@@ -1,0 +1,23 @@
+# Ignorar dependencias de node_modules
+node_modules/
+
+# Ignorar archivos de configuración de entorno
+
+.env.development
+.env.production
+.env
+
+# Ignorar carpetas de distribución
+dist/
+
+# Ignorar archivos de registro
+logs/
+
+# Ignorar archivos de configuración de la base de datos
+#config/database.ts
+#config/index.ts
+
+# Ignorar archivos de configuración de la base de datos
+#config/database.ts
+#config/index.ts
+
