@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { ct_partida, ct_partidaId } from './ct_partida';
 import type { ct_unidad_medida, ct_unidad_medidaId } from './ct_unidad_medida';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
+import type { rl_producto_area, rl_producto_areaId } from './rl_producto_area';
 import type { rl_producto_requisicion, rl_producto_requisicionId } from './rl_producto_requisicion';
 
 export interface ct_producto_consumibleAttributes {
@@ -14,13 +15,13 @@ export interface ct_producto_consumibleAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in?: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_producto_consumiblePk = "id_producto";
 export type ct_producto_consumibleId = ct_producto_consumible[ct_producto_consumiblePk];
-export type ct_producto_consumibleOptionalAttributes = "id_producto" | "ct_partida_id" | "precio" | "ct_unidad_id" | "estado" | "ct_usuario_in" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_producto_consumibleOptionalAttributes = "id_producto" | "ct_partida_id" | "precio" | "ct_unidad_id" | "estado" | "ct_usuario_in" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_producto_consumibleCreationAttributes = Optional<ct_producto_consumibleAttributes, ct_producto_consumibleOptionalAttributes>;
 
 export class ct_producto_consumible extends Model<ct_producto_consumibleAttributes, ct_producto_consumibleCreationAttributes> implements ct_producto_consumibleAttributes {
@@ -32,14 +33,26 @@ export class ct_producto_consumible extends Model<ct_producto_consumibleAttribut
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in?: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_producto_consumible belongsTo ct_partida via ct_partida_id
   ct_partida!: ct_partida;
   getCt_partida!: Sequelize.BelongsToGetAssociationMixin<ct_partida>;
   setCt_partida!: Sequelize.BelongsToSetAssociationMixin<ct_partida, ct_partidaId>;
   createCt_partida!: Sequelize.BelongsToCreateAssociationMixin<ct_partida>;
+  // ct_producto_consumible hasMany rl_producto_area via id_producto
+  rl_producto_areas!: rl_producto_area[];
+  getRl_producto_areas!: Sequelize.HasManyGetAssociationsMixin<rl_producto_area>;
+  setRl_producto_areas!: Sequelize.HasManySetAssociationsMixin<rl_producto_area, rl_producto_areaId>;
+  addRl_producto_area!: Sequelize.HasManyAddAssociationMixin<rl_producto_area, rl_producto_areaId>;
+  addRl_producto_areas!: Sequelize.HasManyAddAssociationsMixin<rl_producto_area, rl_producto_areaId>;
+  createRl_producto_area!: Sequelize.HasManyCreateAssociationMixin<rl_producto_area>;
+  removeRl_producto_area!: Sequelize.HasManyRemoveAssociationMixin<rl_producto_area, rl_producto_areaId>;
+  removeRl_producto_areas!: Sequelize.HasManyRemoveAssociationsMixin<rl_producto_area, rl_producto_areaId>;
+  hasRl_producto_area!: Sequelize.HasManyHasAssociationMixin<rl_producto_area, rl_producto_areaId>;
+  hasRl_producto_areas!: Sequelize.HasManyHasAssociationsMixin<rl_producto_area, rl_producto_areaId>;
+  countRl_producto_areas!: Sequelize.HasManyCountAssociationsMixin;
   // ct_producto_consumible hasMany rl_producto_requisicion via ct_productos_id
   rl_producto_requisicions!: rl_producto_requisicion[];
   getRl_producto_requisicions!: Sequelize.HasManyGetAssociationsMixin<rl_producto_requisicion>;
@@ -123,21 +136,11 @@ export class ct_producto_consumible extends Model<ct_producto_consumibleAttribut
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_producto_consumible',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

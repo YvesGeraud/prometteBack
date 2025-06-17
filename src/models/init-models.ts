@@ -11,6 +11,8 @@ import { ct_capitulo as _ct_capitulo } from "./ct_capitulo";
 import type { ct_capituloAttributes, ct_capituloCreationAttributes } from "./ct_capitulo";
 import { ct_clasificacion_prioridad as _ct_clasificacion_prioridad } from "./ct_clasificacion_prioridad";
 import type { ct_clasificacion_prioridadAttributes, ct_clasificacion_prioridadCreationAttributes } from "./ct_clasificacion_prioridad";
+import { ct_codigos_postales as _ct_codigos_postales } from "./ct_codigos_postales";
+import type { ct_codigos_postalesAttributes, ct_codigos_postalesCreationAttributes } from "./ct_codigos_postales";
 import { ct_consumible_departamento as _ct_consumible_departamento } from "./ct_consumible_departamento";
 import type { ct_consumible_departamentoAttributes, ct_consumible_departamentoCreationAttributes } from "./ct_consumible_departamento";
 import { ct_consumible_direccion as _ct_consumible_direccion } from "./ct_consumible_direccion";
@@ -63,8 +65,10 @@ import { dt_correspondencia as _dt_correspondencia } from "./dt_correspondencia"
 import type { dt_correspondenciaAttributes, dt_correspondenciaCreationAttributes } from "./dt_correspondencia";
 import { dt_diagnostico_aneec as _dt_diagnostico_aneec } from "./dt_diagnostico_aneec";
 import type { dt_diagnostico_aneecAttributes, dt_diagnostico_aneecCreationAttributes } from "./dt_diagnostico_aneec";
-import { dt_informes_annec as _dt_informes_annec } from "./dt_informes_annec";
-import type { dt_informes_annecAttributes, dt_informes_annecCreationAttributes } from "./dt_informes_annec";
+import { dt_funcion as _dt_funcion } from "./dt_funcion";
+import type { dt_funcionAttributes, dt_funcionCreationAttributes } from "./dt_funcion";
+import { dt_informes_aneec as _dt_informes_aneec } from "./dt_informes_aneec";
+import type { dt_informes_aneecAttributes, dt_informes_aneecCreationAttributes } from "./dt_informes_aneec";
 import { dt_proyecto_anual as _dt_proyecto_anual } from "./dt_proyecto_anual";
 import type { dt_proyecto_anualAttributes, dt_proyecto_anualCreationAttributes } from "./dt_proyecto_anual";
 import { dt_techo_presupuesto as _dt_techo_presupuesto } from "./dt_techo_presupuesto";
@@ -75,10 +79,16 @@ import { rl_area_financiero as _rl_area_financiero } from "./rl_area_financiero"
 import type { rl_area_financieroAttributes, rl_area_financieroCreationAttributes } from "./rl_area_financiero";
 import { rl_correspondencia_usuario_estado as _rl_correspondencia_usuario_estado } from "./rl_correspondencia_usuario_estado";
 import type { rl_correspondencia_usuario_estadoAttributes, rl_correspondencia_usuario_estadoCreationAttributes } from "./rl_correspondencia_usuario_estado";
+import { rl_entrega_formato as _rl_entrega_formato } from "./rl_entrega_formato";
+import type { rl_entrega_formatoAttributes, rl_entrega_formatoCreationAttributes } from "./rl_entrega_formato";
 import { rl_justificacion as _rl_justificacion } from "./rl_justificacion";
 import type { rl_justificacionAttributes, rl_justificacionCreationAttributes } from "./rl_justificacion";
 import { rl_modulo_area as _rl_modulo_area } from "./rl_modulo_area";
 import type { rl_modulo_areaAttributes, rl_modulo_areaCreationAttributes } from "./rl_modulo_area";
+import { rl_partida_area as _rl_partida_area } from "./rl_partida_area";
+import type { rl_partida_areaAttributes, rl_partida_areaCreationAttributes } from "./rl_partida_area";
+import { rl_producto_area as _rl_producto_area } from "./rl_producto_area";
+import type { rl_producto_areaAttributes, rl_producto_areaCreationAttributes } from "./rl_producto_area";
 import { rl_producto_requisicion as _rl_producto_requisicion } from "./rl_producto_requisicion";
 import type { rl_producto_requisicionAttributes, rl_producto_requisicionCreationAttributes } from "./rl_producto_requisicion";
 import { rl_puesto_funcion as _rl_puesto_funcion } from "./rl_puesto_funcion";
@@ -95,6 +105,7 @@ export {
   _ct_area as ct_area,
   _ct_capitulo as ct_capitulo,
   _ct_clasificacion_prioridad as ct_clasificacion_prioridad,
+  _ct_codigos_postales as ct_codigos_postales,
   _ct_consumible_departamento as ct_consumible_departamento,
   _ct_consumible_direccion as ct_consumible_direccion,
   _ct_consumible_factura as ct_consumible_factura,
@@ -121,14 +132,18 @@ export {
   _dt_consumible_inventario as dt_consumible_inventario,
   _dt_correspondencia as dt_correspondencia,
   _dt_diagnostico_aneec as dt_diagnostico_aneec,
-  _dt_informes_annec as dt_informes_annec,
+  _dt_funcion as dt_funcion,
+  _dt_informes_aneec as dt_informes_aneec,
   _dt_proyecto_anual as dt_proyecto_anual,
   _dt_techo_presupuesto as dt_techo_presupuesto,
   _rl_analista_unidad as rl_analista_unidad,
   _rl_area_financiero as rl_area_financiero,
   _rl_correspondencia_usuario_estado as rl_correspondencia_usuario_estado,
+  _rl_entrega_formato as rl_entrega_formato,
   _rl_justificacion as rl_justificacion,
   _rl_modulo_area as rl_modulo_area,
+  _rl_partida_area as rl_partida_area,
+  _rl_producto_area as rl_producto_area,
   _rl_producto_requisicion as rl_producto_requisicion,
   _rl_puesto_funcion as rl_puesto_funcion,
   _rl_usuario_funcion as rl_usuario_funcion,
@@ -148,6 +163,8 @@ export type {
   ct_capituloCreationAttributes,
   ct_clasificacion_prioridadAttributes,
   ct_clasificacion_prioridadCreationAttributes,
+  ct_codigos_postalesAttributes,
+  ct_codigos_postalesCreationAttributes,
   ct_consumible_departamentoAttributes,
   ct_consumible_departamentoCreationAttributes,
   ct_consumible_direccionAttributes,
@@ -200,8 +217,10 @@ export type {
   dt_correspondenciaCreationAttributes,
   dt_diagnostico_aneecAttributes,
   dt_diagnostico_aneecCreationAttributes,
-  dt_informes_annecAttributes,
-  dt_informes_annecCreationAttributes,
+  dt_funcionAttributes,
+  dt_funcionCreationAttributes,
+  dt_informes_aneecAttributes,
+  dt_informes_aneecCreationAttributes,
   dt_proyecto_anualAttributes,
   dt_proyecto_anualCreationAttributes,
   dt_techo_presupuestoAttributes,
@@ -212,10 +231,16 @@ export type {
   rl_area_financieroCreationAttributes,
   rl_correspondencia_usuario_estadoAttributes,
   rl_correspondencia_usuario_estadoCreationAttributes,
+  rl_entrega_formatoAttributes,
+  rl_entrega_formatoCreationAttributes,
   rl_justificacionAttributes,
   rl_justificacionCreationAttributes,
   rl_modulo_areaAttributes,
   rl_modulo_areaCreationAttributes,
+  rl_partida_areaAttributes,
+  rl_partida_areaCreationAttributes,
+  rl_producto_areaAttributes,
+  rl_producto_areaCreationAttributes,
   rl_producto_requisicionAttributes,
   rl_producto_requisicionCreationAttributes,
   rl_puesto_funcionAttributes,
@@ -233,6 +258,7 @@ export function initModels(sequelize: Sequelize) {
   const ct_area = _ct_area.initModel(sequelize);
   const ct_capitulo = _ct_capitulo.initModel(sequelize);
   const ct_clasificacion_prioridad = _ct_clasificacion_prioridad.initModel(sequelize);
+  const ct_codigos_postales = _ct_codigos_postales.initModel(sequelize);
   const ct_consumible_departamento = _ct_consumible_departamento.initModel(sequelize);
   const ct_consumible_direccion = _ct_consumible_direccion.initModel(sequelize);
   const ct_consumible_factura = _ct_consumible_factura.initModel(sequelize);
@@ -259,14 +285,18 @@ export function initModels(sequelize: Sequelize) {
   const dt_consumible_inventario = _dt_consumible_inventario.initModel(sequelize);
   const dt_correspondencia = _dt_correspondencia.initModel(sequelize);
   const dt_diagnostico_aneec = _dt_diagnostico_aneec.initModel(sequelize);
-  const dt_informes_annec = _dt_informes_annec.initModel(sequelize);
+  const dt_funcion = _dt_funcion.initModel(sequelize);
+  const dt_informes_aneec = _dt_informes_aneec.initModel(sequelize);
   const dt_proyecto_anual = _dt_proyecto_anual.initModel(sequelize);
   const dt_techo_presupuesto = _dt_techo_presupuesto.initModel(sequelize);
   const rl_analista_unidad = _rl_analista_unidad.initModel(sequelize);
   const rl_area_financiero = _rl_area_financiero.initModel(sequelize);
   const rl_correspondencia_usuario_estado = _rl_correspondencia_usuario_estado.initModel(sequelize);
+  const rl_entrega_formato = _rl_entrega_formato.initModel(sequelize);
   const rl_justificacion = _rl_justificacion.initModel(sequelize);
   const rl_modulo_area = _rl_modulo_area.initModel(sequelize);
+  const rl_partida_area = _rl_partida_area.initModel(sequelize);
+  const rl_producto_area = _rl_producto_area.initModel(sequelize);
   const rl_producto_requisicion = _rl_producto_requisicion.initModel(sequelize);
   const rl_puesto_funcion = _rl_puesto_funcion.initModel(sequelize);
   const rl_usuario_funcion = _rl_usuario_funcion.initModel(sequelize);
@@ -278,14 +308,10 @@ export function initModels(sequelize: Sequelize) {
   ct_area.hasMany(ct_area, { as: "ct_area_ct_areas", foreignKey: "ct_area_id"});
   ct_puesto.belongsTo(ct_area, { as: "ct_area", foreignKey: "ct_area_id"});
   ct_area.hasMany(ct_puesto, { as: "ct_puestos", foreignKey: "ct_area_id"});
-  dt_techo_presupuesto.belongsTo(ct_area, { as: "ct_area", foreignKey: "ct_area_id"});
-  ct_area.hasMany(dt_techo_presupuesto, { as: "dt_techo_presupuestos", foreignKey: "ct_area_id"});
   rl_justificacion.belongsTo(ct_area, { as: "ct_area", foreignKey: "ct_area_id"});
   ct_area.hasMany(rl_justificacion, { as: "rl_justificacions", foreignKey: "ct_area_id"});
   rl_modulo_area.belongsTo(ct_area, { as: "ct_area", foreignKey: "ct_area_id"});
   ct_area.hasMany(rl_modulo_area, { as: "rl_modulo_areas", foreignKey: "ct_area_id"});
-  rl_producto_requisicion.belongsTo(ct_area, { as: "ct_area", foreignKey: "ct_area_id"});
-  ct_area.hasMany(rl_producto_requisicion, { as: "rl_producto_requisicions", foreignKey: "ct_area_id"});
   ct_partida.belongsTo(ct_capitulo, { as: "ct_capitulo", foreignKey: "ct_capitulo_id"});
   ct_capitulo.hasMany(ct_partida, { as: "ct_partidas", foreignKey: "ct_capitulo_id"});
   dt_techo_presupuesto.belongsTo(ct_capitulo, { as: "ct_capitulo", foreignKey: "ct_capitulo_id"});
@@ -310,12 +336,10 @@ export function initModels(sequelize: Sequelize) {
   ct_financiamiento.hasMany(dt_techo_presupuesto, { as: "dt_techo_presupuestos", foreignKey: "ct_financiamiento_id"});
   dt_correspondencia.belongsTo(ct_forma_entrega, { as: "ct_forma_entrega", foreignKey: "ct_forma_entrega_id"});
   ct_forma_entrega.hasMany(dt_correspondencia, { as: "dt_correspondencia", foreignKey: "ct_forma_entrega_id"});
-  rl_puesto_funcion.belongsTo(ct_funcion, { as: "dt_funcion", foreignKey: "dt_funcion_id"});
-  ct_funcion.hasMany(rl_puesto_funcion, { as: "rl_puesto_funcions", foreignKey: "dt_funcion_id"});
-  rl_usuario_funcion.belongsTo(ct_funcion, { as: "dt_funcion", foreignKey: "dt_funcion_id"});
-  ct_funcion.hasMany(rl_usuario_funcion, { as: "rl_usuario_funcions", foreignKey: "dt_funcion_id"});
   ct_funcion.belongsTo(ct_modulo, { as: "ct_modulo", foreignKey: "ct_modulo_id"});
   ct_modulo.hasMany(ct_funcion, { as: "ct_funcions", foreignKey: "ct_modulo_id"});
+  dt_funcion.belongsTo(ct_modulo, { as: "ct_modulo", foreignKey: "ct_modulo_id"});
+  ct_modulo.hasMany(dt_funcion, { as: "dt_funcions", foreignKey: "ct_modulo_id"});
   rl_modulo_area.belongsTo(ct_modulo, { as: "ct_modulo", foreignKey: "ct_modulo_id"});
   ct_modulo.hasMany(rl_modulo_area, { as: "rl_modulo_areas", foreignKey: "ct_modulo_id"});
   dt_aspirante_aneec.belongsTo(ct_municipio, { as: "ct_municipio", foreignKey: "ct_municipio_id"});
@@ -328,6 +352,10 @@ export function initModels(sequelize: Sequelize) {
   ct_partida.hasMany(dt_consumible_inventario, { as: "dt_consumible_inventarios", foreignKey: "ct_partida_id"});
   rl_justificacion.belongsTo(ct_partida, { as: "ct_partida", foreignKey: "ct_partida_id"});
   ct_partida.hasMany(rl_justificacion, { as: "rl_justificacions", foreignKey: "ct_partida_id"});
+  rl_partida_area.belongsTo(ct_partida, { as: "id_partida_ct_partida", foreignKey: "id_partida"});
+  ct_partida.hasMany(rl_partida_area, { as: "rl_partida_areas", foreignKey: "id_partida"});
+  rl_producto_area.belongsTo(ct_producto_consumible, { as: "id_producto_ct_producto_consumible", foreignKey: "id_producto"});
+  ct_producto_consumible.hasMany(rl_producto_area, { as: "rl_producto_areas", foreignKey: "id_producto"});
   rl_producto_requisicion.belongsTo(ct_producto_consumible, { as: "ct_producto", foreignKey: "ct_productos_id"});
   ct_producto_consumible.hasMany(rl_producto_requisicion, { as: "rl_producto_requisicions", foreignKey: "ct_productos_id"});
   ct_puesto.belongsTo(ct_puesto, { as: "ct_puesto_superior", foreignKey: "ct_puesto_superior_id"});
@@ -392,10 +420,14 @@ export function initModels(sequelize: Sequelize) {
   ct_usuario.hasMany(dt_diagnostico_aneec, { as: "dt_diagnostico_aneecs", foreignKey: "ct_usuario_in"});
   dt_diagnostico_aneec.belongsTo(ct_usuario, { as: "ct_usuario_at_ct_usuario", foreignKey: "ct_usuario_at"});
   ct_usuario.hasMany(dt_diagnostico_aneec, { as: "ct_usuario_at_dt_diagnostico_aneecs", foreignKey: "ct_usuario_at"});
-  dt_informes_annec.belongsTo(ct_usuario, { as: "ct_usuario_in_ct_usuario", foreignKey: "ct_usuario_in"});
-  ct_usuario.hasMany(dt_informes_annec, { as: "dt_informes_annecs", foreignKey: "ct_usuario_in"});
-  dt_informes_annec.belongsTo(ct_usuario, { as: "ct_usuario_at_ct_usuario", foreignKey: "ct_usuario_at"});
-  ct_usuario.hasMany(dt_informes_annec, { as: "ct_usuario_at_dt_informes_annecs", foreignKey: "ct_usuario_at"});
+  dt_funcion.belongsTo(ct_usuario, { as: "ct_usuario_in_ct_usuario", foreignKey: "ct_usuario_in"});
+  ct_usuario.hasMany(dt_funcion, { as: "dt_funcions", foreignKey: "ct_usuario_in"});
+  dt_funcion.belongsTo(ct_usuario, { as: "ct_usuario_at_ct_usuario", foreignKey: "ct_usuario_at"});
+  ct_usuario.hasMany(dt_funcion, { as: "ct_usuario_at_dt_funcions", foreignKey: "ct_usuario_at"});
+  dt_informes_aneec.belongsTo(ct_usuario, { as: "ct_usuario_in_ct_usuario", foreignKey: "ct_usuario_in"});
+  ct_usuario.hasMany(dt_informes_aneec, { as: "dt_informes_aneecs", foreignKey: "ct_usuario_in"});
+  dt_informes_aneec.belongsTo(ct_usuario, { as: "ct_usuario_at_ct_usuario", foreignKey: "ct_usuario_at"});
+  ct_usuario.hasMany(dt_informes_aneec, { as: "ct_usuario_at_dt_informes_aneecs", foreignKey: "ct_usuario_at"});
   dt_techo_presupuesto.belongsTo(ct_usuario, { as: "ct_usuario_in_ct_usuario", foreignKey: "ct_usuario_in"});
   ct_usuario.hasMany(dt_techo_presupuesto, { as: "dt_techo_presupuestos", foreignKey: "ct_usuario_in"});
   dt_techo_presupuesto.belongsTo(ct_usuario, { as: "ct_usuario_at_ct_usuario", foreignKey: "ct_usuario_at"});
@@ -410,6 +442,8 @@ export function initModels(sequelize: Sequelize) {
   ct_usuario.hasMany(rl_area_financiero, { as: "ct_usuario_at_rl_area_financieros", foreignKey: "ct_usuario_at"});
   rl_correspondencia_usuario_estado.belongsTo(ct_usuario, { as: "ct_usuarios_in_ct_usuario", foreignKey: "ct_usuarios_in"});
   ct_usuario.hasMany(rl_correspondencia_usuario_estado, { as: "rl_correspondencia_usuario_estados", foreignKey: "ct_usuarios_in"});
+  rl_entrega_formato.belongsTo(ct_usuario, { as: "ct_usuario", foreignKey: "ct_usuario_id"});
+  ct_usuario.hasMany(rl_entrega_formato, { as: "rl_entrega_formatos", foreignKey: "ct_usuario_id"});
   rl_justificacion.belongsTo(ct_usuario, { as: "ct_usuario", foreignKey: "ct_usuario_id"});
   ct_usuario.hasMany(rl_justificacion, { as: "rl_justificacions", foreignKey: "ct_usuario_id"});
   rl_producto_requisicion.belongsTo(ct_usuario, { as: "ct_usuarios_in_ct_usuario", foreignKey: "ct_usuarios_in"});
@@ -424,16 +458,34 @@ export function initModels(sequelize: Sequelize) {
   ct_usuario.hasMany(rl_usuario_puesto, { as: "ct_usuario_at_rl_usuario_puestos", foreignKey: "ct_usuario_at"});
   dt_diagnostico_aneec.belongsTo(dt_aspirante_aneec, { as: "dt_aspirante", foreignKey: "dt_aspirante_id"});
   dt_aspirante_aneec.hasMany(dt_diagnostico_aneec, { as: "dt_diagnostico_aneecs", foreignKey: "dt_aspirante_id"});
-  dt_informes_annec.belongsTo(dt_aspirante_aneec, { as: "dt_aspirante", foreignKey: "dt_aspirante_id"});
-  dt_aspirante_aneec.hasMany(dt_informes_annec, { as: "dt_informes_annecs", foreignKey: "dt_aspirante_id"});
+  dt_informes_aneec.belongsTo(dt_aspirante_aneec, { as: "dt_aspirante", foreignKey: "dt_aspirante_id"});
+  dt_aspirante_aneec.hasMany(dt_informes_aneec, { as: "dt_informes_aneecs", foreignKey: "dt_aspirante_id"});
   rl_correspondencia_usuario_estado.belongsTo(dt_correspondencia, { as: "dt_correspondencium", foreignKey: "dt_correspondencia_id"});
   dt_correspondencia.hasMany(rl_correspondencia_usuario_estado, { as: "rl_correspondencia_usuario_estados", foreignKey: "dt_correspondencia_id"});
+  dt_informes_aneec.belongsTo(dt_diagnostico_aneec, { as: "dt_diagnostico", foreignKey: "dt_diagnostico_id"});
+  dt_diagnostico_aneec.hasMany(dt_informes_aneec, { as: "dt_informes_aneecs", foreignKey: "dt_diagnostico_id"});
+  rl_puesto_funcion.belongsTo(dt_funcion, { as: "dt_funcion", foreignKey: "dt_funcion_id"});
+  dt_funcion.hasMany(rl_puesto_funcion, { as: "rl_puesto_funcions", foreignKey: "dt_funcion_id"});
+  rl_usuario_funcion.belongsTo(dt_funcion, { as: "dt_funcion", foreignKey: "dt_funcion_id"});
+  dt_funcion.hasMany(rl_usuario_funcion, { as: "rl_usuario_funcions", foreignKey: "dt_funcion_id"});
   dt_proyecto_anual.belongsTo(dt_techo_presupuesto, { as: "dt_techo", foreignKey: "dt_techo_id"});
   dt_techo_presupuesto.hasMany(dt_proyecto_anual, { as: "dt_proyecto_anuals", foreignKey: "dt_techo_id"});
+  rl_justificacion.belongsTo(dt_techo_presupuesto, { as: "dt_techo", foreignKey: "dt_techo_id"});
+  dt_techo_presupuesto.hasMany(rl_justificacion, { as: "rl_justificacions", foreignKey: "dt_techo_id"});
   rl_producto_requisicion.belongsTo(dt_techo_presupuesto, { as: "dt_techo", foreignKey: "dt_techo_id"});
   dt_techo_presupuesto.hasMany(rl_producto_requisicion, { as: "rl_producto_requisicions", foreignKey: "dt_techo_id"});
+  dt_techo_presupuesto.belongsTo(rl_area_financiero, { as: "ct_area", foreignKey: "ct_area_id"});
+  rl_area_financiero.hasMany(dt_techo_presupuesto, { as: "dt_techo_presupuestos", foreignKey: "ct_area_id"});
   rl_analista_unidad.belongsTo(rl_area_financiero, { as: "rl_area_financiero_rl_area_financiero", foreignKey: "rl_area_financiero"});
   rl_area_financiero.hasMany(rl_analista_unidad, { as: "rl_analista_unidads", foreignKey: "rl_area_financiero"});
+  rl_partida_area.belongsTo(rl_area_financiero, { as: "id_area_infra_rl_area_financiero", foreignKey: "id_area_infra"});
+  rl_area_financiero.hasMany(rl_partida_area, { as: "rl_partida_areas", foreignKey: "id_area_infra"});
+  rl_producto_area.belongsTo(rl_area_financiero, { as: "id_area_infra_rl_area_financiero", foreignKey: "id_area_infra"});
+  rl_area_financiero.hasMany(rl_producto_area, { as: "rl_producto_areas", foreignKey: "id_area_infra"});
+  rl_producto_requisicion.belongsTo(rl_area_financiero, { as: "ct_area", foreignKey: "ct_area_id"});
+  rl_area_financiero.hasMany(rl_producto_requisicion, { as: "rl_producto_requisicions", foreignKey: "ct_area_id"});
+  dt_consumible_entrega.belongsTo(rl_entrega_formato, { as: "folio_formato_rl_entrega_formato", foreignKey: "folio_formato"});
+  rl_entrega_formato.hasMany(dt_consumible_entrega, { as: "dt_consumible_entregas", foreignKey: "folio_formato"});
   rl_correspondencia_usuario_estado.belongsTo(rl_usuario_puesto, { as: "rl_usuario_puesto", foreignKey: "rl_usuario_puesto_id"});
   rl_usuario_puesto.hasMany(rl_correspondencia_usuario_estado, { as: "rl_correspondencia_usuario_estados", foreignKey: "rl_usuario_puesto_id"});
 
@@ -444,6 +496,7 @@ export function initModels(sequelize: Sequelize) {
     ct_area: ct_area,
     ct_capitulo: ct_capitulo,
     ct_clasificacion_prioridad: ct_clasificacion_prioridad,
+    ct_codigos_postales: ct_codigos_postales,
     ct_consumible_departamento: ct_consumible_departamento,
     ct_consumible_direccion: ct_consumible_direccion,
     ct_consumible_factura: ct_consumible_factura,
@@ -470,14 +523,18 @@ export function initModels(sequelize: Sequelize) {
     dt_consumible_inventario: dt_consumible_inventario,
     dt_correspondencia: dt_correspondencia,
     dt_diagnostico_aneec: dt_diagnostico_aneec,
-    dt_informes_annec: dt_informes_annec,
+    dt_funcion: dt_funcion,
+    dt_informes_aneec: dt_informes_aneec,
     dt_proyecto_anual: dt_proyecto_anual,
     dt_techo_presupuesto: dt_techo_presupuesto,
     rl_analista_unidad: rl_analista_unidad,
     rl_area_financiero: rl_area_financiero,
     rl_correspondencia_usuario_estado: rl_correspondencia_usuario_estado,
+    rl_entrega_formato: rl_entrega_formato,
     rl_justificacion: rl_justificacion,
     rl_modulo_area: rl_modulo_area,
+    rl_partida_area: rl_partida_area,
+    rl_producto_area: rl_producto_area,
     rl_producto_requisicion: rl_producto_requisicion,
     rl_puesto_funcion: rl_puesto_funcion,
     rl_usuario_funcion: rl_usuario_funcion,

@@ -6,21 +6,21 @@ export interface ct_consumibles_proveedorAttributes {
   id_proveedor: number;
   razon_social: string;
   estado: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_consumibles_proveedorPk = "id_proveedor";
 export type ct_consumibles_proveedorId = ct_consumibles_proveedor[ct_consumibles_proveedorPk];
-export type ct_consumibles_proveedorOptionalAttributes = "id_proveedor" | "estado" | "fecha_in" | "fecha_at";
+export type ct_consumibles_proveedorOptionalAttributes = "id_proveedor" | "estado" | "createdAt" | "updatedAt";
 export type ct_consumibles_proveedorCreationAttributes = Optional<ct_consumibles_proveedorAttributes, ct_consumibles_proveedorOptionalAttributes>;
 
 export class ct_consumibles_proveedor extends Model<ct_consumibles_proveedorAttributes, ct_consumibles_proveedorCreationAttributes> implements ct_consumibles_proveedorAttributes {
   id_proveedor!: number;
   razon_social!: string;
   estado!: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_consumibles_proveedor hasMany ct_consumible_factura via ct_provedor_id
   ct_consumible_facturas!: ct_consumible_factura[];
@@ -52,21 +52,11 @@ export class ct_consumibles_proveedor extends Model<ct_consumibles_proveedorAttr
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: 1
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_consumibles_proveedor',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

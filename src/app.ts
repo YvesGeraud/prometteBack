@@ -13,6 +13,7 @@ import corsMiddleware from "./middlewares/cors.middleware";
 import ctUsuarioRoutes from "./routes/ct_usuario.routes";
 import ctPuestoRoutes from "./routes/ct_puesto.routes";
 import ctFuncionRoutes from "./routes/ct_funcion.routes";
+import ctConsumiblesProveedorRoutes from "./routes/ct_consumibles_proveedor.routes";
 
 // Configurar variables de entorno
 dotenv.config();
@@ -30,6 +31,10 @@ app.use(express.json());
 app.use("/api/usuarios", /*authenticateJWT,*/ ctUsuarioRoutes);
 app.use("/api/puestos", /*authenticateJWT,*/ ctPuestoRoutes);
 app.use("/api/funciones", /*authenticateJWT,*/ ctFuncionRoutes);
+app.use(
+  "/api/consumibles-proveedor",
+  /*authenticateJWT,*/ ctConsumiblesProveedorRoutes
+);
 
 // Mostrar información de configuración de la base de datos
 console.log("📝 Configuración de la base de datos:");

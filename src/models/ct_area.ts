@@ -3,10 +3,8 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { ct_departamento_sistema, ct_departamento_sistemaId } from './ct_departamento_sistema';
 import type { ct_puesto, ct_puestoId } from './ct_puesto';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
-import type { dt_techo_presupuesto, dt_techo_presupuestoId } from './dt_techo_presupuesto';
 import type { rl_justificacion, rl_justificacionId } from './rl_justificacion';
 import type { rl_modulo_area, rl_modulo_areaId } from './rl_modulo_area';
-import type { rl_producto_requisicion, rl_producto_requisicionId } from './rl_producto_requisicion';
 
 export interface ct_areaAttributes {
   id_area: number;
@@ -17,13 +15,13 @@ export interface ct_areaAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_areaPk = "id_area";
 export type ct_areaId = ct_area[ct_areaPk];
-export type ct_areaOptionalAttributes = "id_area" | "indice" | "ct_area_id" | "ct_departamento_id" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_areaOptionalAttributes = "id_area" | "indice" | "ct_area_id" | "ct_departamento_id" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_areaCreationAttributes = Optional<ct_areaAttributes, ct_areaOptionalAttributes>;
 
 export class ct_area extends Model<ct_areaAttributes, ct_areaCreationAttributes> implements ct_areaAttributes {
@@ -35,8 +33,8 @@ export class ct_area extends Model<ct_areaAttributes, ct_areaCreationAttributes>
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_area belongsTo ct_area via ct_area_id
   ct_area!: ct_area;
@@ -55,18 +53,6 @@ export class ct_area extends Model<ct_areaAttributes, ct_areaCreationAttributes>
   hasCt_puesto!: Sequelize.HasManyHasAssociationMixin<ct_puesto, ct_puestoId>;
   hasCt_puestos!: Sequelize.HasManyHasAssociationsMixin<ct_puesto, ct_puestoId>;
   countCt_puestos!: Sequelize.HasManyCountAssociationsMixin;
-  // ct_area hasMany dt_techo_presupuesto via ct_area_id
-  dt_techo_presupuestos!: dt_techo_presupuesto[];
-  getDt_techo_presupuestos!: Sequelize.HasManyGetAssociationsMixin<dt_techo_presupuesto>;
-  setDt_techo_presupuestos!: Sequelize.HasManySetAssociationsMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  addDt_techo_presupuesto!: Sequelize.HasManyAddAssociationMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  addDt_techo_presupuestos!: Sequelize.HasManyAddAssociationsMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  createDt_techo_presupuesto!: Sequelize.HasManyCreateAssociationMixin<dt_techo_presupuesto>;
-  removeDt_techo_presupuesto!: Sequelize.HasManyRemoveAssociationMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  removeDt_techo_presupuestos!: Sequelize.HasManyRemoveAssociationsMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  hasDt_techo_presupuesto!: Sequelize.HasManyHasAssociationMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  hasDt_techo_presupuestos!: Sequelize.HasManyHasAssociationsMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
-  countDt_techo_presupuestos!: Sequelize.HasManyCountAssociationsMixin;
   // ct_area hasMany rl_justificacion via ct_area_id
   rl_justificacions!: rl_justificacion[];
   getRl_justificacions!: Sequelize.HasManyGetAssociationsMixin<rl_justificacion>;
@@ -91,18 +77,6 @@ export class ct_area extends Model<ct_areaAttributes, ct_areaCreationAttributes>
   hasRl_modulo_area!: Sequelize.HasManyHasAssociationMixin<rl_modulo_area, rl_modulo_areaId>;
   hasRl_modulo_areas!: Sequelize.HasManyHasAssociationsMixin<rl_modulo_area, rl_modulo_areaId>;
   countRl_modulo_areas!: Sequelize.HasManyCountAssociationsMixin;
-  // ct_area hasMany rl_producto_requisicion via ct_area_id
-  rl_producto_requisicions!: rl_producto_requisicion[];
-  getRl_producto_requisicions!: Sequelize.HasManyGetAssociationsMixin<rl_producto_requisicion>;
-  setRl_producto_requisicions!: Sequelize.HasManySetAssociationsMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  addRl_producto_requisicion!: Sequelize.HasManyAddAssociationMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  addRl_producto_requisicions!: Sequelize.HasManyAddAssociationsMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  createRl_producto_requisicion!: Sequelize.HasManyCreateAssociationMixin<rl_producto_requisicion>;
-  removeRl_producto_requisicion!: Sequelize.HasManyRemoveAssociationMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  removeRl_producto_requisicions!: Sequelize.HasManyRemoveAssociationsMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  hasRl_producto_requisicion!: Sequelize.HasManyHasAssociationMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  hasRl_producto_requisicions!: Sequelize.HasManyHasAssociationsMixin<rl_producto_requisicion, rl_producto_requisicionId>;
-  countRl_producto_requisicions!: Sequelize.HasManyCountAssociationsMixin;
   // ct_area belongsTo ct_departamento_sistema via ct_departamento_id
   ct_departamento!: ct_departamento_sistema;
   getCt_departamento!: Sequelize.BelongsToGetAssociationMixin<ct_departamento_sistema>;
@@ -173,21 +147,11 @@ export class ct_area extends Model<ct_areaAttributes, ct_areaCreationAttributes>
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_area',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

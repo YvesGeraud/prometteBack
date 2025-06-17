@@ -16,13 +16,13 @@ export interface dt_correspondenciaAttributes {
   ruta_correspondencia: string;
   ct_usuarios_in: number;
   ct_usuarios_at?: number;
-  fecha_in: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type dt_correspondenciaPk = "id_correspondencia";
 export type dt_correspondenciaId = dt_correspondencia[dt_correspondenciaPk];
-export type dt_correspondenciaOptionalAttributes = "id_correspondencia" | "ct_clasificacion_prioridad_id" | "ct_forma_entrega_id" | "folio_sistema" | "fecha_correspondencia" | "folio_correspondencia" | "resumen_correspondencia" | "ruta_correspondencia" | "ct_usuarios_in" | "ct_usuarios_at" | "fecha_in" | "fecha_at";
+export type dt_correspondenciaOptionalAttributes = "id_correspondencia" | "ct_clasificacion_prioridad_id" | "ct_forma_entrega_id" | "folio_sistema" | "fecha_correspondencia" | "folio_correspondencia" | "resumen_correspondencia" | "ruta_correspondencia" | "ct_usuarios_in" | "ct_usuarios_at" | "createdAt" | "updatedAt";
 export type dt_correspondenciaCreationAttributes = Optional<dt_correspondenciaAttributes, dt_correspondenciaOptionalAttributes>;
 
 export class dt_correspondencia extends Model<dt_correspondenciaAttributes, dt_correspondenciaCreationAttributes> implements dt_correspondenciaAttributes {
@@ -36,8 +36,8 @@ export class dt_correspondencia extends Model<dt_correspondenciaAttributes, dt_c
   ruta_correspondencia!: string;
   ct_usuarios_in!: number;
   ct_usuarios_at?: number;
-  fecha_in!: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // dt_correspondencia belongsTo ct_clasificacion_prioridad via ct_clasificacion_prioridad_id
   ct_clasificacion_prioridad!: ct_clasificacion_prioridad;
@@ -131,21 +131,11 @@ export class dt_correspondencia extends Model<dt_correspondenciaAttributes, dt_c
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'dt_correspondencia',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

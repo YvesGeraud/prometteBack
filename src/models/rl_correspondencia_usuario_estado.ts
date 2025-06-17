@@ -12,12 +12,12 @@ export interface rl_correspondencia_usuario_estadoAttributes {
   ct_correspondencia_estado: number;
   observaciones?: string;
   ct_usuarios_in: number;
-  fecha_at: Date;
+  createdAt?: Date;
 }
 
 export type rl_correspondencia_usuario_estadoPk = "id_correspondencia_usuario";
 export type rl_correspondencia_usuario_estadoId = rl_correspondencia_usuario_estado[rl_correspondencia_usuario_estadoPk];
-export type rl_correspondencia_usuario_estadoOptionalAttributes = "id_correspondencia_usuario" | "observaciones" | "fecha_at";
+export type rl_correspondencia_usuario_estadoOptionalAttributes = "id_correspondencia_usuario" | "observaciones" | "createdAt";
 export type rl_correspondencia_usuario_estadoCreationAttributes = Optional<rl_correspondencia_usuario_estadoAttributes, rl_correspondencia_usuario_estadoOptionalAttributes>;
 
 export class rl_correspondencia_usuario_estado extends Model<rl_correspondencia_usuario_estadoAttributes, rl_correspondencia_usuario_estadoCreationAttributes> implements rl_correspondencia_usuario_estadoAttributes {
@@ -27,7 +27,7 @@ export class rl_correspondencia_usuario_estado extends Model<rl_correspondencia_
   ct_correspondencia_estado!: number;
   observaciones?: string;
   ct_usuarios_in!: number;
-  fecha_at!: Date;
+  createdAt?: Date;
 
   // rl_correspondencia_usuario_estado belongsTo ct_correspondencia_estado via ct_correspondencia_estado
   ct_correspondencia_estado_ct_correspondencia_estado!: ct_correspondencia_estado;
@@ -93,16 +93,11 @@ export class rl_correspondencia_usuario_estado extends Model<rl_correspondencia_
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'rl_correspondencia_usuario_estado',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

@@ -7,7 +7,7 @@ import type { ct_usuario, ct_usuarioId } from './ct_usuario';
 
 export interface dt_bitacoraAttributes {
   id_bitacora: number;
-  fecha_in: Date;
+  createdAt?: Date;
   ct_usuario_id: number;
   ct_accion_id: number;
   registro_id: number;
@@ -16,17 +16,17 @@ export interface dt_bitacoraAttributes {
   ct_dispositivo_id?: number;
   estatus_accion: number;
   detalles_error?: string;
-  fecha_at?: Date;
+  updatedAt?: Date;
 }
 
 export type dt_bitacoraPk = "id_bitacora";
 export type dt_bitacoraId = dt_bitacora[dt_bitacoraPk];
-export type dt_bitacoraOptionalAttributes = "id_bitacora" | "fecha_in" | "ip_origen" | "ct_dispositivo_id" | "detalles_error" | "fecha_at";
+export type dt_bitacoraOptionalAttributes = "id_bitacora" | "createdAt" | "ip_origen" | "ct_dispositivo_id" | "detalles_error" | "updatedAt";
 export type dt_bitacoraCreationAttributes = Optional<dt_bitacoraAttributes, dt_bitacoraOptionalAttributes>;
 
 export class dt_bitacora extends Model<dt_bitacoraAttributes, dt_bitacoraCreationAttributes> implements dt_bitacoraAttributes {
   id_bitacora!: number;
-  fecha_in!: Date;
+  createdAt?: Date;
   ct_usuario_id!: number;
   ct_accion_id!: number;
   registro_id!: number;
@@ -35,7 +35,7 @@ export class dt_bitacora extends Model<dt_bitacoraAttributes, dt_bitacoraCreatio
   ct_dispositivo_id?: number;
   estatus_accion!: number;
   detalles_error?: string;
-  fecha_at?: Date;
+  updatedAt?: Date;
 
   // dt_bitacora belongsTo ct_accion via ct_accion_id
   ct_accion!: ct_accion;
@@ -65,11 +65,6 @@ export class dt_bitacora extends Model<dt_bitacoraAttributes, dt_bitacoraCreatio
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     },
     ct_usuario_id: {
       type: DataTypes.INTEGER,
@@ -119,16 +114,11 @@ export class dt_bitacora extends Model<dt_bitacoraAttributes, dt_bitacoraCreatio
     detalles_error: {
       type: DataTypes.TEXT,
       allowNull: true
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'dt_bitacora',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

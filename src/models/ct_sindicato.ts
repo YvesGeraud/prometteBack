@@ -9,13 +9,13 @@ export interface ct_sindicatoAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_sindicatoPk = "id_sindicato";
 export type ct_sindicatoId = ct_sindicato[ct_sindicatoPk];
-export type ct_sindicatoOptionalAttributes = "id_sindicato" | "nombre_sindicato" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_sindicatoOptionalAttributes = "id_sindicato" | "nombre_sindicato" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_sindicatoCreationAttributes = Optional<ct_sindicatoAttributes, ct_sindicatoOptionalAttributes>;
 
 export class ct_sindicato extends Model<ct_sindicatoAttributes, ct_sindicatoCreationAttributes> implements ct_sindicatoAttributes {
@@ -24,8 +24,8 @@ export class ct_sindicato extends Model<ct_sindicatoAttributes, ct_sindicatoCrea
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_sindicato hasMany rl_usuario_puesto via ct_sindicato_id
   rl_usuario_puestos!: rl_usuario_puesto[];
@@ -82,21 +82,11 @@ export class ct_sindicato extends Model<ct_sindicatoAttributes, ct_sindicatoCrea
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_sindicato',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

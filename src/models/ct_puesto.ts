@@ -9,31 +9,31 @@ export interface ct_puestoAttributes {
   id_puesto: number;
   nombre_puesto: string;
   descripcion?: string;
-  ct_area_id?: number;
+  ct_area_id: number;
   ct_puesto_superior_id?: number;
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_puestoPk = "id_puesto";
 export type ct_puestoId = ct_puesto[ct_puestoPk];
-export type ct_puestoOptionalAttributes = "id_puesto" | "descripcion" | "ct_area_id" | "ct_puesto_superior_id" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_puestoOptionalAttributes = "id_puesto" | "descripcion" | "ct_puesto_superior_id" | "estado" | "ct_usuario_in" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_puestoCreationAttributes = Optional<ct_puestoAttributes, ct_puestoOptionalAttributes>;
 
 export class ct_puesto extends Model<ct_puestoAttributes, ct_puestoCreationAttributes> implements ct_puestoAttributes {
   id_puesto!: number;
   nombre_puesto!: string;
   descripcion?: string;
-  ct_area_id?: number;
+  ct_area_id!: number;
   ct_puesto_superior_id?: number;
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_puesto belongsTo ct_area via ct_area_id
   ct_area!: ct_area;
@@ -98,7 +98,7 @@ export class ct_puesto extends Model<ct_puestoAttributes, ct_puestoCreationAttri
     },
     ct_area_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'ct_area',
         key: 'id_area'
@@ -120,6 +120,7 @@ export class ct_puesto extends Model<ct_puestoAttributes, ct_puestoCreationAttri
     ct_usuario_in: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 1,
       references: {
         model: 'ct_usuario',
         key: 'id_usuario'
@@ -132,21 +133,11 @@ export class ct_puesto extends Model<ct_puestoAttributes, ct_puestoCreationAttri
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_puesto',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

@@ -1,10 +1,11 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { ct_area, ct_areaId } from './ct_area';
 import type { ct_capitulo, ct_capituloId } from './ct_capitulo';
 import type { ct_financiamiento, ct_financiamientoId } from './ct_financiamiento';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
 import type { dt_proyecto_anual, dt_proyecto_anualId } from './dt_proyecto_anual';
+import type { rl_area_financiero, rl_area_financieroId } from './rl_area_financiero';
+import type { rl_justificacion, rl_justificacionId } from './rl_justificacion';
 import type { rl_producto_requisicion, rl_producto_requisicionId } from './rl_producto_requisicion';
 
 export interface dt_techo_presupuestoAttributes {
@@ -15,13 +16,13 @@ export interface dt_techo_presupuestoAttributes {
   cantidad_presupuestada: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type dt_techo_presupuestoPk = "id_techo";
 export type dt_techo_presupuestoId = dt_techo_presupuesto[dt_techo_presupuestoPk];
-export type dt_techo_presupuestoOptionalAttributes = "id_techo" | "ct_area_id" | "ct_capitulo_id" | "ct_financiamiento_id" | "cantidad_presupuestada" | "ct_usuario_in" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type dt_techo_presupuestoOptionalAttributes = "id_techo" | "ct_area_id" | "ct_capitulo_id" | "ct_financiamiento_id" | "cantidad_presupuestada" | "ct_usuario_in" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type dt_techo_presupuestoCreationAttributes = Optional<dt_techo_presupuestoAttributes, dt_techo_presupuestoOptionalAttributes>;
 
 export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, dt_techo_presupuestoCreationAttributes> implements dt_techo_presupuestoAttributes {
@@ -32,14 +33,9 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
   cantidad_presupuestada!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
-  // dt_techo_presupuesto belongsTo ct_area via ct_area_id
-  ct_area!: ct_area;
-  getCt_area!: Sequelize.BelongsToGetAssociationMixin<ct_area>;
-  setCt_area!: Sequelize.BelongsToSetAssociationMixin<ct_area, ct_areaId>;
-  createCt_area!: Sequelize.BelongsToCreateAssociationMixin<ct_area>;
   // dt_techo_presupuesto belongsTo ct_capitulo via ct_capitulo_id
   ct_capitulo!: ct_capitulo;
   getCt_capitulo!: Sequelize.BelongsToGetAssociationMixin<ct_capitulo>;
@@ -72,6 +68,18 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
   hasDt_proyecto_anual!: Sequelize.HasManyHasAssociationMixin<dt_proyecto_anual, dt_proyecto_anualId>;
   hasDt_proyecto_anuals!: Sequelize.HasManyHasAssociationsMixin<dt_proyecto_anual, dt_proyecto_anualId>;
   countDt_proyecto_anuals!: Sequelize.HasManyCountAssociationsMixin;
+  // dt_techo_presupuesto hasMany rl_justificacion via dt_techo_id
+  rl_justificacions!: rl_justificacion[];
+  getRl_justificacions!: Sequelize.HasManyGetAssociationsMixin<rl_justificacion>;
+  setRl_justificacions!: Sequelize.HasManySetAssociationsMixin<rl_justificacion, rl_justificacionId>;
+  addRl_justificacion!: Sequelize.HasManyAddAssociationMixin<rl_justificacion, rl_justificacionId>;
+  addRl_justificacions!: Sequelize.HasManyAddAssociationsMixin<rl_justificacion, rl_justificacionId>;
+  createRl_justificacion!: Sequelize.HasManyCreateAssociationMixin<rl_justificacion>;
+  removeRl_justificacion!: Sequelize.HasManyRemoveAssociationMixin<rl_justificacion, rl_justificacionId>;
+  removeRl_justificacions!: Sequelize.HasManyRemoveAssociationsMixin<rl_justificacion, rl_justificacionId>;
+  hasRl_justificacion!: Sequelize.HasManyHasAssociationMixin<rl_justificacion, rl_justificacionId>;
+  hasRl_justificacions!: Sequelize.HasManyHasAssociationsMixin<rl_justificacion, rl_justificacionId>;
+  countRl_justificacions!: Sequelize.HasManyCountAssociationsMixin;
   // dt_techo_presupuesto hasMany rl_producto_requisicion via dt_techo_id
   rl_producto_requisicions!: rl_producto_requisicion[];
   getRl_producto_requisicions!: Sequelize.HasManyGetAssociationsMixin<rl_producto_requisicion>;
@@ -84,6 +92,11 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
   hasRl_producto_requisicion!: Sequelize.HasManyHasAssociationMixin<rl_producto_requisicion, rl_producto_requisicionId>;
   hasRl_producto_requisicions!: Sequelize.HasManyHasAssociationsMixin<rl_producto_requisicion, rl_producto_requisicionId>;
   countRl_producto_requisicions!: Sequelize.HasManyCountAssociationsMixin;
+  // dt_techo_presupuesto belongsTo rl_area_financiero via ct_area_id
+  ct_area!: rl_area_financiero;
+  getCt_area!: Sequelize.BelongsToGetAssociationMixin<rl_area_financiero>;
+  setCt_area!: Sequelize.BelongsToSetAssociationMixin<rl_area_financiero, rl_area_financieroId>;
+  createCt_area!: Sequelize.BelongsToCreateAssociationMixin<rl_area_financiero>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof dt_techo_presupuesto {
     return dt_techo_presupuesto.init({
@@ -98,8 +111,8 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
       allowNull: false,
       defaultValue: 0,
       references: {
-        model: 'ct_area',
-        key: 'id_area'
+        model: 'rl_area_financiero',
+        key: 'id_area_fin'
       }
     },
     ct_capitulo_id: {
@@ -142,20 +155,11 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
     tableName: 'dt_techo_presupuesto',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -163,13 +167,6 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
         using: "BTREE",
         fields: [
           { name: "id_techo" },
-        ]
-      },
-      {
-        name: "fk_techo_area",
-        using: "BTREE",
-        fields: [
-          { name: "ct_area_id" },
         ]
       },
       {
@@ -198,6 +195,13 @@ export class dt_techo_presupuesto extends Model<dt_techo_presupuestoAttributes, 
         using: "BTREE",
         fields: [
           { name: "ct_usuario_at" },
+        ]
+      },
+      {
+        name: "fk_techo_area_idx",
+        using: "BTREE",
+        fields: [
+          { name: "ct_area_id" },
         ]
       },
     ]

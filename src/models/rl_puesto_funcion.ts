@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { ct_funcion, ct_funcionId } from './ct_funcion';
 import type { ct_puesto, ct_puestoId } from './ct_puesto';
+import type { dt_funcion, dt_funcionId } from './dt_funcion';
 
 export interface rl_puesto_funcionAttributes {
   id_puesto_funcion: number;
@@ -19,16 +19,16 @@ export class rl_puesto_funcion extends Model<rl_puesto_funcionAttributes, rl_pue
   ct_puesto_id?: number;
   dt_funcion_id?: number;
 
-  // rl_puesto_funcion belongsTo ct_funcion via dt_funcion_id
-  dt_funcion!: ct_funcion;
-  getDt_funcion!: Sequelize.BelongsToGetAssociationMixin<ct_funcion>;
-  setDt_funcion!: Sequelize.BelongsToSetAssociationMixin<ct_funcion, ct_funcionId>;
-  createDt_funcion!: Sequelize.BelongsToCreateAssociationMixin<ct_funcion>;
   // rl_puesto_funcion belongsTo ct_puesto via ct_puesto_id
   ct_puesto!: ct_puesto;
   getCt_puesto!: Sequelize.BelongsToGetAssociationMixin<ct_puesto>;
   setCt_puesto!: Sequelize.BelongsToSetAssociationMixin<ct_puesto, ct_puestoId>;
   createCt_puesto!: Sequelize.BelongsToCreateAssociationMixin<ct_puesto>;
+  // rl_puesto_funcion belongsTo dt_funcion via dt_funcion_id
+  dt_funcion!: dt_funcion;
+  getDt_funcion!: Sequelize.BelongsToGetAssociationMixin<dt_funcion>;
+  setDt_funcion!: Sequelize.BelongsToSetAssociationMixin<dt_funcion, dt_funcionId>;
+  createDt_funcion!: Sequelize.BelongsToCreateAssociationMixin<dt_funcion>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof rl_puesto_funcion {
     return rl_puesto_funcion.init({
@@ -50,7 +50,7 @@ export class rl_puesto_funcion extends Model<rl_puesto_funcionAttributes, rl_pue
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'ct_funcion',
+        model: 'dt_funcion',
         key: 'id_funcion'
       }
     }

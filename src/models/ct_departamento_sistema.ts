@@ -11,13 +11,13 @@ export interface ct_departamento_sistemaAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_departamento_sistemaPk = "id_departamento";
 export type ct_departamento_sistemaId = ct_departamento_sistema[ct_departamento_sistemaPk];
-export type ct_departamento_sistemaOptionalAttributes = "id_departamento" | "nombre_departamento" | "ct_direccion_id" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_departamento_sistemaOptionalAttributes = "id_departamento" | "nombre_departamento" | "ct_direccion_id" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_departamento_sistemaCreationAttributes = Optional<ct_departamento_sistemaAttributes, ct_departamento_sistemaOptionalAttributes>;
 
 export class ct_departamento_sistema extends Model<ct_departamento_sistemaAttributes, ct_departamento_sistemaCreationAttributes> implements ct_departamento_sistemaAttributes {
@@ -27,8 +27,8 @@ export class ct_departamento_sistema extends Model<ct_departamento_sistemaAttrib
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_departamento_sistema hasMany ct_area via ct_departamento_id
   ct_areas!: ct_area[];
@@ -73,7 +73,7 @@ export class ct_departamento_sistema extends Model<ct_departamento_sistemaAttrib
     ct_direccion_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 0,
+      defaultValue: 85,
       references: {
         model: 'ct_direccion_sistema',
         key: 'id_direccion'
@@ -99,21 +99,11 @@ export class ct_departamento_sistema extends Model<ct_departamento_sistemaAttrib
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_departamento_sistema',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

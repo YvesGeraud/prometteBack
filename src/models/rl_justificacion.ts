@@ -3,30 +3,33 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { ct_area, ct_areaId } from './ct_area';
 import type { ct_partida, ct_partidaId } from './ct_partida';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
+import type { dt_techo_presupuesto, dt_techo_presupuestoId } from './dt_techo_presupuesto';
 
 export interface rl_justificacionAttributes {
   id_justificacion: number;
   ct_partida_id: number;
   ct_area_id: number;
+  dt_techo_id?: number;
   justificacion: string;
   ct_usuario_id?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type rl_justificacionPk = "id_justificacion";
 export type rl_justificacionId = rl_justificacion[rl_justificacionPk];
-export type rl_justificacionOptionalAttributes = "id_justificacion" | "ct_usuario_id" | "fecha_in" | "fecha_at";
+export type rl_justificacionOptionalAttributes = "id_justificacion" | "dt_techo_id" | "ct_usuario_id" | "createdAt" | "updatedAt";
 export type rl_justificacionCreationAttributes = Optional<rl_justificacionAttributes, rl_justificacionOptionalAttributes>;
 
 export class rl_justificacion extends Model<rl_justificacionAttributes, rl_justificacionCreationAttributes> implements rl_justificacionAttributes {
   id_justificacion!: number;
   ct_partida_id!: number;
   ct_area_id!: number;
+  dt_techo_id?: number;
   justificacion!: string;
   ct_usuario_id?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // rl_justificacion belongsTo ct_area via ct_area_id
   ct_area!: ct_area;
@@ -43,6 +46,11 @@ export class rl_justificacion extends Model<rl_justificacionAttributes, rl_justi
   getCt_usuario!: Sequelize.BelongsToGetAssociationMixin<ct_usuario>;
   setCt_usuario!: Sequelize.BelongsToSetAssociationMixin<ct_usuario, ct_usuarioId>;
   createCt_usuario!: Sequelize.BelongsToCreateAssociationMixin<ct_usuario>;
+  // rl_justificacion belongsTo dt_techo_presupuesto via dt_techo_id
+  dt_techo!: dt_techo_presupuesto;
+  getDt_techo!: Sequelize.BelongsToGetAssociationMixin<dt_techo_presupuesto>;
+  setDt_techo!: Sequelize.BelongsToSetAssociationMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
+  createDt_techo!: Sequelize.BelongsToCreateAssociationMixin<dt_techo_presupuesto>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof rl_justificacion {
     return rl_justificacion.init({
@@ -70,6 +78,15 @@ export class rl_justificacion extends Model<rl_justificacionAttributes, rl_justi
         key: 'id_area'
       }
     },
+    dt_techo_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 1,
+      references: {
+        model: 'dt_techo_presupuesto',
+        key: 'id_techo'
+      }
+    },
     justificacion: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -83,21 +100,11 @@ export class rl_justificacion extends Model<rl_justificacionAttributes, rl_justi
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'rl_justificacion',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -134,6 +141,13 @@ export class rl_justificacion extends Model<rl_justificacionAttributes, rl_justi
         fields: [
           { name: "ct_partida_id" },
           { name: "ct_area_id" },
+        ]
+      },
+      {
+        name: "FK_rl_justificacion_dt_techo_presupuesto",
+        using: "BTREE",
+        fields: [
+          { name: "dt_techo_id" },
         ]
       },
     ]

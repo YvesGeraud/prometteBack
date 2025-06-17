@@ -10,13 +10,13 @@ export interface ct_direccion_sistemaAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_direccion_sistemaPk = "id_direccion";
 export type ct_direccion_sistemaId = ct_direccion_sistema[ct_direccion_sistemaPk];
-export type ct_direccion_sistemaOptionalAttributes = "id_direccion" | "nombre_direccion" | "ct_dependencia_id" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_direccion_sistemaOptionalAttributes = "id_direccion" | "nombre_direccion" | "ct_dependencia_id" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_direccion_sistemaCreationAttributes = Optional<ct_direccion_sistemaAttributes, ct_direccion_sistemaOptionalAttributes>;
 
 export class ct_direccion_sistema extends Model<ct_direccion_sistemaAttributes, ct_direccion_sistemaCreationAttributes> implements ct_direccion_sistemaAttributes {
@@ -26,8 +26,8 @@ export class ct_direccion_sistema extends Model<ct_direccion_sistemaAttributes, 
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_direccion_sistema hasMany ct_departamento_sistema via ct_direccion_id
   ct_departamento_sistemas!: ct_departamento_sistema[];
@@ -89,21 +89,11 @@ export class ct_direccion_sistema extends Model<ct_direccion_sistemaAttributes, 
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_direccion_sistema',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

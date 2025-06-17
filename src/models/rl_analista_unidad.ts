@@ -8,15 +8,15 @@ export interface rl_analista_unidadAttributes {
   ct_usuario_id: number;
   rl_area_financiero: number;
   estado: number;
-  fecha_in: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   ct_usuario_in: number;
   ct_usuario_at?: number;
 }
 
 export type rl_analista_unidadPk = "id_puesto_unidad";
 export type rl_analista_unidadId = rl_analista_unidad[rl_analista_unidadPk];
-export type rl_analista_unidadOptionalAttributes = "id_puesto_unidad" | "ct_usuario_id" | "rl_area_financiero" | "estado" | "fecha_in" | "fecha_at" | "ct_usuario_in" | "ct_usuario_at";
+export type rl_analista_unidadOptionalAttributes = "id_puesto_unidad" | "ct_usuario_id" | "rl_area_financiero" | "estado" | "createdAt" | "updatedAt" | "ct_usuario_in" | "ct_usuario_at";
 export type rl_analista_unidadCreationAttributes = Optional<rl_analista_unidadAttributes, rl_analista_unidadOptionalAttributes>;
 
 export class rl_analista_unidad extends Model<rl_analista_unidadAttributes, rl_analista_unidadCreationAttributes> implements rl_analista_unidadAttributes {
@@ -24,8 +24,8 @@ export class rl_analista_unidad extends Model<rl_analista_unidadAttributes, rl_a
   ct_usuario_id!: number;
   rl_area_financiero!: number;
   estado!: number;
-  fecha_in!: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
 
@@ -76,16 +76,6 @@ export class rl_analista_unidad extends Model<rl_analista_unidadAttributes, rl_a
       allowNull: false,
       defaultValue: 1
     },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
     ct_usuario_in: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -102,7 +92,7 @@ export class rl_analista_unidad extends Model<rl_analista_unidadAttributes, rl_a
   }, {
     sequelize,
     tableName: 'rl_analista_unidad',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

@@ -3,7 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { ct_municipio, ct_municipioId } from './ct_municipio';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
 import type { dt_diagnostico_aneec, dt_diagnostico_aneecId } from './dt_diagnostico_aneec';
-import type { dt_informes_annec, dt_informes_annecId } from './dt_informes_annec';
+import type { dt_informes_aneec, dt_informes_aneecId } from './dt_informes_aneec';
 
 export interface dt_aspirante_aneecAttributes {
   id_aspirante: number;
@@ -11,6 +11,7 @@ export interface dt_aspirante_aneecAttributes {
   nombre: string;
   apellido_paterno: string;
   apellido_materno: string;
+  telefono: string;
   correo: string;
   fecha_nacimiento: string;
   instituto: string;
@@ -20,24 +21,21 @@ export interface dt_aspirante_aneecAttributes {
   ct_municipio_id: number;
   localidad: string;
   ruta_ine: string;
+  tipo_documento: string;
   ruta_comprobante_estudio: string;
   ruta_comprobante_domicilio: string;
   ruta_carta_compromiso: string;
-  ruta_carta_compromiso_tutor: string;
   ruta_aviso_privacidad_aspirante: string;
-  ruta_privacidad_usuario: string;
   ct_usuario_in: number;
-  fecha_in: Date;
+  createdAt?: Date;
   ct_usuario_at?: number;
-  fecha_at?: Date;
+  updatedAt?: Date;
   status: string;
-  tipo_documento: string;
-  telefono: string;
 }
 
 export type dt_aspirante_aneecPk = "id_aspirante";
 export type dt_aspirante_aneecId = dt_aspirante_aneec[dt_aspirante_aneecPk];
-export type dt_aspirante_aneecOptionalAttributes = "id_aspirante" | "fecha_in" | "ct_usuario_at" | "fecha_at" | "status";
+export type dt_aspirante_aneecOptionalAttributes = "id_aspirante" | "createdAt" | "ct_usuario_at" | "updatedAt" | "status";
 export type dt_aspirante_aneecCreationAttributes = Optional<dt_aspirante_aneecAttributes, dt_aspirante_aneecOptionalAttributes>;
 
 export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_aspirante_aneecCreationAttributes> implements dt_aspirante_aneecAttributes {
@@ -46,6 +44,7 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
   nombre!: string;
   apellido_paterno!: string;
   apellido_materno!: string;
+  telefono!: string;
   correo!: string;
   fecha_nacimiento!: string;
   instituto!: string;
@@ -55,19 +54,16 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
   ct_municipio_id!: number;
   localidad!: string;
   ruta_ine!: string;
+  tipo_documento!: string;
   ruta_comprobante_estudio!: string;
   ruta_comprobante_domicilio!: string;
   ruta_carta_compromiso!: string;
-  ruta_carta_compromiso_tutor!: string;
   ruta_aviso_privacidad_aspirante!: string;
-  ruta_privacidad_usuario!: string;
   ct_usuario_in!: number;
-  fecha_in!: Date;
+  createdAt?: Date;
   ct_usuario_at?: number;
-  fecha_at?: Date;
+  updatedAt?: Date;
   status!: string;
-  tipo_documento!: string;
-  telefono!: string;
 
   // dt_aspirante_aneec belongsTo ct_municipio via ct_municipio_id
   ct_municipio!: ct_municipio;
@@ -96,18 +92,18 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
   hasDt_diagnostico_aneec!: Sequelize.HasManyHasAssociationMixin<dt_diagnostico_aneec, dt_diagnostico_aneecId>;
   hasDt_diagnostico_aneecs!: Sequelize.HasManyHasAssociationsMixin<dt_diagnostico_aneec, dt_diagnostico_aneecId>;
   countDt_diagnostico_aneecs!: Sequelize.HasManyCountAssociationsMixin;
-  // dt_aspirante_aneec hasMany dt_informes_annec via dt_aspirante_id
-  dt_informes_annecs!: dt_informes_annec[];
-  getDt_informes_annecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_annec>;
-  setDt_informes_annecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  addDt_informes_annec!: Sequelize.HasManyAddAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  addDt_informes_annecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  createDt_informes_annec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_annec>;
-  removeDt_informes_annec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  removeDt_informes_annecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  hasDt_informes_annec!: Sequelize.HasManyHasAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  hasDt_informes_annecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  countDt_informes_annecs!: Sequelize.HasManyCountAssociationsMixin;
+  // dt_aspirante_aneec hasMany dt_informes_aneec via dt_aspirante_id
+  dt_informes_aneecs!: dt_informes_aneec[];
+  getDt_informes_aneecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_aneec>;
+  setDt_informes_aneecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addDt_informes_aneec!: Sequelize.HasManyAddAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addDt_informes_aneecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  createDt_informes_aneec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_aneec>;
+  removeDt_informes_aneec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  removeDt_informes_aneecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasDt_informes_aneec!: Sequelize.HasManyHasAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasDt_informes_aneecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  countDt_informes_aneecs!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof dt_aspirante_aneec {
     return dt_aspirante_aneec.init({
@@ -131,6 +127,10 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
     },
     apellido_materno: {
       type: DataTypes.STRING(50),
+      allowNull: false
+    },
+    telefono: {
+      type: DataTypes.STRING(15),
       allowNull: false
     },
     correo: {
@@ -173,6 +173,10 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
       type: DataTypes.STRING(50),
       allowNull: false
     },
+    tipo_documento: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
     ruta_comprobante_estudio: {
       type: DataTypes.STRING(50),
       allowNull: false
@@ -185,15 +189,7 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    ruta_carta_compromiso_tutor: {
-      type: DataTypes.STRING(50),
-      allowNull: false
-    },
     ruta_aviso_privacidad_aspirante: {
-      type: DataTypes.STRING(50),
-      allowNull: false
-    },
-    ruta_privacidad_usuario: {
       type: DataTypes.STRING(50),
       allowNull: false
     },
@@ -205,11 +201,6 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
         key: 'id_usuario'
       }
     },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
     ct_usuario_at: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -218,28 +209,15 @@ export class dt_aspirante_aneec extends Model<dt_aspirante_aneecAttributes, dt_a
         key: 'id_usuario'
       }
     },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
     status: {
       type: DataTypes.STRING(50),
       allowNull: false,
       defaultValue: "EN PROCESO"
-    },
-    tipo_documento: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    telefono: {
-      type: DataTypes.STRING(15),
-      allowNull: false
     }
   }, {
     sequelize,
     tableName: 'dt_aspirante_aneec',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

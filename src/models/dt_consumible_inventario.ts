@@ -13,13 +13,14 @@ export interface dt_consumible_inventarioAttributes {
   ct_partida_id: number;
   ct_unidad_id: number;
   ct_factura_id: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  observaciones: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type dt_consumible_inventarioPk = "id_inventario";
 export type dt_consumible_inventarioId = dt_consumible_inventario[dt_consumible_inventarioPk];
-export type dt_consumible_inventarioOptionalAttributes = "id_inventario" | "descripcion" | "cantidad" | "resta" | "fecha_in" | "fecha_at";
+export type dt_consumible_inventarioOptionalAttributes = "id_inventario" | "descripcion" | "cantidad" | "resta" | "observaciones" | "createdAt" | "updatedAt";
 export type dt_consumible_inventarioCreationAttributes = Optional<dt_consumible_inventarioAttributes, dt_consumible_inventarioOptionalAttributes>;
 
 export class dt_consumible_inventario extends Model<dt_consumible_inventarioAttributes, dt_consumible_inventarioCreationAttributes> implements dt_consumible_inventarioAttributes {
@@ -31,8 +32,9 @@ export class dt_consumible_inventario extends Model<dt_consumible_inventarioAttr
   ct_partida_id!: number;
   ct_unidad_id!: number;
   ct_factura_id!: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  observaciones!: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // dt_consumible_inventario belongsTo ct_consumible_factura via ct_factura_id
   ct_factura!: ct_consumible_factura;
@@ -101,20 +103,15 @@ export class dt_consumible_inventario extends Model<dt_consumible_inventarioAttr
         key: 'id_factura'
       }
     },
-    fecha_in: {
-      type: DataTypes.DATE,
+    observaciones: {
+      type: DataTypes.STRING(255),
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
+      defaultValue: ""
     }
   }, {
     sequelize,
     tableName: 'dt_consumible_inventario',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

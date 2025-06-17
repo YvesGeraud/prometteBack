@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { ct_area, ct_areaId } from './ct_area';
 import type { ct_producto_consumible, ct_producto_consumibleId } from './ct_producto_consumible';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
 import type { dt_techo_presupuesto, dt_techo_presupuestoId } from './dt_techo_presupuesto';
+import type { rl_area_financiero, rl_area_financieroId } from './rl_area_financiero';
 
 export interface rl_producto_requisicionAttributes {
   id_producto_requisicion: number;
@@ -12,15 +12,16 @@ export interface rl_producto_requisicionAttributes {
   ct_productos_id: number;
   cantidad: number;
   mes: string;
+  total: number;
   ct_usuarios_in: number;
   ct_usuarios_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type rl_producto_requisicionPk = "id_producto_requisicion";
 export type rl_producto_requisicionId = rl_producto_requisicion[rl_producto_requisicionPk];
-export type rl_producto_requisicionOptionalAttributes = "id_producto_requisicion" | "ct_area_id" | "dt_techo_id" | "ct_productos_id" | "cantidad" | "mes" | "ct_usuarios_in" | "ct_usuarios_at" | "fecha_in" | "fecha_at";
+export type rl_producto_requisicionOptionalAttributes = "id_producto_requisicion" | "ct_area_id" | "dt_techo_id" | "ct_productos_id" | "cantidad" | "mes" | "ct_usuarios_in" | "ct_usuarios_at" | "createdAt" | "updatedAt";
 export type rl_producto_requisicionCreationAttributes = Optional<rl_producto_requisicionAttributes, rl_producto_requisicionOptionalAttributes>;
 
 export class rl_producto_requisicion extends Model<rl_producto_requisicionAttributes, rl_producto_requisicionCreationAttributes> implements rl_producto_requisicionAttributes {
@@ -30,16 +31,12 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
   ct_productos_id!: number;
   cantidad!: number;
   mes!: string;
+  total!: number;
   ct_usuarios_in!: number;
   ct_usuarios_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
-  // rl_producto_requisicion belongsTo ct_area via ct_area_id
-  ct_area!: ct_area;
-  getCt_area!: Sequelize.BelongsToGetAssociationMixin<ct_area>;
-  setCt_area!: Sequelize.BelongsToSetAssociationMixin<ct_area, ct_areaId>;
-  createCt_area!: Sequelize.BelongsToCreateAssociationMixin<ct_area>;
   // rl_producto_requisicion belongsTo ct_producto_consumible via ct_productos_id
   ct_producto!: ct_producto_consumible;
   getCt_producto!: Sequelize.BelongsToGetAssociationMixin<ct_producto_consumible>;
@@ -55,6 +52,11 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
   getDt_techo!: Sequelize.BelongsToGetAssociationMixin<dt_techo_presupuesto>;
   setDt_techo!: Sequelize.BelongsToSetAssociationMixin<dt_techo_presupuesto, dt_techo_presupuestoId>;
   createDt_techo!: Sequelize.BelongsToCreateAssociationMixin<dt_techo_presupuesto>;
+  // rl_producto_requisicion belongsTo rl_area_financiero via ct_area_id
+  ct_area!: rl_area_financiero;
+  getCt_area!: Sequelize.BelongsToGetAssociationMixin<rl_area_financiero>;
+  setCt_area!: Sequelize.BelongsToSetAssociationMixin<rl_area_financiero, rl_area_financieroId>;
+  createCt_area!: Sequelize.BelongsToCreateAssociationMixin<rl_area_financiero>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof rl_producto_requisicion {
     return rl_producto_requisicion.init({
@@ -69,8 +71,8 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
       allowNull: false,
       defaultValue: 0,
       references: {
-        model: 'ct_area',
-        key: 'id_area'
+        model: 'rl_area_financiero',
+        key: 'id_area_fin'
       }
     },
     dt_techo_id: {
@@ -101,6 +103,10 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
       allowNull: false,
       defaultValue: "0"
     },
+    total: {
+      type: DataTypes.DECIMAL(15,3),
+      allowNull: false
+    },
     ct_usuarios_in: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -114,21 +120,11 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'rl_producto_requisicion',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
@@ -136,13 +132,6 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
         using: "BTREE",
         fields: [
           { name: "id_producto_requisicion" },
-        ]
-      },
-      {
-        name: "FK__ct_area",
-        using: "BTREE",
-        fields: [
-          { name: "ct_area_id" },
         ]
       },
       {
@@ -164,6 +153,13 @@ export class rl_producto_requisicion extends Model<rl_producto_requisicionAttrib
         using: "BTREE",
         fields: [
           { name: "dt_techo_id" },
+        ]
+      },
+      {
+        name: "FK__ct_area_idx",
+        using: "BTREE",
+        fields: [
+          { name: "ct_area_id" },
         ]
       },
     ]

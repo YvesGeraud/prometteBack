@@ -16,13 +16,13 @@ export interface rl_usuario_puestoAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type rl_usuario_puestoPk = "id_usuario_puesto";
 export type rl_usuario_puestoId = rl_usuario_puesto[rl_usuario_puestoPk];
-export type rl_usuario_puestoOptionalAttributes = "id_usuario_puesto" | "periodo_inicio" | "periodo_final" | "plaza" | "ct_sindicato_id" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type rl_usuario_puestoOptionalAttributes = "id_usuario_puesto" | "periodo_inicio" | "periodo_final" | "plaza" | "ct_sindicato_id" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type rl_usuario_puestoCreationAttributes = Optional<rl_usuario_puestoAttributes, rl_usuario_puestoOptionalAttributes>;
 
 export class rl_usuario_puesto extends Model<rl_usuario_puestoAttributes, rl_usuario_puestoCreationAttributes> implements rl_usuario_puestoAttributes {
@@ -36,8 +36,8 @@ export class rl_usuario_puesto extends Model<rl_usuario_puestoAttributes, rl_usu
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // rl_usuario_puesto belongsTo ct_puesto via ct_puesto_id
   ct_puesto!: ct_puesto;
@@ -142,21 +142,11 @@ export class rl_usuario_puesto extends Model<rl_usuario_puestoAttributes, rl_usu
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'rl_usuario_puesto',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

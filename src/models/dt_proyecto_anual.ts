@@ -11,13 +11,13 @@ export interface dt_proyecto_anualAttributes {
   monto_disponible: number;
   descripcion?: string;
   estado: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type dt_proyecto_anualPk = "id_proyecto_anual";
 export type dt_proyecto_anualId = dt_proyecto_anual[dt_proyecto_anualPk];
-export type dt_proyecto_anualOptionalAttributes = "id_proyecto_anual" | "monto_asignado" | "monto_utilizado" | "monto_disponible" | "descripcion" | "estado" | "fecha_in" | "fecha_at";
+export type dt_proyecto_anualOptionalAttributes = "id_proyecto_anual" | "monto_asignado" | "monto_utilizado" | "monto_disponible" | "descripcion" | "estado" | "createdAt" | "updatedAt";
 export type dt_proyecto_anualCreationAttributes = Optional<dt_proyecto_anualAttributes, dt_proyecto_anualOptionalAttributes>;
 
 export class dt_proyecto_anual extends Model<dt_proyecto_anualAttributes, dt_proyecto_anualCreationAttributes> implements dt_proyecto_anualAttributes {
@@ -29,8 +29,8 @@ export class dt_proyecto_anual extends Model<dt_proyecto_anualAttributes, dt_pro
   monto_disponible!: number;
   descripcion?: string;
   estado!: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // dt_proyecto_anual belongsTo dt_techo_presupuesto via dt_techo_id
   dt_techo!: dt_techo_presupuesto;
@@ -88,21 +88,11 @@ export class dt_proyecto_anual extends Model<dt_proyecto_anualAttributes, dt_pro
       allowNull: false,
       defaultValue: 1,
       comment: "Estado del proyecto (1: activo, 0: inactivo)"
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'dt_proyecto_anual',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

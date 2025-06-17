@@ -7,13 +7,13 @@ export interface ct_consumible_departamentoAttributes {
   nombre_departamento: string;
   ct_puesto_id: number;
   ct_direccion_id: number;
-  fecha_in: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_consumible_departamentoPk = "id_departamento";
 export type ct_consumible_departamentoId = ct_consumible_departamento[ct_consumible_departamentoPk];
-export type ct_consumible_departamentoOptionalAttributes = "id_departamento" | "fecha_in" | "fecha_at";
+export type ct_consumible_departamentoOptionalAttributes = "id_departamento" | "createdAt" | "updatedAt";
 export type ct_consumible_departamentoCreationAttributes = Optional<ct_consumible_departamentoAttributes, ct_consumible_departamentoOptionalAttributes>;
 
 export class ct_consumible_departamento extends Model<ct_consumible_departamentoAttributes, ct_consumible_departamentoCreationAttributes> implements ct_consumible_departamentoAttributes {
@@ -21,8 +21,8 @@ export class ct_consumible_departamento extends Model<ct_consumible_departamento
   nombre_departamento!: string;
   ct_puesto_id!: number;
   ct_direccion_id!: number;
-  fecha_in!: Date;
-  fecha_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_consumible_departamento belongsTo ct_consumible_direccion via ct_direccion_id
   ct_direccion!: ct_consumible_direccion;
@@ -53,21 +53,11 @@ export class ct_consumible_departamento extends Model<ct_consumible_departamento
         model: 'ct_consumible_direccion',
         key: 'id_direccion'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_consumible_departamento',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

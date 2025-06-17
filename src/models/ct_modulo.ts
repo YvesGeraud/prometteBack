@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { ct_funcion, ct_funcionId } from './ct_funcion';
 import type { ct_usuario, ct_usuarioId } from './ct_usuario';
+import type { dt_funcion, dt_funcionId } from './dt_funcion';
 import type { rl_modulo_area, rl_modulo_areaId } from './rl_modulo_area';
 
 export interface ct_moduloAttributes {
@@ -13,13 +14,13 @@ export interface ct_moduloAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_moduloPk = "id_modulo";
 export type ct_moduloId = ct_modulo[ct_moduloPk];
-export type ct_moduloOptionalAttributes = "id_modulo" | "modulo_padre" | "clave" | "icono" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_moduloOptionalAttributes = "id_modulo" | "modulo_padre" | "clave" | "icono" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_moduloCreationAttributes = Optional<ct_moduloAttributes, ct_moduloOptionalAttributes>;
 
 export class ct_modulo extends Model<ct_moduloAttributes, ct_moduloCreationAttributes> implements ct_moduloAttributes {
@@ -31,8 +32,8 @@ export class ct_modulo extends Model<ct_moduloAttributes, ct_moduloCreationAttri
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_modulo hasMany ct_funcion via ct_modulo_id
   ct_funcions!: ct_funcion[];
@@ -46,6 +47,18 @@ export class ct_modulo extends Model<ct_moduloAttributes, ct_moduloCreationAttri
   hasCt_funcion!: Sequelize.HasManyHasAssociationMixin<ct_funcion, ct_funcionId>;
   hasCt_funcions!: Sequelize.HasManyHasAssociationsMixin<ct_funcion, ct_funcionId>;
   countCt_funcions!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_modulo hasMany dt_funcion via ct_modulo_id
+  dt_funcions!: dt_funcion[];
+  getDt_funcions!: Sequelize.HasManyGetAssociationsMixin<dt_funcion>;
+  setDt_funcions!: Sequelize.HasManySetAssociationsMixin<dt_funcion, dt_funcionId>;
+  addDt_funcion!: Sequelize.HasManyAddAssociationMixin<dt_funcion, dt_funcionId>;
+  addDt_funcions!: Sequelize.HasManyAddAssociationsMixin<dt_funcion, dt_funcionId>;
+  createDt_funcion!: Sequelize.HasManyCreateAssociationMixin<dt_funcion>;
+  removeDt_funcion!: Sequelize.HasManyRemoveAssociationMixin<dt_funcion, dt_funcionId>;
+  removeDt_funcions!: Sequelize.HasManyRemoveAssociationsMixin<dt_funcion, dt_funcionId>;
+  hasDt_funcion!: Sequelize.HasManyHasAssociationMixin<dt_funcion, dt_funcionId>;
+  hasDt_funcions!: Sequelize.HasManyHasAssociationsMixin<dt_funcion, dt_funcionId>;
+  countDt_funcions!: Sequelize.HasManyCountAssociationsMixin;
   // ct_modulo hasMany rl_modulo_area via ct_modulo_id
   rl_modulo_areas!: rl_modulo_area[];
   getRl_modulo_areas!: Sequelize.HasManyGetAssociationsMixin<rl_modulo_area>;
@@ -115,21 +128,11 @@ export class ct_modulo extends Model<ct_moduloAttributes, ct_moduloCreationAttri
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_modulo',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

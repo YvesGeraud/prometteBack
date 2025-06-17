@@ -12,11 +12,13 @@ import type { dt_aspirante_aneec, dt_aspirante_aneecId } from './dt_aspirante_an
 import type { dt_bitacora, dt_bitacoraId } from './dt_bitacora';
 import type { dt_correspondencia, dt_correspondenciaId } from './dt_correspondencia';
 import type { dt_diagnostico_aneec, dt_diagnostico_aneecId } from './dt_diagnostico_aneec';
-import type { dt_informes_annec, dt_informes_annecId } from './dt_informes_annec';
+import type { dt_funcion, dt_funcionId } from './dt_funcion';
+import type { dt_informes_aneec, dt_informes_aneecId } from './dt_informes_aneec';
 import type { dt_techo_presupuesto, dt_techo_presupuestoId } from './dt_techo_presupuesto';
 import type { rl_analista_unidad, rl_analista_unidadId } from './rl_analista_unidad';
 import type { rl_area_financiero, rl_area_financieroId } from './rl_area_financiero';
 import type { rl_correspondencia_usuario_estado, rl_correspondencia_usuario_estadoId } from './rl_correspondencia_usuario_estado';
+import type { rl_entrega_formato, rl_entrega_formatoId } from './rl_entrega_formato';
 import type { rl_justificacion, rl_justificacionId } from './rl_justificacion';
 import type { rl_producto_requisicion, rl_producto_requisicionId } from './rl_producto_requisicion';
 import type { rl_usuario_funcion, rl_usuario_funcionId } from './rl_usuario_funcion';
@@ -33,13 +35,13 @@ export interface ct_usuarioAttributes {
   estado: number;
   ct_usuario_in: number;
   ct_usuario_at?: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_usuarioPk = "id_usuario";
 export type ct_usuarioId = ct_usuario[ct_usuarioPk];
-export type ct_usuarioOptionalAttributes = "id_usuario" | "email_institucional" | "estado" | "ct_usuario_at" | "fecha_in" | "fecha_at";
+export type ct_usuarioOptionalAttributes = "id_usuario" | "email_institucional" | "estado" | "ct_usuario_at" | "createdAt" | "updatedAt";
 export type ct_usuarioCreationAttributes = Optional<ct_usuarioAttributes, ct_usuarioOptionalAttributes>;
 
 export class ct_usuario extends Model<ct_usuarioAttributes, ct_usuarioCreationAttributes> implements ct_usuarioAttributes {
@@ -53,8 +55,8 @@ export class ct_usuario extends Model<ct_usuarioAttributes, ct_usuarioCreationAt
   estado!: number;
   ct_usuario_in!: number;
   ct_usuario_at?: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_usuario hasMany ct_area via ct_usuario_in
   ct_areas!: ct_area[];
@@ -330,30 +332,54 @@ export class ct_usuario extends Model<ct_usuarioAttributes, ct_usuarioCreationAt
   hasCt_usuario_at_dt_diagnostico_aneec!: Sequelize.HasManyHasAssociationMixin<dt_diagnostico_aneec, dt_diagnostico_aneecId>;
   hasCt_usuario_at_dt_diagnostico_aneecs!: Sequelize.HasManyHasAssociationsMixin<dt_diagnostico_aneec, dt_diagnostico_aneecId>;
   countCt_usuario_at_dt_diagnostico_aneecs!: Sequelize.HasManyCountAssociationsMixin;
-  // ct_usuario hasMany dt_informes_annec via ct_usuario_in
-  dt_informes_annecs!: dt_informes_annec[];
-  getDt_informes_annecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_annec>;
-  setDt_informes_annecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  addDt_informes_annec!: Sequelize.HasManyAddAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  addDt_informes_annecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  createDt_informes_annec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_annec>;
-  removeDt_informes_annec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  removeDt_informes_annecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  hasDt_informes_annec!: Sequelize.HasManyHasAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  hasDt_informes_annecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  countDt_informes_annecs!: Sequelize.HasManyCountAssociationsMixin;
-  // ct_usuario hasMany dt_informes_annec via ct_usuario_at
-  ct_usuario_at_dt_informes_annecs!: dt_informes_annec[];
-  getCt_usuario_at_dt_informes_annecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_annec>;
-  setCt_usuario_at_dt_informes_annecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  addCt_usuario_at_dt_informes_annec!: Sequelize.HasManyAddAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  addCt_usuario_at_dt_informes_annecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  createCt_usuario_at_dt_informes_annec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_annec>;
-  removeCt_usuario_at_dt_informes_annec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  removeCt_usuario_at_dt_informes_annecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  hasCt_usuario_at_dt_informes_annec!: Sequelize.HasManyHasAssociationMixin<dt_informes_annec, dt_informes_annecId>;
-  hasCt_usuario_at_dt_informes_annecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_annec, dt_informes_annecId>;
-  countCt_usuario_at_dt_informes_annecs!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_usuario hasMany dt_funcion via ct_usuario_in
+  dt_funcions!: dt_funcion[];
+  getDt_funcions!: Sequelize.HasManyGetAssociationsMixin<dt_funcion>;
+  setDt_funcions!: Sequelize.HasManySetAssociationsMixin<dt_funcion, dt_funcionId>;
+  addDt_funcion!: Sequelize.HasManyAddAssociationMixin<dt_funcion, dt_funcionId>;
+  addDt_funcions!: Sequelize.HasManyAddAssociationsMixin<dt_funcion, dt_funcionId>;
+  createDt_funcion!: Sequelize.HasManyCreateAssociationMixin<dt_funcion>;
+  removeDt_funcion!: Sequelize.HasManyRemoveAssociationMixin<dt_funcion, dt_funcionId>;
+  removeDt_funcions!: Sequelize.HasManyRemoveAssociationsMixin<dt_funcion, dt_funcionId>;
+  hasDt_funcion!: Sequelize.HasManyHasAssociationMixin<dt_funcion, dt_funcionId>;
+  hasDt_funcions!: Sequelize.HasManyHasAssociationsMixin<dt_funcion, dt_funcionId>;
+  countDt_funcions!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_usuario hasMany dt_funcion via ct_usuario_at
+  ct_usuario_at_dt_funcions!: dt_funcion[];
+  getCt_usuario_at_dt_funcions!: Sequelize.HasManyGetAssociationsMixin<dt_funcion>;
+  setCt_usuario_at_dt_funcions!: Sequelize.HasManySetAssociationsMixin<dt_funcion, dt_funcionId>;
+  addCt_usuario_at_dt_funcion!: Sequelize.HasManyAddAssociationMixin<dt_funcion, dt_funcionId>;
+  addCt_usuario_at_dt_funcions!: Sequelize.HasManyAddAssociationsMixin<dt_funcion, dt_funcionId>;
+  createCt_usuario_at_dt_funcion!: Sequelize.HasManyCreateAssociationMixin<dt_funcion>;
+  removeCt_usuario_at_dt_funcion!: Sequelize.HasManyRemoveAssociationMixin<dt_funcion, dt_funcionId>;
+  removeCt_usuario_at_dt_funcions!: Sequelize.HasManyRemoveAssociationsMixin<dt_funcion, dt_funcionId>;
+  hasCt_usuario_at_dt_funcion!: Sequelize.HasManyHasAssociationMixin<dt_funcion, dt_funcionId>;
+  hasCt_usuario_at_dt_funcions!: Sequelize.HasManyHasAssociationsMixin<dt_funcion, dt_funcionId>;
+  countCt_usuario_at_dt_funcions!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_usuario hasMany dt_informes_aneec via ct_usuario_in
+  dt_informes_aneecs!: dt_informes_aneec[];
+  getDt_informes_aneecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_aneec>;
+  setDt_informes_aneecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addDt_informes_aneec!: Sequelize.HasManyAddAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addDt_informes_aneecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  createDt_informes_aneec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_aneec>;
+  removeDt_informes_aneec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  removeDt_informes_aneecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasDt_informes_aneec!: Sequelize.HasManyHasAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasDt_informes_aneecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  countDt_informes_aneecs!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_usuario hasMany dt_informes_aneec via ct_usuario_at
+  ct_usuario_at_dt_informes_aneecs!: dt_informes_aneec[];
+  getCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManyGetAssociationsMixin<dt_informes_aneec>;
+  setCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManySetAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addCt_usuario_at_dt_informes_aneec!: Sequelize.HasManyAddAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  addCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManyAddAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  createCt_usuario_at_dt_informes_aneec!: Sequelize.HasManyCreateAssociationMixin<dt_informes_aneec>;
+  removeCt_usuario_at_dt_informes_aneec!: Sequelize.HasManyRemoveAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  removeCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManyRemoveAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasCt_usuario_at_dt_informes_aneec!: Sequelize.HasManyHasAssociationMixin<dt_informes_aneec, dt_informes_aneecId>;
+  hasCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManyHasAssociationsMixin<dt_informes_aneec, dt_informes_aneecId>;
+  countCt_usuario_at_dt_informes_aneecs!: Sequelize.HasManyCountAssociationsMixin;
   // ct_usuario hasMany dt_techo_presupuesto via ct_usuario_in
   dt_techo_presupuestos!: dt_techo_presupuesto[];
   getDt_techo_presupuestos!: Sequelize.HasManyGetAssociationsMixin<dt_techo_presupuesto>;
@@ -438,6 +464,18 @@ export class ct_usuario extends Model<ct_usuarioAttributes, ct_usuarioCreationAt
   hasRl_correspondencia_usuario_estado!: Sequelize.HasManyHasAssociationMixin<rl_correspondencia_usuario_estado, rl_correspondencia_usuario_estadoId>;
   hasRl_correspondencia_usuario_estados!: Sequelize.HasManyHasAssociationsMixin<rl_correspondencia_usuario_estado, rl_correspondencia_usuario_estadoId>;
   countRl_correspondencia_usuario_estados!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_usuario hasMany rl_entrega_formato via ct_usuario_id
+  rl_entrega_formatos!: rl_entrega_formato[];
+  getRl_entrega_formatos!: Sequelize.HasManyGetAssociationsMixin<rl_entrega_formato>;
+  setRl_entrega_formatos!: Sequelize.HasManySetAssociationsMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  addRl_entrega_formato!: Sequelize.HasManyAddAssociationMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  addRl_entrega_formatos!: Sequelize.HasManyAddAssociationsMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  createRl_entrega_formato!: Sequelize.HasManyCreateAssociationMixin<rl_entrega_formato>;
+  removeRl_entrega_formato!: Sequelize.HasManyRemoveAssociationMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  removeRl_entrega_formatos!: Sequelize.HasManyRemoveAssociationsMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  hasRl_entrega_formato!: Sequelize.HasManyHasAssociationMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  hasRl_entrega_formatos!: Sequelize.HasManyHasAssociationsMixin<rl_entrega_formato, rl_entrega_formatoId>;
+  countRl_entrega_formatos!: Sequelize.HasManyCountAssociationsMixin;
   // ct_usuario hasMany rl_justificacion via ct_usuario_id
   rl_justificacions!: rl_justificacion[];
   getRl_justificacions!: Sequelize.HasManyGetAssociationsMixin<rl_justificacion>;
@@ -565,21 +603,11 @@ export class ct_usuario extends Model<ct_usuarioAttributes, ct_usuarioCreationAt
         model: 'ct_usuario',
         key: 'id_usuario'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_usuario',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

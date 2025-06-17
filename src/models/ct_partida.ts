@@ -4,6 +4,7 @@ import type { ct_capitulo, ct_capituloId } from './ct_capitulo';
 import type { ct_producto_consumible, ct_producto_consumibleId } from './ct_producto_consumible';
 import type { dt_consumible_inventario, dt_consumible_inventarioId } from './dt_consumible_inventario';
 import type { rl_justificacion, rl_justificacionId } from './rl_justificacion';
+import type { rl_partida_area, rl_partida_areaId } from './rl_partida_area';
 
 export interface ct_partidaAttributes {
   id_partida: number;
@@ -11,13 +12,13 @@ export interface ct_partidaAttributes {
   clave_partida: string;
   nombre_partida: string;
   estado: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_partidaPk = "id_partida";
 export type ct_partidaId = ct_partida[ct_partidaPk];
-export type ct_partidaOptionalAttributes = "id_partida" | "estado" | "fecha_in" | "fecha_at";
+export type ct_partidaOptionalAttributes = "id_partida" | "estado" | "createdAt" | "updatedAt";
 export type ct_partidaCreationAttributes = Optional<ct_partidaAttributes, ct_partidaOptionalAttributes>;
 
 export class ct_partida extends Model<ct_partidaAttributes, ct_partidaCreationAttributes> implements ct_partidaAttributes {
@@ -26,8 +27,8 @@ export class ct_partida extends Model<ct_partidaAttributes, ct_partidaCreationAt
   clave_partida!: string;
   nombre_partida!: string;
   estado!: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_partida belongsTo ct_capitulo via ct_capitulo_id
   ct_capitulo!: ct_capitulo;
@@ -70,6 +71,18 @@ export class ct_partida extends Model<ct_partidaAttributes, ct_partidaCreationAt
   hasRl_justificacion!: Sequelize.HasManyHasAssociationMixin<rl_justificacion, rl_justificacionId>;
   hasRl_justificacions!: Sequelize.HasManyHasAssociationsMixin<rl_justificacion, rl_justificacionId>;
   countRl_justificacions!: Sequelize.HasManyCountAssociationsMixin;
+  // ct_partida hasMany rl_partida_area via id_partida
+  rl_partida_areas!: rl_partida_area[];
+  getRl_partida_areas!: Sequelize.HasManyGetAssociationsMixin<rl_partida_area>;
+  setRl_partida_areas!: Sequelize.HasManySetAssociationsMixin<rl_partida_area, rl_partida_areaId>;
+  addRl_partida_area!: Sequelize.HasManyAddAssociationMixin<rl_partida_area, rl_partida_areaId>;
+  addRl_partida_areas!: Sequelize.HasManyAddAssociationsMixin<rl_partida_area, rl_partida_areaId>;
+  createRl_partida_area!: Sequelize.HasManyCreateAssociationMixin<rl_partida_area>;
+  removeRl_partida_area!: Sequelize.HasManyRemoveAssociationMixin<rl_partida_area, rl_partida_areaId>;
+  removeRl_partida_areas!: Sequelize.HasManyRemoveAssociationsMixin<rl_partida_area, rl_partida_areaId>;
+  hasRl_partida_area!: Sequelize.HasManyHasAssociationMixin<rl_partida_area, rl_partida_areaId>;
+  hasRl_partida_areas!: Sequelize.HasManyHasAssociationsMixin<rl_partida_area, rl_partida_areaId>;
+  countRl_partida_areas!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof ct_partida {
     return ct_partida.init({
@@ -99,21 +112,11 @@ export class ct_partida extends Model<ct_partidaAttributes, ct_partidaCreationAt
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: 1
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_partida',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

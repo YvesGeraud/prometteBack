@@ -7,21 +7,21 @@ export interface ct_consumible_facturaAttributes {
   id_factura: number;
   factura: string;
   ct_provedor_id: number;
-  fecha_in: Date;
-  fecha_at: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type ct_consumible_facturaPk = "id_factura";
 export type ct_consumible_facturaId = ct_consumible_factura[ct_consumible_facturaPk];
-export type ct_consumible_facturaOptionalAttributes = "id_factura" | "fecha_in" | "fecha_at";
+export type ct_consumible_facturaOptionalAttributes = "id_factura" | "createdAt" | "updatedAt";
 export type ct_consumible_facturaCreationAttributes = Optional<ct_consumible_facturaAttributes, ct_consumible_facturaOptionalAttributes>;
 
 export class ct_consumible_factura extends Model<ct_consumible_facturaAttributes, ct_consumible_facturaCreationAttributes> implements ct_consumible_facturaAttributes {
   id_factura!: number;
   factura!: string;
   ct_provedor_id!: number;
-  fecha_in!: Date;
-  fecha_at!: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   // ct_consumible_factura hasMany dt_consumible_inventario via ct_factura_id
   dt_consumible_inventarios!: dt_consumible_inventario[];
@@ -60,21 +60,11 @@ export class ct_consumible_factura extends Model<ct_consumible_facturaAttributes
         model: 'ct_consumibles_proveedor',
         key: 'id_proveedor'
       }
-    },
-    fecha_in: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
-    },
-    fecha_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
     tableName: 'ct_consumible_factura',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
