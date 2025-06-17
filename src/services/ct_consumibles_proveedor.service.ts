@@ -29,6 +29,22 @@ class CtConsumiblesProveedorService {
       throw new Error("Error al obtener consumibles proveedor en el servicio");
     }
   }
+
+  //* Crear un consumible proveedor
+  async crearConsumibleProveedor(data: any) {
+    const transaction = await sequelize.transaction();
+    try {
+      const consumibleProveedor = await ct_consumibles_proveedor.create(data, {
+        transaction,
+      });
+      await transaction.commit();
+      return consumibleProveedor;
+    } catch (error: any) {
+      await transaction.rollback();
+      console.error("Error al crear el consumible proveedor service:", error);
+      throw new Error("Error al crear el consumible proveedor service");
+    }
+  }
 }
 
 export default new CtConsumiblesProveedorService();

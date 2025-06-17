@@ -6,7 +6,7 @@ const router = Router();
 //* Obtener todos los consumibles proveedor
 router.get("/", CtConsumiblesProveedorController.getConsumiblesProveedor);
 
-//* Obtener un consumible proveedor por su ID
-//router.get("/:id", ctPuestoController.getPuestoById);
+//* Crear un consumible proveedor
+router.post("/", CtConsumiblesProveedorController.crearConsumibleProveedor);
 
 export default router;
