@@ -8,13 +8,20 @@ datasource db {
 }
 
 model ct_bitacora_accion {
-  id_ct_bitacora_accion  Int                      @id @default(autoincrement())
-  accion                 String                   @db.VarChar(50)
-  descripcion            String?                  @db.VarChar(255)
-  activo                 Boolean?                 @default(true)
-  createdAt              DateTime                   @default(now()) @db.DateTime(0)
-  updatedAt              DateTime?                  @db.DateTime(0)
-  dt_bitacora_movimiento dt_bitacora_movimiento[]
+  id_ct_bitacora_accion                                      Int                      @id @default(autoincrement())
+  accion                                                     String                   @db.VarChar(50)
+  descripcion                                                String?                  @db.VarChar(255)
+  estado                                                     Boolean?                 @default(true)
+  id_ct_usuario_in                                           Int
+  id_ct_usuario_up                                           Int?
+  fecha_in                                                   DateTime                 @default(now()) @db.DateTime(0)
+  fecha_up                                                   DateTime?                @db.DateTime(0)
+  ct_usuario_ct_bitacora_accion_id_ct_usuario_inToct_usuario ct_usuario               @relation("ct_bitacora_accion_id_ct_usuario_inToct_usuario", fields: [id_ct_usuario_in], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_bitacora_accion_ct_usuario_in")
+  ct_usuario_ct_bitacora_accion_id_ct_usuario_upToct_usuario ct_usuario?              @relation("ct_bitacora_accion_id_ct_usuario_upToct_usuario", fields: [id_ct_usuario_up], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_bitacora_accion_ct_usuario_up")
+  dt_bitacora_movimiento                                     dt_bitacora_movimiento[]
+
+  @@index([id_ct_usuario_in], map: "FK_ct_bitacora_accion_ct_usuario")
+  @@index([id_ct_usuario_up], map: "FK_ct_bitacora_accion_ct_usuario_up")
 }
 
 model ct_bitacora_entidad {
@@ -22,8 +29,8 @@ model ct_bitacora_entidad {
   entidad                String                   @db.VarChar(100)
   descripcion            String?                  @db.VarChar(255)
   activo                 Boolean?                 @default(true)
-  createdAt              DateTime                   @default(now()) @db.DateTime(0)
-  updatedAt              DateTime?                  @db.DateTime(0)
+  createdAt              DateTime                 @default(now()) @db.DateTime(0)
+  updatedAt              DateTime?                @db.DateTime(0)
   dt_bitacora_movimiento dt_bitacora_movimiento[]
 }
 
@@ -32,9 +39,9 @@ model ct_capitulo {
   clave_capitulo       Int
   nombre_capitulo      String                 @db.VarChar(100)
   activo               Boolean                @default(true)
+  createdAt            DateTime               @default(now()) @db.DateTime(0)
+  updatedAt            DateTime?              @db.DateTime(0)
   ct_partida           ct_partida[]
-  createdAt            DateTime                   @default(now()) @db.DateTime(0)
-  updatedAt            DateTime?                  @db.DateTime(0)
   dt_techo_presupuesto dt_techo_presupuesto[]
 }
 
@@ -198,6 +205,8 @@ model ct_usuario {
   ct_usuario_at                                                           Int?
   createdAt                                                               DateTime                            @default(now()) @db.Timestamp(0)
   updatedAt                                                               DateTime                            @default(now()) @db.Timestamp(0)
+  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_inToct_usuario      ct_bitacora_accion[]                @relation("ct_bitacora_accion_id_ct_usuario_inToct_usuario")
+  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_upToct_usuario      ct_bitacora_accion[]                @relation("ct_bitacora_accion_id_ct_usuario_upToct_usuario")
   ct_modulo_ct_modulo_ct_usuario_atToct_usuario                           ct_modulo[]                         @relation("ct_modulo_ct_usuario_atToct_usuario")
   ct_modulo_ct_modulo_ct_usuario_inToct_usuario                           ct_modulo[]                         @relation("ct_modulo_ct_usuario_inToct_usuario")
   ct_producto_consumible_ct_producto_consumible_ct_usuario_atToct_usuario ct_producto_consumible[]            @relation("ct_producto_consumible_ct_usuario_atToct_usuario")

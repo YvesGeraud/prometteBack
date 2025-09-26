@@ -6,6 +6,8 @@ import {
   ActualizarCtBitacoraAccionInput,
   ctBitacoraAccionIdParamSchema,
   CtBitacoraAccionIdParam,
+  eliminarCtBitacoraAccionSchema,
+  EliminarCtBitacoraAccionInput,
 } from "../schemas/ct_bitacora_accion.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
@@ -137,7 +139,16 @@ export class CtBitacoraAccionBaseController extends BaseController {
             req.params
           );
 
-        await ctBitacoraAccionBaseService.eliminar(id_ct_bitacora_accion);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtBitacoraAccionInput>(
+            eliminarCtBitacoraAccionSchema,
+            req.body
+          );
+
+        await ctBitacoraAccionBaseService.eliminar(
+          id_ct_bitacora_accion,
+          id_ct_usuario_up
+        );
       },
       "Bitacora acción eliminada exitosamente"
     );

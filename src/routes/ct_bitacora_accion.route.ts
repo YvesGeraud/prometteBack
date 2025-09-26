@@ -6,6 +6,7 @@ import {
   actualizarCtBitacoraAccionSchema,
   ctBitacoraAccionIdParamSchema,
   bitacoraAccionFiltrosSchema,
+  eliminarCtBitacoraAccionSchema,
 } from "../schemas/ct_bitacora_accion.schema";
 
 //TODO ===== RUTAS PARA CT_BITACORA_ACCION CON BASE SERVICE =====
@@ -47,7 +48,10 @@ router.put(
 // 📦 Eliminar entidad
 router.delete(
   "/:id_ct_bitacora_accion",
-  validarRequest({ params: ctBitacoraAccionIdParamSchema }),
+  validarRequest({
+    params: ctBitacoraAccionIdParamSchema,
+    body: eliminarCtBitacoraAccionSchema,
+  }),
   ctBitacoraAccionController.eliminarBitacoraAccion
 );
 
@@ -58,4 +62,4 @@ export default router;
 // GET    /api/ct_bitacora_accion/:id      - Obtener por ID
 // POST   /api/ct_bitacora_accion          - Crear
 // PUT    /api/ct_bitacora_accion/:id      - Actualizar
-// DELETE /api/ct_bitacora_accion/:id      - Eliminar
+// DELETE /api/ct_bitacora_accion/:id      - Eliminar (requiere id_ct_usuario_up en body)

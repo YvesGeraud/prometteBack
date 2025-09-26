@@ -5,6 +5,7 @@
  */
 
 import { Response } from "express";
+import { traducirMensajeZod } from "./zodTranslations";
 
 // ==========================================
 // INTERFACES DE RESPUESTA NORMALIZADA
@@ -271,7 +272,10 @@ export function validarDatos<T>(schema: any, data: any): T {
   } catch (error: any) {
     if (error.errors && Array.isArray(error.errors)) {
       const mensajes = error.errors
-        .map((err: any) => `${err.path?.join(".")}: ${err.message}`)
+        .map((err: any) => {
+          const campo = err.path?.join(".") || "desconocido";
+          return traducirMensajeZod(err.message, campo);
+        })
         .join(", ");
       throw new Error(`Datos inválidos: ${mensajes}`);
     }

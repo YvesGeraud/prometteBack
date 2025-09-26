@@ -14,6 +14,7 @@ export interface BaseServiceConfig {
   tableName: string;
   defaultOrderBy: Record<string, "asc" | "desc">;
   relations?: Record<string, any>;
+  campoActivo?: string; // Campo que indica si el registro está activo (por defecto 'activo')
 }
 
 /**
@@ -57,10 +58,11 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
 
       // 🔍 FILTRO AUTOMÁTICO: Solo mostrar registros activos por defecto
       // A menos que se especifique explícitamente incluir inactivos
+      const campoActivo = this.config.campoActivo || "activo";
       const where = {
         ...baseWhere,
         // Solo agregar filtro de activo si no se especifica en los filtros
-        ...(!(filters as any)?.incluirInactivos && { activo: true }),
+        ...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }),
       };
 
       const include = this.configurarIncludes(filters);
@@ -102,11 +104,12 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
     try {
       const include = this.configurarIncludes(filters);
 
+      const campoActivo = this.config.campoActivo || "activo";
       const record = await this.model.findUnique({
         where: {
           [this.getPrimaryKeyField()]: id,
           // 🔍 FILTRO AUTOMÁTICO: Solo buscar registros activos por defecto
-          ...(!(filters as any)?.incluirInactivos && { activo: true }),
+          ...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }),
         },
         include,
       });
@@ -167,7 +170,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
         data: {
           ...datos,
           // 🕐 Actualizar automáticamente updatedAt en cada UPDATE
-          updatedAt: new Date(),
+          fecha_up: new Date(),
         },
         include,
       });
@@ -184,8 +187,10 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
 
   /**
    * 🗑️ Eliminar un registro
+   * @param id - ID del registro a eliminar
+   * @param idUsuarioUp - ID del usuario que ejecuta la eliminación (opcional)
    */
-  async eliminar(id: number): Promise<void> {
+  async eliminar(id: number, idUsuarioUp?: number): Promise<void> {
     try {
       // Hook para validaciones personalizadas antes de eliminar
       await this.antesDeEliminar(id);
@@ -198,17 +203,25 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
         throw new Error(`${this.config.tableName} no encontrado`);
       }
 
-      // 🚫 SOFT DELETE: Actualizar activo a false en lugar de eliminar físicamente
+      // 🚫 SOFT DELETE: Actualizar estado a false en lugar de eliminar físicamente
       // Esto preserva los datos para auditoría y evita problemas de integridad referencial
+      const campoActivo = this.config.campoActivo || "activo";
+      const updateData: any = {
+        [campoActivo]: false,
+        // Si existe campo de actualización, también lo actualizamos
+        ...(existingRecord.hasOwnProperty("fecha_up") && {
+          fecha_up: new Date(),
+        }),
+        // Si se proporciona el usuario que elimina, registrarlo
+        ...(idUsuarioUp &&
+          existingRecord.hasOwnProperty("id_ct_usuario_up") && {
+            id_ct_usuario_up: idUsuarioUp,
+          }),
+      };
+
       await this.model.update({
         where: { [this.getPrimaryKeyField()]: id },
-        data: {
-          activo: false,
-          // Si existe campo de actualización, también lo actualizamos
-          ...(existingRecord.hasOwnProperty("updatedAt") && {
-            updatedAt: new Date(),
-          }),
-        },
+        data: updateData,
       });
 
       // Hook para acciones después de eliminar (soft delete)

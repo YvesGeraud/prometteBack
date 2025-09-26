@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
 import { enviarRespuestaError } from "../utils/responseUtils";
+import { traducirMensajeZod } from "../utils/zodTranslations";
 
 /**
  * Interfaz para esquemas de validación múltiples
@@ -36,11 +37,14 @@ export const validarRequest = (esquemas: EsquemasValidacion) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const errores = error.issues.map((err) => ({
-          campo: err.path.join("."),
-          mensaje: err.message,
-          codigo: err.code,
-        }));
+        const errores = error.issues.map((err) => {
+          const campo = err.path.join(".");
+          return {
+            campo: campo,
+            mensaje: traducirMensajeZod(err.message, campo),
+            codigo: err.code,
+          };
+        });
 
         return enviarRespuestaError(res, "Datos de entrada inválidos", 400, {
           errores: errores,
@@ -70,11 +74,14 @@ export const validarBody = (esquema: z.ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const errores = error.issues.map((err) => ({
-          campo: err.path.join("."),
-          mensaje: err.message,
-          codigo: err.code,
-        }));
+        const errores = error.issues.map((err) => {
+          const campo = err.path.join(".");
+          return {
+            campo: campo,
+            mensaje: traducirMensajeZod(err.message, campo),
+            codigo: err.code,
+          };
+        });
 
         return enviarRespuestaError(
           res,
@@ -104,11 +111,14 @@ export const validarQuery = (esquema: z.ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const errores = error.issues.map((err) => ({
-          campo: err.path.join("."),
-          mensaje: err.message,
-          codigo: err.code,
-        }));
+        const errores = error.issues.map((err) => {
+          const campo = err.path.join(".");
+          return {
+            campo: campo,
+            mensaje: traducirMensajeZod(err.message, campo),
+            codigo: err.code,
+          };
+        });
 
         return enviarRespuestaError(
           res,
@@ -135,11 +145,14 @@ export const validarParams = (esquema: z.ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const errores = error.issues.map((err) => ({
-          campo: err.path.join("."),
-          mensaje: err.message,
-          codigo: err.code,
-        }));
+        const errores = error.issues.map((err) => {
+          const campo = err.path.join(".");
+          return {
+            campo: campo,
+            mensaje: traducirMensajeZod(err.message, campo),
+            codigo: err.code,
+          };
+        });
 
         return enviarRespuestaError(res, "Parámetros de ruta inválidos", 400, {
           errores: errores,

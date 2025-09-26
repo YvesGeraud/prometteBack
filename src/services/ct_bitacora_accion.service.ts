@@ -23,6 +23,7 @@ export class CtBitacoraAccionService extends BaseService<
   protected config = {
     tableName: "ct_bitacora_accion",
     defaultOrderBy: { id_ct_bitacora_accion: "asc" as const },
+    campoActivo: "estado", // Este modelo usa 'estado' en lugar de 'activo'
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
@@ -53,9 +54,9 @@ export class CtBitacoraAccionService extends BaseService<
       };
     }
 
-    // Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    // Filtro de estado
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -71,8 +72,8 @@ export class CtBitacoraAccionService extends BaseService<
   // - obtenerPorId() ✅
   // - crear() con validaciones ✅
   // - actualizar() con verificaciones ✅
-  // - eliminar() con manejo de errores ✅
+  // - eliminar() con manejo de errores y auditoría ✅
 }
 
-// 🎉 TOTAL: ¡Solo 18 líneas para CRUD completo!
-// Sin BaseService serían ~150 líneas 😱
+// 🎉 TOTAL: ¡Solo ~25 líneas para CRUD completo con auditoría!
+// Sin BaseService serían ~200 líneas 😱
