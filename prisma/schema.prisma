@@ -27,7 +27,7 @@ model ct_capitulo {
   id_capitulo          Int                    @id @default(autoincrement())
   clave_capitulo       Int
   nombre_capitulo      String                 @db.VarChar(100)
-  estado               Boolean                @default(true)
+  activo               Boolean                @default(true)
   ct_partida           ct_partida[]
   dt_techo_presupuesto dt_techo_presupuesto[]
 }
@@ -36,8 +36,9 @@ model ct_consumible_factura {
   id_factura               Int                        @id @default(autoincrement())
   factura                  String                     @db.VarChar(255)
   ct_provedor_id           Int
+  activo                   Boolean                    @default(true)
   createdAt                DateTime                   @default(now()) @db.DateTime(0)
-  updatedAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime?                  @db.DateTime(0)
   ct_consumibles_proveedor ct_consumibles_proveedor   @relation(fields: [ct_provedor_id], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_facturas_ct_proveedor")
   dt_consumible_inventario dt_consumible_inventario[]
 
@@ -47,9 +48,9 @@ model ct_consumible_factura {
 model ct_consumibles_proveedor {
   id_proveedor          Int                     @id @default(autoincrement())
   razon_social          String                  @unique(map: "uk_razon_social", length: 191) @db.VarChar(255)
-  estado                Boolean                 @default(true)
+  activo                Boolean                 @default(true)
   createdAt             DateTime                @default(now()) @db.Timestamp(0)
-  updatedAt             DateTime                @default(now()) @db.Timestamp(0)
+  updatedAt             DateTime?               @db.Timestamp(0)
   ct_consumible_factura ct_consumible_factura[]
 }
 

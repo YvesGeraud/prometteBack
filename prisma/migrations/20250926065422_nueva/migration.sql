@@ -23,7 +23,7 @@ CREATE TABLE `ct_capitulo` (
     `id_capitulo` INTEGER NOT NULL AUTO_INCREMENT,
     `clave_capitulo` INTEGER NOT NULL,
     `nombre_capitulo` VARCHAR(100) NOT NULL,
-    `estado` BOOLEAN NOT NULL DEFAULT true,
+    `activo` BOOLEAN NOT NULL DEFAULT true,
 
     PRIMARY KEY (`id_capitulo`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -33,8 +33,9 @@ CREATE TABLE `ct_consumible_factura` (
     `id_factura` INTEGER NOT NULL AUTO_INCREMENT,
     `factura` VARCHAR(255) NOT NULL,
     `ct_provedor_id` INTEGER NOT NULL,
+    `activo` TINYINT NOT NULL DEFAULT 1,
     `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `updatedAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` DATETIME(0) NULL,
 
     INDEX `FK_ct_facturas_ct_proveedor`(`ct_provedor_id`),
     PRIMARY KEY (`id_factura`)
@@ -44,9 +45,9 @@ CREATE TABLE `ct_consumible_factura` (
 CREATE TABLE `ct_consumibles_proveedor` (
     `id_proveedor` INTEGER NOT NULL AUTO_INCREMENT,
     `razon_social` VARCHAR(255) NOT NULL,
-    `estado` BOOLEAN NOT NULL DEFAULT true,
+    `activo` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `updatedAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` TIMESTAMP(0) NULL,
 
     UNIQUE INDEX `uk_razon_social`(`razon_social`(191)),
     PRIMARY KEY (`id_proveedor`)

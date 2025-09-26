@@ -139,7 +139,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
       return record;
     } catch (error) {
       console.error(`Error al crear ${this.config.tableName}:`, error);
-      throw error; // Re-lanzar para que el controlador lo maneje
+      throw this.manejarErrorPrisma(error);
     }
   }
 
@@ -164,7 +164,11 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
 
       const record = await this.model.update({
         where: { [this.getPrimaryKeyField()]: id },
-        data: datos,
+        data: {
+          ...datos,
+          // 🕐 Actualizar automáticamente updatedAt en cada UPDATE
+          updatedAt: new Date(),
+        },
         include,
       });
 
@@ -174,7 +178,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
       return record;
     } catch (error) {
       console.error(`Error al actualizar ${this.config.tableName}:`, error);
-      throw error; // Re-lanzar para que el controlador lo maneje
+      throw this.manejarErrorPrisma(error);
     }
   }
 
@@ -334,6 +338,40 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
     );
     return `id_${tableName}`;
   }
+
+  /**
+   * 🛡️ Manejar errores de Prisma y convertirlos en mensajes amigables
+   */
+  protected manejarErrorPrisma(error: any): Error {
+    // Error de constraint UNIQUE violado
+    if (error.code === "P2002") {
+      const campo = error.meta?.target?.[0] || "campo";
+      return new Error(
+        `Ya existe un registro con ese ${campo}. Por favor, use un valor diferente.`
+      );
+    }
+
+    // Error de registro no encontrado
+    if (error.code === "P2025") {
+      return new Error(`${this.config.tableName} no encontrado`);
+    }
+
+    // Error de foreign key constraint
+    if (error.code === "P2003") {
+      return new Error(
+        `No se puede realizar la operación. Existe una referencia a otro registro.`
+      );
+    }
+
+    // Error de constraint requerido
+    if (error.code === "P2011") {
+      const campo = error.meta?.constraint || "campo requerido";
+      return new Error(`El campo ${campo} es obligatorio`);
+    }
+
+    // Para otros errores, devolver el error original
+    return error;
+  }
 }
 
 /*
@@ -343,6 +381,8 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
 1. 🚫 método eliminar() - Ahora hace UPDATE activo=false en lugar de DELETE físico
 2. 🔍 método obtenerTodos() - Solo muestra registros activos por defecto
 3. 🔍 método obtenerPorId() - Solo busca registros activos por defecto
+4. 🛡️ manejarErrorPrisma() - Convierte errores de BD en mensajes amigables
+5. 🕐 método actualizar() - Actualiza automáticamente updatedAt en cada UPDATE
 
 📋 Beneficios:
 - ✅ Preserva datos para auditoría
