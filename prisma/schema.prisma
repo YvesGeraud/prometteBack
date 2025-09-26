@@ -1,0 +1,741 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ct_bitacora_accion {
+  id_ct_bitacora_accion  Int                      @id @default(autoincrement())
+  accion                 String                   @db.VarChar(50)
+  descripcion            String?                  @db.VarChar(255)
+  activo                 Boolean?                 @default(true)
+  dt_bitacora_movimiento dt_bitacora_movimiento[]
+}
+
+model ct_bitacora_entidad {
+  id_ct_bitacora_entidad Int                      @id @default(autoincrement())
+  entidad                String                   @db.VarChar(100)
+  descripcion            String?                  @db.VarChar(255)
+  activo                 Boolean?                 @default(true)
+  dt_bitacora_movimiento dt_bitacora_movimiento[]
+}
+
+model ct_capitulo {
+  id_capitulo          Int                    @id @default(autoincrement())
+  clave_capitulo       Int
+  nombre_capitulo      String                 @db.VarChar(100)
+  estado               Boolean                @default(true)
+  ct_partida           ct_partida[]
+  dt_techo_presupuesto dt_techo_presupuesto[]
+}
+
+model ct_consumible_factura {
+  id_factura               Int                        @id @default(autoincrement())
+  factura                  String                     @db.VarChar(255)
+  ct_provedor_id           Int
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt                DateTime                   @default(now()) @db.DateTime(0)
+  ct_consumibles_proveedor ct_consumibles_proveedor   @relation(fields: [ct_provedor_id], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_facturas_ct_proveedor")
+  dt_consumible_inventario dt_consumible_inventario[]
+
+  @@index([ct_provedor_id], map: "FK_ct_facturas_ct_proveedor")
+}
+
+model ct_consumibles_proveedor {
+  id_proveedor          Int                     @id @default(autoincrement())
+  razon_social          String                  @unique(map: "uk_razon_social", length: 191) @db.VarChar(255)
+  estado                Boolean                 @default(true)
+  createdAt             DateTime                @default(now()) @db.Timestamp(0)
+  updatedAt             DateTime                @default(now()) @db.Timestamp(0)
+  ct_consumible_factura ct_consumible_factura[]
+}
+
+model ct_correspondencia_estado {
+  id_estado                         Int                                 @id @default(autoincrement())
+  nombre                            String                              @unique(map: "uk_corresp_estado_nombre") @db.VarChar(50)
+  activo                            Boolean                             @default(true)
+  rl_correspondencia_usuario_estado rl_correspondencia_usuario_estado[]
+}
+
+model ct_correspondencia_formato_entrega {
+  id_formato         Int                  @id @default(autoincrement())
+  nombre             String               @unique(map: "uk_corresp_formato_nombre") @db.VarChar(50)
+  activo             Boolean              @default(true)
+  dt_correspondencia dt_correspondencia[]
+}
+
+model ct_correspondencia_prioridad {
+  id_prioridad       Int                  @id @default(autoincrement())
+  nombre             String               @unique(map: "uk_corresp_prioridad_nombre") @db.VarChar(50)
+  activo             Boolean              @default(true)
+  dt_correspondencia dt_correspondencia[]
+}
+
+model ct_dispositivo {
+  id_dispositivo         Int                      @id @default(autoincrement())
+  nombre_dispositivo     String                   @unique(map: "nombre_dispositivo_UNIQUE") @db.VarChar(100)
+  descripcion            String?                  @db.VarChar(255)
+  dt_bitacora_movimiento dt_bitacora_movimiento[]
+}
+
+model ct_documentos_aneec {
+  id_tipo_documento     Int                           @id @default(autoincrement())
+  nombre                String?                       @db.VarChar(50)
+  vigencia              ct_documentos_aneec_vigencia?
+  dt_planeaciones_aneec dt_planeaciones_aneec[]
+}
+
+model ct_financiamiento {
+  id_financiamiento     Int                    @id @default(autoincrement())
+  nombre_financiamiento String                 @default("0") @db.VarChar(50)
+  estado                Boolean                @default(true)
+  dt_techo_presupuesto  dt_techo_presupuesto[]
+}
+
+model ct_modulo {
+  id_modulo                                      Int          @id @default(autoincrement())
+  nombre_modulo                                  String       @db.VarChar(100)
+  estado                                         Boolean      @default(true)
+  ct_usuario_in                                  Int
+  ct_usuario_at                                  Int?
+  createdAt                                      DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt                                      DateTime     @default(now()) @db.Timestamp(0)
+  ct_usuario_ct_modulo_ct_usuario_atToct_usuario ct_usuario?  @relation("ct_modulo_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_modulo_actualizado_por")
+  ct_usuario_ct_modulo_ct_usuario_inToct_usuario ct_usuario   @relation("ct_modulo_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_ct_modulo_creado_por")
+  dt_funcion                                     dt_funcion[]
+
+  @@index([ct_usuario_at], map: "fk_ct_modulo_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_ct_modulo_creado_por")
+}
+
+model ct_partida {
+  id_partida               Int                        @id @default(autoincrement())
+  ct_capitulo_id           Int
+  clave_partida            String                     @db.VarChar(10)
+  nombre_partida           String                     @db.VarChar(255)
+  estado                   Boolean                    @default(true)
+  createdAt                DateTime                   @default(now()) @db.Timestamp(0)
+  updatedAt                DateTime                   @default(now()) @db.Timestamp(0)
+  ct_capitulo              ct_capitulo                @relation(fields: [ct_capitulo_id], references: [id_capitulo], onUpdate: Restrict, map: "FK_ct_partida_ct_capitulo")
+  ct_producto_consumible   ct_producto_consumible[]
+  dt_consumible_inventario dt_consumible_inventario[]
+  rl_justificacion         rl_justificacion[]
+  rl_partida_area          rl_partida_area[]
+
+  @@index([ct_capitulo_id], map: "FK_ct_partida_ct_capitulo")
+}
+
+model ct_producto_consumible {
+  id_producto                                                 Int                       @id @default(autoincrement())
+  ct_partida_id                                               Int                       @default(0)
+  nombre_producto                                             String                    @db.VarChar(500)
+  precio                                                      Decimal                   @default(0.00) @db.Decimal(20, 2)
+  ct_unidad_id                                                Int?
+  estado                                                      Boolean                   @default(true)
+  ct_usuario_in                                               Int                       @default(1)
+  ct_usuario_at                                               Int?
+  createdAt                                                   DateTime?                 @default(now()) @db.Timestamp(0)
+  updatedAt                                                   DateTime?                 @default(now()) @db.Timestamp(0)
+  ct_usuario_ct_producto_consumible_ct_usuario_atToct_usuario ct_usuario?               @relation("ct_producto_consumible_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_producto_consumible_actualizado_por")
+  ct_usuario_ct_producto_consumible_ct_usuario_inToct_usuario ct_usuario                @relation("ct_producto_consumible_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_ct_producto_consumible_creado_por")
+  ct_partida                                                  ct_partida                @relation(fields: [ct_partida_id], references: [id_partida], onDelete: NoAction, onUpdate: NoAction, map: "fk_ct_producto_consumible_ct_partida")
+  ct_unidad_medida                                            ct_unidad_medida?         @relation(fields: [ct_unidad_id], references: [id_unidad], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_producto_consumible_unidad")
+  rl_producto_area                                            rl_producto_area[]
+  rl_producto_requisicion                                     rl_producto_requisicion[]
+
+  @@index([ct_usuario_at], map: "fk_ct_producto_consumible_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_ct_producto_consumible_creado_por")
+  @@index([ct_partida_id], map: "fk_ct_producto_consumible_ct_partida")
+  @@index([ct_unidad_id], map: "fk_ct_producto_consumible_unidad")
+}
+
+model ct_puesto {
+  id_puesto                                            Int                 @id @default(autoincrement())
+  nombre                                               String              @db.VarChar(255)
+  descripcion                                          String?             @db.VarChar(255)
+  activo                                               Boolean             @default(true)
+  id_usuario_crea                                      Int                 @default(1)
+  id_usuario_modifica                                  Int?
+  fecha_crea                                           DateTime            @default(now()) @db.Timestamp(0)
+  fecha_modifica                                       DateTime            @default(now()) @db.Timestamp(0)
+  ct_usuario_ct_puesto_id_usuario_creaToct_usuario     ct_usuario          @relation("ct_puesto_id_usuario_creaToct_usuario", fields: [id_usuario_crea], references: [id_usuario], onUpdate: Restrict, map: "fk_puesto_usuario_crea")
+  ct_usuario_ct_puesto_id_usuario_modificaToct_usuario ct_usuario?         @relation("ct_puesto_id_usuario_modificaToct_usuario", fields: [id_usuario_modifica], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_puesto_usuario_modifica")
+  rl_puesto_funcion                                    rl_puesto_funcion[]
+  rl_usuario_puesto                                    rl_usuario_puesto[]
+
+  @@index([id_usuario_crea], map: "fk_puesto_usuario_crea")
+  @@index([id_usuario_modifica], map: "fk_puesto_usuario_modifica")
+}
+
+model ct_unidad_medida {
+  id_unidad                Int                        @id @default(autoincrement())
+  clave_unidad             String?                    @db.VarChar(4)
+  nombre_unidad            String?                    @db.VarChar(100)
+  ct_producto_consumible   ct_producto_consumible[]
+  dt_consumible_entrega    dt_consumible_entrega[]
+  dt_consumible_inventario dt_consumible_inventario[]
+}
+
+model ct_usuario {
+  id_usuario                                                              Int                                 @id @default(autoincrement())
+  nombre_usuario                                                          String                              @unique(map: "nombre_usuario_UNIQUE") @db.VarChar(255)
+  contrasena                                                              String                              @db.VarChar(255)
+  estado                                                                  Boolean                             @default(true)
+  id_dt_rupeet_informacion                                                Int?
+  ct_usuario_in                                                           Int
+  ct_usuario_at                                                           Int?
+  createdAt                                                               DateTime                            @default(now()) @db.Timestamp(0)
+  updatedAt                                                               DateTime                            @default(now()) @db.Timestamp(0)
+  ct_modulo_ct_modulo_ct_usuario_atToct_usuario                           ct_modulo[]                         @relation("ct_modulo_ct_usuario_atToct_usuario")
+  ct_modulo_ct_modulo_ct_usuario_inToct_usuario                           ct_modulo[]                         @relation("ct_modulo_ct_usuario_inToct_usuario")
+  ct_producto_consumible_ct_producto_consumible_ct_usuario_atToct_usuario ct_producto_consumible[]            @relation("ct_producto_consumible_ct_usuario_atToct_usuario")
+  ct_producto_consumible_ct_producto_consumible_ct_usuario_inToct_usuario ct_producto_consumible[]            @relation("ct_producto_consumible_ct_usuario_inToct_usuario")
+  ct_puesto_ct_puesto_id_usuario_creaToct_usuario                         ct_puesto[]                         @relation("ct_puesto_id_usuario_creaToct_usuario")
+  ct_puesto_ct_puesto_id_usuario_modificaToct_usuario                     ct_puesto[]                         @relation("ct_puesto_id_usuario_modificaToct_usuario")
+  ct_usuario_ct_usuario_ct_usuario_atToct_usuario                         ct_usuario?                         @relation("ct_usuario_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_usuario_actualizado_por")
+  other_ct_usuario_ct_usuario_ct_usuario_atToct_usuario                   ct_usuario[]                        @relation("ct_usuario_ct_usuario_atToct_usuario")
+  ct_usuario_ct_usuario_ct_usuario_inToct_usuario                         ct_usuario                          @relation("ct_usuario_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_ct_usuario_creado_por")
+  other_ct_usuario_ct_usuario_ct_usuario_inToct_usuario                   ct_usuario[]                        @relation("ct_usuario_ct_usuario_inToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_atToct_usuario         dt_aspirante_aneec[]                @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_inToct_usuario         dt_aspirante_aneec[]                @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario")
+  dt_bitacora_movimiento                                                  dt_bitacora_movimiento[]
+  dt_consumible_entrega                                                   dt_consumible_entrega[]
+  dt_correspondencia_dt_correspondencia_id_usuario_creaToct_usuario       dt_correspondencia[]                @relation("dt_correspondencia_id_usuario_creaToct_usuario")
+  dt_correspondencia_dt_correspondencia_id_usuario_modificaToct_usuario   dt_correspondencia[]                @relation("dt_correspondencia_id_usuario_modificaToct_usuario")
+  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_atToct_usuario     dt_diagnostico_aneec[]              @relation("dt_diagnostico_aneec_ct_usuario_atToct_usuario")
+  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_inToct_usuario     dt_diagnostico_aneec[]              @relation("dt_diagnostico_aneec_ct_usuario_inToct_usuario")
+  dt_funcion_dt_funcion_ct_usuario_atToct_usuario                         dt_funcion[]                        @relation("dt_funcion_ct_usuario_atToct_usuario")
+  dt_funcion_dt_funcion_ct_usuario_inToct_usuario                         dt_funcion[]                        @relation("dt_funcion_ct_usuario_inToct_usuario")
+  dt_informes_aneec_dt_informes_aneec_ct_usuario_atToct_usuario           dt_informes_aneec[]                 @relation("dt_informes_aneec_ct_usuario_atToct_usuario")
+  dt_informes_aneec_dt_informes_aneec_ct_usuario_inToct_usuario           dt_informes_aneec[]                 @relation("dt_informes_aneec_ct_usuario_inToct_usuario")
+  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_atToct_usuario   dt_planeaciones_aneec[]             @relation("dt_planeaciones_aneec_ct_usuario_atToct_usuario")
+  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_inToct_usuario   dt_planeaciones_aneec[]             @relation("dt_planeaciones_aneec_ct_usuario_inToct_usuario")
+  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_atToct_usuario     dt_techo_presupuesto[]              @relation("dt_techo_presupuesto_ct_usuario_atToct_usuario")
+  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_inToct_usuario     dt_techo_presupuesto[]              @relation("dt_techo_presupuesto_ct_usuario_inToct_usuario")
+  rl_analista_unidad_rl_analista_unidad_ct_usuario_inToct_usuario         rl_analista_unidad[]                @relation("rl_analista_unidad_ct_usuario_inToct_usuario")
+  rl_analista_unidad_rl_analista_unidad_ct_usuario_idToct_usuario         rl_analista_unidad[]                @relation("rl_analista_unidad_ct_usuario_idToct_usuario")
+  rl_area_financiero_rl_area_financiero_ct_usuario_atToct_usuario         rl_area_financiero[]                @relation("rl_area_financiero_ct_usuario_atToct_usuario")
+  rl_area_financiero_rl_area_financiero_ct_usuario_inToct_usuario         rl_area_financiero[]                @relation("rl_area_financiero_ct_usuario_inToct_usuario")
+  rl_correspondencia_usuario_estado                                       rl_correspondencia_usuario_estado[]
+  rl_entrega_formato                                                      rl_entrega_formato[]
+  rl_justificacion                                                        rl_justificacion[]
+  rl_producto_requisicion                                                 rl_producto_requisicion[]
+  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_atToct_usuario           rl_puesto_funcion[]                 @relation("rl_puesto_funcion_ct_usuario_atToct_usuario")
+  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_inToct_usuario           rl_puesto_funcion[]                 @relation("rl_puesto_funcion_ct_usuario_inToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_atToct_usuario         rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_atToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_inToct_usuario         rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_inToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_idToct_usuario         rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_idToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_atToct_usuario           rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_atToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_inToct_usuario           rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_inToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_idToct_usuario           rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_idToct_usuario")
+
+  @@index([ct_usuario_at], map: "fk_ct_usuario_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_ct_usuario_creado_por")
+}
+
+model dt_aspirante_aneec {
+  id_aspirante                                            Int                     @id @default(autoincrement())
+  curp                                                    String                  @db.VarChar(18)
+  nombre                                                  String                  @db.VarChar(50)
+  apellido_paterno                                        String                  @db.VarChar(50)
+  apellido_materno                                        String                  @db.VarChar(50)
+  telefono                                                String                  @db.VarChar(15)
+  correo                                                  String                  @db.VarChar(50)
+  fecha_nacimiento                                        DateTime                @db.Date
+  instituto                                               String                  @db.VarChar(100)
+  licenciatura                                            String                  @db.VarChar(50)
+  direccion                                               String                  @db.VarChar(50)
+  codigo_postal                                           String                  @db.VarChar(10)
+  ct_municipio_id                                         Int
+  localidad                                               String                  @db.VarChar(100)
+  ruta_ine                                                String                  @db.VarChar(50)
+  tipo_documento                                          String                  @db.VarChar(45)
+  ruta_comprobante_estudio                                String                  @db.VarChar(50)
+  ruta_comprobante_domicilio                              String                  @db.VarChar(50)
+  ruta_carta_compromiso                                   String                  @db.VarChar(50)
+  ruta_aviso_privacidad_aspirante                         String                  @db.VarChar(50)
+  ct_usuario_in                                           Int
+  createdAt                                               DateTime                @default(now()) @db.Timestamp(0)
+  ct_usuario_at                                           Int?
+  updatedAt                                               DateTime?               @default(now()) @db.Timestamp(0)
+  status                                                  String                  @default("EN PROCESO") @db.VarChar(50)
+  ct_usuario_dt_aspirante_aneec_ct_usuario_atToct_usuario ct_usuario?             @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_aspirante_aneec_actualizado_por")
+  ct_usuario_dt_aspirante_aneec_ct_usuario_inToct_usuario ct_usuario              @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_dt_aspirante_aneec_creado_por")
+  dt_diagnostico_aneec                                    dt_diagnostico_aneec[]
+  dt_informes_aneec                                       dt_informes_aneec[]
+  dt_planeaciones_aneec                                   dt_planeaciones_aneec[]
+
+  @@index([ct_municipio_id], map: "fk_ct_municipio_id")
+  @@index([ct_usuario_at], map: "fk_dt_aspirante_aneec_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_dt_aspirante_aneec_creado_por")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model dt_bitacora_movimiento {
+  id_dt_bitacora_movimiento BigInt              @id @default(autoincrement())
+  id_ct_bitacora_accion     Int
+  id_ct_bitacora_entidad    Int
+  id_registro_afectado      BigInt?
+  id_usuario                Int?
+  ip_origen                 String              @db.VarChar(45)
+  id_dispositivo            Int?
+  estado_accion             Boolean
+  datos_anteriores          String?             @db.LongText
+  datos_nuevos              String?             @db.LongText
+  fecha_in                  DateTime            @default(now()) @db.Timestamp(0)
+  ct_bitacora_accion        ct_bitacora_accion  @relation(fields: [id_ct_bitacora_accion], references: [id_ct_bitacora_accion], onUpdate: Restrict, map: "dt_bitacora_movimiento_ibfk_1")
+  ct_bitacora_entidad       ct_bitacora_entidad @relation(fields: [id_ct_bitacora_entidad], references: [id_ct_bitacora_entidad], onUpdate: Restrict, map: "dt_bitacora_movimiento_ibfk_2")
+  ct_usuario                ct_usuario?         @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "dt_bitacora_movimiento_ibfk_3")
+  ct_dispositivo            ct_dispositivo?     @relation(fields: [id_dispositivo], references: [id_dispositivo], onDelete: Restrict, onUpdate: Restrict, map: "dt_bitacora_movimiento_ibfk_4")
+
+  @@index([id_ct_bitacora_accion], map: "id_ct_bitacora_accion")
+  @@index([id_ct_bitacora_entidad], map: "id_ct_bitacora_entidad")
+  @@index([id_dispositivo], map: "id_dispositivo")
+  @@index([id_usuario], map: "id_usuario")
+}
+
+model dt_consumible_entrega {
+  id_entrega               Int                      @id @default(autoincrement())
+  folio                    String                   @db.VarChar(15)
+  ct_area_id               Int
+  dt_inventario_id         Int
+  ct_unidad_id             Int
+  cantidad                 Decimal                  @db.Decimal(10, 2)
+  ct_usuario_id            Int
+  observaciones            String                   @default("") @db.VarChar(255)
+  createdAt                DateTime                 @default(now()) @db.DateTime(0)
+  updatedAt                DateTime                 @default(now()) @db.DateTime(0)
+  folio_formato            String?                  @db.VarChar(20)
+  ct_unidad_medida         ct_unidad_medida         @relation(fields: [ct_unidad_id], references: [id_unidad], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_consumible_entrega_ct_unidad_medida")
+  ct_usuario               ct_usuario               @relation(fields: [ct_usuario_id], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_consumible_entrega_ct_usuario")
+  dt_consumible_inventario dt_consumible_inventario @relation(fields: [dt_inventario_id], references: [id_inventario], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_consumible_entrega_dt_consumible_inventario")
+  rl_entrega_formato       rl_entrega_formato?      @relation(fields: [folio_formato], references: [folio_formato], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_consumible_entrega_rl_entrega_formato")
+
+  @@index([ct_area_id], map: "ct_area_id")
+  @@index([ct_unidad_id], map: "ct_unidad_id")
+  @@index([ct_usuario_id], map: "ct_usuario_id")
+  @@index([dt_inventario_id], map: "dt_inventario_id")
+  @@index([folio_formato], map: "fk_dt_consumible_entrega_formato_idx")
+}
+
+model dt_consumible_inventario {
+  id_inventario         Int                     @id @default(autoincrement())
+  folio                 String                  @unique(map: "folio") @db.VarChar(20)
+  descripcion           String?                 @db.Text
+  cantidad              Int                     @default(0)
+  resta                 Int                     @default(0)
+  ct_partida_id         Int
+  ct_unidad_id          Int
+  ct_factura_id         Int
+  observaciones         String                  @default("") @db.VarChar(255)
+  createdAt             DateTime                @default(now()) @db.Timestamp(0)
+  updatedAt             DateTime                @default(now()) @db.Timestamp(0)
+  dt_consumible_entrega dt_consumible_entrega[]
+  ct_consumible_factura ct_consumible_factura   @relation(fields: [ct_factura_id], references: [id_factura], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_inventario_ct_facturas")
+  ct_partida            ct_partida              @relation(fields: [ct_partida_id], references: [id_partida], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_inventario_ct_partida")
+  ct_unidad_medida      ct_unidad_medida        @relation(fields: [ct_unidad_id], references: [id_unidad], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_inventario_ct_unidad_medida")
+
+  @@index([ct_factura_id], map: "ct_factura_id")
+  @@index([ct_partida_id], map: "ct_partida_id")
+  @@index([ct_unidad_id], map: "ct_unidad_id")
+}
+
+model dt_correspondencia {
+  id_correspondencia                                            Int                                 @id @default(autoincrement())
+  asunto                                                        String                              @db.VarChar(255)
+  descripcion                                                   String?                             @db.Text
+  remitente                                                     String                              @db.VarChar(255)
+  destinatario                                                  String                              @db.VarChar(255)
+  id_prioridad                                                  Int
+  id_tipo                                                       Int
+  id_formato                                                    Int
+  folio                                                         String?                             @db.VarChar(100)
+  fecha_documento                                               DateTime                            @db.Date
+  fecha_registro                                                DateTime                            @default(now()) @db.Timestamp(0)
+  id_usuario_crea                                               Int
+  id_usuario_modifica                                           Int?
+  ct_correspondencia_formato_entrega                            ct_correspondencia_formato_entrega  @relation(fields: [id_formato], references: [id_formato], onUpdate: Restrict, map: "fk_corresp_formato")
+  ct_correspondencia_prioridad                                  ct_correspondencia_prioridad        @relation(fields: [id_prioridad], references: [id_prioridad], onUpdate: Restrict, map: "fk_corresp_prioridad")
+  ct_usuario_dt_correspondencia_id_usuario_creaToct_usuario     ct_usuario                          @relation("dt_correspondencia_id_usuario_creaToct_usuario", fields: [id_usuario_crea], references: [id_usuario], onUpdate: Restrict, map: "fk_corresp_usuario_crea")
+  ct_usuario_dt_correspondencia_id_usuario_modificaToct_usuario ct_usuario?                         @relation("dt_correspondencia_id_usuario_modificaToct_usuario", fields: [id_usuario_modifica], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_corresp_usuario_modifica")
+  rl_correspondencia_usuario_estado                             rl_correspondencia_usuario_estado[]
+
+  @@index([id_formato], map: "fk_corresp_formato")
+  @@index([id_prioridad], map: "fk_corresp_prioridad")
+  @@index([id_tipo], map: "fk_corresp_tipo")
+  @@index([id_usuario_crea], map: "fk_corresp_usuario_crea")
+  @@index([id_usuario_modifica], map: "fk_corresp_usuario_modifica")
+}
+
+model dt_diagnostico_aneec {
+  id_diagnostico                                            Int                                        @id @default(autoincrement())
+  curp                                                      String                                     @db.VarChar(18)
+  nombreCompleto                                            String                                     @db.VarChar(100)
+  ct_municipio_id                                           Int
+  tipo_necesidad                                            String                                     @db.VarChar(100)
+  rehabilitacion_fisica                                     dt_diagnostico_aneec_rehabilitacion_fisica
+  ruta_diagnostico                                          String                                     @db.VarChar(50)
+  dt_aspirante_id                                           Int
+  ct_usuario_in                                             Int
+  createdAt                                                 DateTime                                   @default(now()) @db.Timestamp(0)
+  ct_usuario_at                                             Int?
+  updatedAt                                                 DateTime?                                  @default(now()) @db.Timestamp(0)
+  ruta_INE_tutor                                            String                                     @db.VarChar(50)
+  ruta_acta_nacimiento_usuario                              String                                     @db.VarChar(50)
+  ruta_comprobante_domicilio                                String                                     @db.VarChar(50)
+  ruta_privacidad_usuario                                   String                                     @db.VarChar(50)
+  ruta_carta_compromiso_usuario                             String                                     @db.VarChar(50)
+  dt_aspirante_aneec                                        dt_aspirante_aneec                         @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "fk_dt_aspirante_id")
+  ct_usuario_dt_diagnostico_aneec_ct_usuario_atToct_usuario ct_usuario?                                @relation("dt_diagnostico_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_diagnostico_aneec_actualizado_por")
+  ct_usuario_dt_diagnostico_aneec_ct_usuario_inToct_usuario ct_usuario                                 @relation("dt_diagnostico_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_dt_diagnostico_aneec_creado_por")
+  dt_informes_aneec                                         dt_informes_aneec[]
+  dt_planeaciones_aneec                                     dt_planeaciones_aneec[]
+
+  @@index([ct_municipio_id], map: "fk_ct_municipio_id_diagnostico")
+  @@index([dt_aspirante_id], map: "fk_dt_aspirante_id")
+  @@index([ct_usuario_at], map: "fk_dt_diagnostico_aneec_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_dt_diagnostico_aneec_creado_por")
+}
+
+model dt_funcion {
+  id_funcion                                      Int                  @id @default(autoincrement())
+  ct_modulo_id                                    Int?
+  nombre_funcion                                  String               @db.VarChar(100)
+  descripcion                                     String?              @db.VarChar(255)
+  estado                                          Boolean              @default(true)
+  ct_usuario_in                                   Int
+  ct_usuario_at                                   Int?
+  createdAt                                       DateTime             @default(now()) @db.Timestamp(0)
+  updatedAt                                       DateTime             @default(now()) @db.Timestamp(0)
+  ct_usuario_dt_funcion_ct_usuario_atToct_usuario ct_usuario?          @relation("dt_funcion_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_funcion_actualizado_por")
+  ct_usuario_dt_funcion_ct_usuario_inToct_usuario ct_usuario           @relation("dt_funcion_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_dt_funcion_creado_por")
+  ct_modulo                                       ct_modulo?           @relation(fields: [ct_modulo_id], references: [id_modulo], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_funcion_ct_modulo")
+  rl_puesto_funcion                               rl_puesto_funcion[]
+  rl_usuario_funcion                              rl_usuario_funcion[]
+
+  @@index([ct_usuario_at], map: "fk_dt_funcion_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_dt_funcion_creado_por")
+  @@index([ct_modulo_id], map: "fk_dt_funcion_ct_modulo")
+}
+
+model dt_informes_aneec {
+  id_informe                                             Int                  @id @default(autoincrement())
+  ruta_informe                                           String               @db.VarChar(50)
+  dt_aspirante_id                                        Int
+  dt_diagnostico_id                                      Int
+  ct_usuario_in                                          Int
+  createdAt                                              DateTime             @default(now()) @db.Timestamp(0)
+  ct_usuario_at                                          Int?
+  updatedAt                                              DateTime?            @default(now()) @db.Timestamp(0)
+  dt_aspirante_aneec                                     dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "fk_dt_aspirante_id_informe")
+  dt_diagnostico_aneec                                   dt_diagnostico_aneec @relation(fields: [dt_diagnostico_id], references: [id_diagnostico], onUpdate: Restrict, map: "fk_dt_diagnostico_id_informe")
+  ct_usuario_dt_informes_aneec_ct_usuario_atToct_usuario ct_usuario?          @relation("dt_informes_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_informes_annec_actualizado_por")
+  ct_usuario_dt_informes_aneec_ct_usuario_inToct_usuario ct_usuario           @relation("dt_informes_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_dt_informes_annec_creado_por")
+
+  @@index([dt_aspirante_id], map: "fk_dt_aspirante_id_informe")
+  @@index([dt_diagnostico_id], map: "fk_dt_diagnostico_id_informe")
+  @@index([ct_usuario_at], map: "fk_dt_informes_annec_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_dt_informes_annec_creado_por")
+}
+
+model dt_planeaciones_aneec {
+  id_planeacion                                              Int                  @id @default(autoincrement())
+  ruta_documento                                             String               @db.VarChar(50)
+  id_tipo_documento                                          Int
+  dt_aspirante_id                                            Int
+  dt_diagnostico_id                                          Int
+  ct_usuario_in                                              Int
+  createdAt                                                  DateTime             @default(now()) @db.Timestamp(0)
+  ct_usuario_at                                              Int?
+  updatedAt                                                  DateTime?            @default(now()) @db.Timestamp(0)
+  ct_usuario_dt_planeaciones_aneec_ct_usuario_atToct_usuario ct_usuario?          @relation("dt_planeaciones_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "FK_dt_planeaciones_aneec__actualizado_por")
+  ct_documentos_aneec                                        ct_documentos_aneec  @relation(fields: [id_tipo_documento], references: [id_tipo_documento], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_ct_documentos_aneec")
+  ct_usuario_dt_planeaciones_aneec_ct_usuario_inToct_usuario ct_usuario           @relation("dt_planeaciones_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_ct_usuario_creado_por")
+  dt_aspirante_aneec                                         dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_dt_aspirante_aneec")
+  dt_diagnostico_aneec                                       dt_diagnostico_aneec @relation(fields: [dt_diagnostico_id], references: [id_diagnostico], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_dt_diagnostico_aneec")
+
+  @@index([ct_usuario_at], map: "FK_dt_planeaciones_aneec__actualizado_por")
+  @@index([id_tipo_documento], map: "FK_dt_planeaciones_aneec_ct_documentos_aneec")
+  @@index([ct_usuario_in], map: "FK_dt_planeaciones_aneec_ct_usuario_creado_por")
+  @@index([dt_aspirante_id], map: "FK_dt_planeaciones_aneec_dt_aspirante_aneec")
+  @@index([dt_diagnostico_id], map: "FK_dt_planeaciones_aneec_dt_diagnostico_aneec")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model dt_proyecto_anual {
+  id_proyecto_anual    Int                  @id @default(autoincrement())
+  a_o                  Int                  @map("año")
+  dt_techo_id          Int
+  monto_asignado       Decimal              @default(0.000) @db.Decimal(15, 3)
+  monto_utilizado      Decimal              @default(0.000) @db.Decimal(15, 3)
+  monto_disponible     Decimal              @default(0.000) @db.Decimal(15, 3)
+  descripcion          String?              @db.VarChar(255)
+  estado               Int                  @default(1) @db.TinyInt
+  createdAt            DateTime             @default(now()) @db.Timestamp(0)
+  updatedAt            DateTime             @default(now()) @db.Timestamp(0)
+  dt_techo_presupuesto dt_techo_presupuesto @relation(fields: [dt_techo_id], references: [id_techo], map: "fk_proyecto_anual_techo_presupuestal")
+
+  @@index([dt_techo_id], map: "fk_proyecto_anual_techo_presupuestal_idx")
+  @@index([a_o], map: "idx_proyecto_anual_año")
+}
+
+model dt_techo_presupuesto {
+  id_techo                                                  Int                       @id @default(autoincrement())
+  ct_area_id                                                Int                       @default(0)
+  ct_capitulo_id                                            Int                       @default(0)
+  ct_financiamiento_id                                      Int                       @default(0)
+  cantidad_presupuestada                                    Decimal                   @default(0.000) @db.Decimal(15, 3)
+  ct_usuario_in                                             Int                       @default(1)
+  ct_usuario_at                                             Int?                      @default(0)
+  createdAt                                                 DateTime                  @default(now()) @db.Timestamp(0)
+  updatedAt                                                 DateTime?                 @db.Timestamp(0)
+  dt_proyecto_anual                                         dt_proyecto_anual[]
+  rl_area_financiero                                        rl_area_financiero        @relation(fields: [ct_area_id], references: [id_area_fin], map: "fk_techo_area")
+  ct_capitulo                                               ct_capitulo               @relation(fields: [ct_capitulo_id], references: [id_capitulo], onDelete: NoAction, onUpdate: NoAction, map: "fk_techo_capitulo")
+  ct_financiamiento                                         ct_financiamiento         @relation(fields: [ct_financiamiento_id], references: [id_financiamiento], onDelete: NoAction, onUpdate: NoAction, map: "fk_techo_financiamiento")
+  ct_usuario_dt_techo_presupuesto_ct_usuario_atToct_usuario ct_usuario?               @relation("dt_techo_presupuesto_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_techo_usuario_at")
+  ct_usuario_dt_techo_presupuesto_ct_usuario_inToct_usuario ct_usuario                @relation("dt_techo_presupuesto_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_techo_usuario_in")
+  rl_justificacion                                          rl_justificacion[]
+  rl_producto_requisicion                                   rl_producto_requisicion[]
+
+  @@index([ct_area_id], map: "fk_techo_area_idx")
+  @@index([ct_capitulo_id], map: "fk_techo_capitulo")
+  @@index([ct_financiamiento_id], map: "fk_techo_financiamiento")
+  @@index([ct_usuario_at], map: "fk_techo_usuario_at")
+  @@index([ct_usuario_in], map: "fk_techo_usuario_in")
+}
+
+model rl_analista_unidad {
+  id_puesto_unidad                                                             Int                @id @default(autoincrement())
+  ct_usuario_id                                                                Int                @default(0)
+  rl_area_financiero                                                           Int                @default(1)
+  estado                                                                       Boolean            @default(true)
+  createdAt                                                                    DateTime           @default(now()) @db.Timestamp(0)
+  updatedAt                                                                    DateTime?          @default(now()) @db.Timestamp(0)
+  ct_usuario_in                                                                Int                @default(1)
+  ct_usuario_at                                                                Int?
+  ct_usuario_rl_analista_unidad_ct_usuario_inToct_usuario                      ct_usuario         @relation("rl_analista_unidad_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "FK_rl_analista_unidad_ct_usuario")
+  ct_usuario_rl_analista_unidad_ct_usuario_idToct_usuario                      ct_usuario         @relation("rl_analista_unidad_ct_usuario_idToct_usuario", fields: [ct_usuario_id], references: [id_usuario], onUpdate: Restrict, map: "FK_rl_analista_unidad_ct_usuario_2")
+  rl_area_financiero_rl_analista_unidad_rl_area_financieroTorl_area_financiero rl_area_financiero @relation("rl_analista_unidad_rl_area_financieroTorl_area_financiero", fields: [rl_area_financiero], references: [id_area_fin], onUpdate: Restrict, map: "FK_rl_analista_unidad_rl_area_financiero")
+
+  @@index([ct_usuario_in], map: "FK_rl_analista_unidad_ct_usuario")
+  @@index([ct_usuario_id], map: "FK_rl_analista_unidad_ct_usuario_2")
+  @@index([rl_area_financiero], map: "fk_ct_area_id_area")
+}
+
+model rl_area_financiero {
+  id_area_fin                                                                  Int                       @id @default(autoincrement())
+  id_financiero                                                                Int                       @default(0)
+  id_area_infra                                                                Int                       @default(0)
+  ct_usuario_in                                                                Int                       @default(1)
+  ct_usuario_at                                                                Int?                      @default(1)
+  createdAt                                                                    DateTime                  @default(now()) @db.Timestamp(0)
+  updatedAt                                                                    DateTime?                 @default(now()) @db.Timestamp(0)
+  dt_techo_presupuesto                                                         dt_techo_presupuesto[]
+  rl_analista_unidad_rl_analista_unidad_rl_area_financieroTorl_area_financiero rl_analista_unidad[]      @relation("rl_analista_unidad_rl_area_financieroTorl_area_financiero")
+  ct_usuario_rl_area_financiero_ct_usuario_atToct_usuario                      ct_usuario?               @relation("rl_area_financiero_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_area_fin_usuario_at")
+  ct_usuario_rl_area_financiero_ct_usuario_inToct_usuario                      ct_usuario                @relation("rl_area_financiero_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_area_fin_usuario_in")
+  rl_justificacion                                                             rl_justificacion[]
+  rl_partida_area                                                              rl_partida_area[]
+  rl_producto_area                                                             rl_producto_area[]
+  rl_producto_requisicion                                                      rl_producto_requisicion[]
+
+  @@index([ct_usuario_at], map: "fk_area_fin_usuario_at")
+  @@index([ct_usuario_in], map: "fk_area_fin_usuario_in")
+  @@index([id_area_infra], map: "idx_id_area_infra")
+}
+
+model rl_correspondencia_usuario_estado {
+  id_correspondencia_usuario Int                                            @id @default(autoincrement())
+  id_correspondencia         Int
+  id_usuario_puesto          Int
+  id_estado                  Int
+  tipo_turnado               rl_correspondencia_usuario_estado_tipo_turnado @default(respuesta)
+  observaciones              String?                                        @db.VarChar(300)
+  id_usuario_crea            Int
+  fecha_crea                 DateTime                                       @default(now()) @db.Timestamp(0)
+  dt_correspondencia         dt_correspondencia                             @relation(fields: [id_correspondencia], references: [id_correspondencia], onUpdate: Restrict, map: "fk_rl_corresp_corresp")
+  ct_correspondencia_estado  ct_correspondencia_estado                      @relation(fields: [id_estado], references: [id_estado], onUpdate: Restrict, map: "fk_rl_corresp_estado")
+  ct_usuario                 ct_usuario                                     @relation(fields: [id_usuario_crea], references: [id_usuario], onUpdate: Restrict, map: "fk_rl_corresp_usuario_crea")
+  rl_usuario_puesto          rl_usuario_puesto                              @relation(fields: [id_usuario_puesto], references: [id_usuario_puesto], onUpdate: Restrict, map: "fk_rl_corresp_usuario_puesto")
+
+  @@index([id_correspondencia], map: "fk_rl_corresp_corresp")
+  @@index([id_estado], map: "fk_rl_corresp_estado")
+  @@index([id_usuario_crea], map: "fk_rl_corresp_usuario_crea")
+  @@index([id_usuario_puesto], map: "fk_rl_corresp_usuario_puesto")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rl_entrega_formato {
+  id_formato            Int                     @id @default(autoincrement())
+  folio_formato         String                  @unique(map: "folio_formato_UNIQUE") @db.VarChar(20)
+  mes_cantidad          String?                 @db.VarChar(100)
+  persona_recibe        String?                 @db.VarChar(255)
+  ct_usuario_id         Int
+  createdAt             DateTime                @default(now()) @db.DateTime(0)
+  updatedAt             DateTime                @default(now()) @db.DateTime(0)
+  dt_consumible_entrega dt_consumible_entrega[]
+  ct_usuario            ct_usuario              @relation(fields: [ct_usuario_id], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_rl_entrega_formato_ct_usuario")
+
+  @@index([ct_usuario_id], map: "fk_rl_entrega_formato_ct_usuario_idx")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rl_justificacion {
+  id_justificacion     Int                   @id @default(autoincrement())
+  ct_partida_id        Int
+  ct_area_id           Int
+  dt_techo_id          Int?                  @default(1)
+  justificacion        String                @db.Text
+  ct_usuario_id        Int?
+  createdAt            DateTime              @default(now()) @db.DateTime(0)
+  updatedAt            DateTime              @default(now()) @db.DateTime(0)
+  dt_techo_presupuesto dt_techo_presupuesto? @relation(fields: [dt_techo_id], references: [id_techo], onDelete: NoAction, onUpdate: NoAction, map: "FK_rl_justificacion_dt_techo_presupuesto")
+  rl_area_financiero   rl_area_financiero    @relation(fields: [ct_area_id], references: [id_area_fin], map: "FK_rl_justificacion_rl_area_financiero")
+  ct_partida           ct_partida            @relation(fields: [ct_partida_id], references: [id_partida], map: "fk_justificacion_partida")
+  ct_usuario           ct_usuario?           @relation(fields: [ct_usuario_id], references: [id_usuario], map: "fk_justificacion_usuario")
+
+  @@index([dt_techo_id], map: "FK_rl_justificacion_dt_techo_presupuesto")
+  @@index([ct_area_id], map: "FK_rl_justificacion_rl_area_financiero")
+  @@index([ct_area_id], map: "idx_justificacion_area")
+  @@index([ct_area_id], map: "idx_justificacion_area_financiera")
+  @@index([ct_partida_id], map: "idx_justificacion_partida")
+  @@index([ct_partida_id, ct_area_id], map: "idx_justificacion_partida_area")
+  @@index([ct_partida_id, ct_area_id], map: "idx_justificacion_partida_area_financiera")
+  @@index([ct_usuario_id], map: "idx_justificacion_usuario")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rl_partida_area {
+  id_partida_area    Int                @id @default(autoincrement())
+  id_area_infra      Int                @default(0)
+  id_partida         Int                @default(0)
+  createdAt          DateTime           @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime?          @db.Timestamp(0)
+  ct_usuario_in      Int                @default(0)
+  ct_usuario_at      Int?
+  ct_partida         ct_partida         @relation(fields: [id_partida], references: [id_partida], onDelete: NoAction, onUpdate: Restrict, map: "FK_rl_partida_area_ct_partida")
+  rl_area_financiero rl_area_financiero @relation(fields: [id_area_infra], references: [id_area_fin], onDelete: NoAction, onUpdate: Restrict, map: "FK_rl_partida_area_rl_area_financiero")
+
+  @@index([id_partida], map: "FK_rl_partida_area_ct_partida")
+  @@index([id_area_infra], map: "FK_rl_partida_area_rl_area_financiero")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rl_producto_area {
+  id_producto_area       Int                    @id @default(autoincrement())
+  id_producto            Int
+  id_area_infra          Int
+  ct_usuario_in          Int                    @default(1)
+  ct_usuario_at          Int?
+  createdAt              DateTime               @default(now()) @db.Timestamp(0)
+  updatedAt              DateTime?              @db.Timestamp(0)
+  ct_producto_consumible ct_producto_consumible @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: Restrict, map: "FK_rl_producto_area_ct_producto_consumible")
+  rl_area_financiero     rl_area_financiero     @relation(fields: [id_area_infra], references: [id_area_fin], onDelete: NoAction, onUpdate: Restrict, map: "FK_rl_producto_area_rl_area_financiero")
+
+  @@index([id_producto], map: "FK_rl_producto_area_ct_producto_consumible")
+  @@index([id_area_infra], map: "FK_rl_producto_area_rl_area_financiero")
+}
+
+model rl_producto_requisicion {
+  id_producto_requisicion Int                    @id @default(autoincrement())
+  ct_area_id              Int                    @default(0)
+  dt_techo_id             Int                    @default(0)
+  ct_productos_id         Int                    @default(0)
+  cantidad                Decimal                @default(0.000) @db.Decimal(10, 3)
+  mes                     String                 @default("0") @db.VarChar(2)
+  total                   Decimal                @db.Decimal(15, 3)
+  ct_usuarios_in          Int                    @default(0)
+  ct_usuarios_at          Int?                   @default(0)
+  createdAt               DateTime               @default(now()) @db.Timestamp(0)
+  updatedAt               DateTime               @default(now()) @db.Timestamp(0)
+  rl_area_financiero      rl_area_financiero     @relation(fields: [ct_area_id], references: [id_area_fin], map: "FK__ct_area")
+  ct_producto_consumible  ct_producto_consumible @relation(fields: [ct_productos_id], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "FK__ct_producto_consumible")
+  ct_usuario              ct_usuario             @relation(fields: [ct_usuarios_in], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK__ct_usuario")
+  dt_techo_presupuesto    dt_techo_presupuesto   @relation(fields: [dt_techo_id], references: [id_techo], onDelete: NoAction, onUpdate: NoAction, map: "FK_rl_producto_requisicion_dt_techo_presupuesto")
+
+  @@index([ct_area_id], map: "FK__ct_area_idx")
+  @@index([ct_productos_id], map: "FK__ct_producto_consumible")
+  @@index([ct_usuarios_in], map: "FK__ct_usuario")
+  @@index([dt_techo_id], map: "FK_rl_producto_requisicion_dt_techo_presupuesto")
+}
+
+model rl_puesto_funcion {
+  id_puesto_funcion                                      Int         @id @default(autoincrement())
+  ct_puesto_id                                           Int?
+  dt_funcion_id                                          Int?
+  estado                                                 Boolean     @default(true)
+  ct_usuario_in                                          Int
+  ct_usuario_at                                          Int?
+  createdAt                                              DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt                                              DateTime    @default(now()) @db.Timestamp(0)
+  ct_usuario_rl_puesto_funcion_ct_usuario_atToct_usuario ct_usuario? @relation("rl_puesto_funcion_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_puesto_funcion_actualizado_por")
+  ct_usuario_rl_puesto_funcion_ct_usuario_inToct_usuario ct_usuario  @relation("rl_puesto_funcion_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_rl_puesto_funcion_creado_por")
+  dt_funcion                                             dt_funcion? @relation(fields: [dt_funcion_id], references: [id_funcion], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_puesto_funcion_funcion")
+  ct_puesto                                              ct_puesto?  @relation(fields: [ct_puesto_id], references: [id_puesto], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_puesto_funcion_puesto")
+
+  @@index([ct_usuario_at], map: "fk_rl_puesto_funcion_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_rl_puesto_funcion_creado_por")
+  @@index([dt_funcion_id], map: "fk_rl_puesto_funcion_funcion")
+  @@index([ct_puesto_id], map: "fk_rl_puesto_funcion_puesto")
+}
+
+model rl_usuario_funcion {
+  id_usuario_funcion                                      Int         @id @default(autoincrement())
+  ct_usuario_id                                           Int?
+  dt_funcion_id                                           Int?
+  estado                                                  Boolean     @default(true)
+  ct_usuario_in                                           Int
+  ct_usuario_at                                           Int?
+  createdAt                                               DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt                                               DateTime    @default(now()) @db.Timestamp(0)
+  ct_usuario_rl_usuario_funcion_ct_usuario_atToct_usuario ct_usuario? @relation("rl_usuario_funcion_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_usuario_funcion_actualizado_por")
+  ct_usuario_rl_usuario_funcion_ct_usuario_inToct_usuario ct_usuario  @relation("rl_usuario_funcion_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_rl_usuario_funcion_creado_por")
+  dt_funcion                                              dt_funcion? @relation(fields: [dt_funcion_id], references: [id_funcion], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_usuario_funcion_funcion")
+  ct_usuario_rl_usuario_funcion_ct_usuario_idToct_usuario ct_usuario? @relation("rl_usuario_funcion_ct_usuario_idToct_usuario", fields: [ct_usuario_id], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_usuario_funcion_usuario")
+
+  @@index([ct_usuario_at], map: "fk_rl_usuario_funcion_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_rl_usuario_funcion_creado_por")
+  @@index([dt_funcion_id], map: "fk_rl_usuario_funcion_funcion")
+  @@index([ct_usuario_id], map: "fk_rl_usuario_funcion_usuario")
+}
+
+model rl_usuario_puesto {
+  id_usuario_puesto                                      Int                                 @id @default(autoincrement())
+  ct_usuario_id                                          Int
+  ct_puesto_id                                           Int
+  id_area                                                Int?
+  estado                                                 Boolean                             @default(true)
+  ct_usuario_in                                          Int
+  ct_usuario_at                                          Int?
+  createdAt                                              DateTime                            @default(now()) @db.Timestamp(0)
+  updatedAt                                              DateTime                            @default(now()) @db.Timestamp(0)
+  rl_correspondencia_usuario_estado                      rl_correspondencia_usuario_estado[]
+  ct_usuario_rl_usuario_puesto_ct_usuario_atToct_usuario ct_usuario?                         @relation("rl_usuario_puesto_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_rl_usuario_puesto_actualizado_por")
+  ct_usuario_rl_usuario_puesto_ct_usuario_inToct_usuario ct_usuario                          @relation("rl_usuario_puesto_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onUpdate: Restrict, map: "fk_rl_usuario_puesto_creado_por")
+  ct_puesto                                              ct_puesto                           @relation(fields: [ct_puesto_id], references: [id_puesto], onUpdate: Restrict, map: "fk_rl_usuario_puesto_ct_puesto")
+  ct_usuario_rl_usuario_puesto_ct_usuario_idToct_usuario ct_usuario                          @relation("rl_usuario_puesto_ct_usuario_idToct_usuario", fields: [ct_usuario_id], references: [id_usuario], onUpdate: Restrict, map: "fk_rl_usuario_puesto_ct_usuario")
+
+  @@index([ct_usuario_at], map: "fk_rl_usuario_puesto_actualizado_por")
+  @@index([ct_usuario_in], map: "fk_rl_usuario_puesto_creado_por")
+  @@index([ct_puesto_id], map: "fk_rl_usuario_puesto_ct_puesto")
+  @@index([ct_usuario_id], map: "fk_rl_usuario_puesto_ct_usuario")
+}
+
+enum ct_documentos_aneec_vigencia {
+  S
+  N
+}
+
+enum rl_correspondencia_usuario_estado_tipo_turnado {
+  respuesta
+  consulta
+}
+
+enum dt_diagnostico_aneec_rehabilitacion_fisica {
+  S
+  N
+}

@@ -1,87 +1,121 @@
-import { Sequelize, QueryTypes } from "sequelize";
-import config from "./index";
+import { PrismaClient } from "@prisma/client";
+import { createOptimizedDatabaseUrl, PoolMonitor } from "./poolMonitor";
+import { isProduction, isDevelopment } from "./env";
 
-// Configuración del pool de conexiones
-const poolConfig = {
-  max: 10,
-  min: 2,
-  acquire: 30000,
-  idle: 10000,
-  evict: 1000,
+// Declaramos globalmente el tipo para evitar conflictos en desarrollo
+declare global {
+  var __global_prisma__: PrismaClient | undefined;
+}
+
+// Configuración del cliente Prisma con pool de conexiones optimizado
+const createPrismaClient = () => {
+  return new PrismaClient({
+    log: isDevelopment ? ["query", "info", "warn", "error"] : ["warn", "error"],
+
+    // 🔥 CONFIGURACIÓN DEL POOL DE CONEXIONES
+    datasources: {
+      db: {
+        url: createOptimizedDatabaseUrl(),
+      },
+    },
+
+    // Configuración de transacciones optimizada por entorno
+    transactionOptions: {
+      maxWait: isProduction ? 5000 : 10000, // Prod: 5s, Dev: 10s
+      timeout: isProduction ? 10000 : 20000, // Prod: 10s, Dev: 20s
+      isolationLevel: "ReadCommitted", // Nivel de aislamiento optimizado
+    },
+  });
 };
 
-// Crear la instancia de Sequelize con el pool
-const sequelize = new Sequelize(
-  config.db.name,
-  config.db.user,
-  config.db.password,
-  {
-    host: config.db.host,
-    dialect: "mariadb",
-    port: config.db.port,
-    logging: config.nodeEnv === "development" ? console.log : false,
-    pool: poolConfig,
-    dialectOptions: {
-      connectTimeout: 60000,
-      supportBigNumbers: true,
-      bigNumberStrings: true,
-      dateStrings: true,
-      typeCast: true,
-    },
-    retry: {
-      max: 3,
-      match: [
-        /Deadlock/i,
-        /SequelizeConnectionError/,
-        /SequelizeConnectionRefusedError/,
-        /SequelizeHostNotFoundError/,
-        /SequelizeHostNotReachableError/,
-        /SequelizeInvalidConnectionError/,
-        /SequelizeConnectionTimedOutError/,
-        /TimeoutError/,
-      ],
-    },
-  }
-);
+// Singleton pattern para evitar múltiples instancias en desarrollo
+let prisma: PrismaClient;
 
-// Función para ejecutar consultas con el pool
-const executeQuery = async (
-  query: string,
-  params: any[] = [],
-  type: QueryTypes = QueryTypes.SELECT
-) => {
+if (process.env.NODE_ENV === "production") {
+  prisma = createPrismaClient();
+} else {
+  // En desarrollo, usar variable global para persistir entre hot reloads
+  if (!global.__global_prisma__) {
+    global.__global_prisma__ = createPrismaClient();
+  }
+  prisma = global.__global_prisma__;
+}
+
+// Función para inicializar la conexión
+export const initializeDatabase = async (): Promise<void> => {
   try {
-    const result = await sequelize.query(query, {
-      replacements: params,
-      type: type,
-    });
-    return result;
+    // Log detallado de la configuración de conexión
+    const { dbConfig, serverConfig, getDatabaseUrl } = await import("./env");
+
+    console.log("🔌 ===== INICIANDO CONEXIÓN A BASE DE DATOS =====");
+    console.log("📊 Configuración de conexión:");
+    console.log(`   • Entorno: ${serverConfig.nodeEnv}`);
+    console.log(`   • Host: ${dbConfig.host}`);
+    console.log(`   • Puerto: ${dbConfig.port}`);
+    console.log(`   • Base de datos: ${dbConfig.name}`);
+    console.log(`   • Usuario: ${dbConfig.user}`);
+    console.log(
+      `   • Password: ${
+        dbConfig.password ? "***configurado***" : "sin password"
+      }`
+    );
+
+    // Mostrar la URL construida (sin la password)
+    const fullUrl = getDatabaseUrl();
+    const urlParseada = new URL(fullUrl);
+    const urlSinPassword = `${urlParseada.protocol}//${urlParseada.username}@${urlParseada.host}${urlParseada.pathname}${urlParseada.search}`;
+    console.log(`   • URL final: ${urlSinPassword}`);
+
+    console.log("🔄 Intentando conectar con Prisma...");
+    const startTime = Date.now();
+
+    await prisma.$connect();
+
+    const connectionTime = Date.now() - startTime;
+    console.log("✅ ===== CONEXIÓN EXITOSA =====");
+    console.log(`   • Tiempo de conexión: ${connectionTime}ms`);
+    console.log(`   • Cliente Prisma: Conectado y listo`);
+    console.log(`   • Timestamp: ${new Date().toISOString()}`);
+    console.log("=====================================");
   } catch (error) {
-    console.error("❌ Error en la consulta:", error);
+    console.log("❌ ===== FALLO EN LA CONEXIÓN =====");
+    console.error("💥 Error al conectar con la base de datos:");
+    console.error("   • Detalles del error:", error);
+    console.error("   • Timestamp del error:", new Date().toISOString());
+    console.log("=====================================");
     throw error;
   }
 };
 
-// Función para verificar la conexión
-const checkConnection = async () => {
+// Función para desconectar
+export const disconnectDatabase = async (): Promise<void> => {
   try {
-    await sequelize.authenticate();
+    await prisma.$disconnect();
+    console.log("✅ Desconexión de la base de datos completada.");
+  } catch (error) {
+    console.error("❌ Error al desconectar de la base de datos:", error);
+  }
+};
+
+// Función para verificar estado de la conexión
+export const checkDatabaseHealth = async (): Promise<boolean> => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
     return true;
   } catch (error) {
-    console.error("❌ Error al verificar conexión:", error);
+    console.error("❌ Database health check failed:", error);
     return false;
   }
 };
 
-// Función para cerrar todas las conexiones
-const closeAllConnections = async () => {
-  try {
-    await sequelize.close();
-    console.log("✅ Todas las conexiones cerradas");
-  } catch (error) {
-    console.error("❌ Error al cerrar conexiones:", error);
-    throw error;
-  }
-};
+// Monitor del pool de conexiones
+export const poolMonitor = new PoolMonitor(prisma);
 
-export { sequelize, executeQuery, checkConnection, closeAllConnections };
+// Función para obtener estadísticas del pool
+export const getPoolStats = () => poolMonitor.getDetailedStats();
+
+// Función para verificar la salud del pool
+export const getPoolHealth = () => poolMonitor.healthCheck();
+
+export { prisma };
+export default prisma;
