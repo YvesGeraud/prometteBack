@@ -4,6 +4,8 @@ CREATE TABLE `ct_bitacora_accion` (
     `accion` VARCHAR(50) NOT NULL,
     `descripcion` VARCHAR(255) NULL,
     `activo` BOOLEAN NULL DEFAULT true,
+    `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` DATETIME(0) NULL,
 
     PRIMARY KEY (`id_ct_bitacora_accion`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -14,6 +16,8 @@ CREATE TABLE `ct_bitacora_entidad` (
     `entidad` VARCHAR(100) NOT NULL,
     `descripcion` VARCHAR(255) NULL,
     `activo` BOOLEAN NULL DEFAULT true,
+    `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` DATETIME(0) NULL,
 
     PRIMARY KEY (`id_ct_bitacora_entidad`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -24,6 +28,8 @@ CREATE TABLE `ct_capitulo` (
     `clave_capitulo` INTEGER NOT NULL,
     `nombre_capitulo` VARCHAR(100) NOT NULL,
     `activo` BOOLEAN NOT NULL DEFAULT true,
+    `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` DATETIME(0) NULL,
 
     PRIMARY KEY (`id_capitulo`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -33,7 +39,7 @@ CREATE TABLE `ct_consumible_factura` (
     `id_factura` INTEGER NOT NULL AUTO_INCREMENT,
     `factura` VARCHAR(255) NOT NULL,
     `ct_provedor_id` INTEGER NOT NULL,
-    `activo` TINYINT NOT NULL DEFAULT 1,
+    `activo` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `updatedAt` DATETIME(0) NULL,
 

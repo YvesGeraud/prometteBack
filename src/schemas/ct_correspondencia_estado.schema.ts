@@ -3,24 +3,14 @@ import { z } from "zod";
 //TODO ===== SCHEMAS PARA CT_CAPITULO =====
 //? Esquemas para crear una nueva entidad
 
-export const crearCtCapituloSchema = z.object({
-  clave_capitulo: z
-    .number()
-    .min(1, "La clave del capitulo debe tener al menos 1 caracter"),
-  nombre_capitulo: z
-    .string()
-    .min(2, "El nombre del capitulo debe tener al menos 2 caracteres"),
+export const crearCtCorrespondenciaEstadoSchema = z.object({
+  nombre: z.string().min(1, "El nombre debe tener al menos 1 caracter"),
   activo: z.boolean().default(true),
 });
 
 //? Esquemas para actualizar una acción
-export const actualizarCtCapituloSchema = z.object({
-  clave_capitulo: z
-    .number()
-    .min(1, "La clave del capitulo debe tener al menos 1 caracter"),
-  nombre_capitulo: z
-    .string()
-    .min(2, "El nombre del capitulo debe tener al menos 2 caracteres"),
+export const actualizarCtCorrespondenciaEstadoSchema = z.object({
+  nombre: z.string().min(1, "El nombre debe tener al menos 1 caracter"),
   activo: z.boolean().default(true),
 });
 
@@ -28,9 +18,9 @@ export { paginationSchema, idParamSchema } from "./commonSchemas";
 
 //? Schema para filtros y paginación de entidades
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctCapituloFiltrosSchema = z.object({
+export const ctCorrespondenciaEstadoFiltrosSchema = z.object({
   //? Filtros específicos
-  id_capitulo: z
+  id_estado: z
     .string()
     .optional()
     .transform((val) => {
@@ -42,19 +32,10 @@ export const ctCapituloFiltrosSchema = z.object({
       z
         .number()
         .int()
-        .positive("ID de la capitulo debe ser un número positivo")
+        .positive("ID de la estado debe ser un número positivo")
         .optional()
     ),
-  clave_capitulo: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return undefined;
-      const num = parseInt(val, 10);
-      return isNaN(num) ? undefined : num;
-    })
-    .pipe(z.number().optional()),
-  nombre_capitulo: z.string().optional(),
+  nombre: z.string().optional(),
   activo: z
     .string()
     .optional()
@@ -95,24 +76,30 @@ export const ctCapituloFiltrosSchema = z.object({
     .pipe(z.number().int().min(1).max(100)),
 });
 
-export type CrearCtCapituloInput = z.infer<typeof crearCtCapituloSchema>;
-export type ActualizarCtCapituloInput = z.infer<
-  typeof actualizarCtCapituloSchema
+export type CrearCtCorrespondenciaEstadoInput = z.infer<
+  typeof crearCtCorrespondenciaEstadoSchema
+>;
+export type ActualizarCtCorrespondenciaEstadoInput = z.infer<
+  typeof actualizarCtCorrespondenciaEstadoSchema
 >;
 
-export type BuscarCtCapituloInput = z.infer<typeof ctCapituloFiltrosSchema>;
+export type BuscarCtCorrespondenciaEstadoInput = z.infer<
+  typeof ctCorrespondenciaEstadoFiltrosSchema
+>;
 
-export const ctCapituloIdParamSchema = z.object({
-  id_capitulo: z.union([z.string(), z.number()]).transform((val) => {
+export const ctCorrespondenciaEstadoIdParamSchema = z.object({
+  id_estado: z.union([z.string(), z.number()]).transform((val) => {
     const num = typeof val === "string" ? parseInt(val, 10) : val;
     if (isNaN(num) || num <= 0) {
-      throw new Error("ID de la capitulo debe ser un número positivo");
+      throw new Error("ID de la estado debe ser un número positivo");
     }
     return num;
   }),
 });
 
-export type CtCapituloIdParam = z.infer<typeof ctCapituloIdParamSchema>;
+export type CtCorrespondenciaEstadoIdParam = z.infer<
+  typeof ctCorrespondenciaEstadoIdParamSchema
+>;
 
 /*
 🔧 SCHEMA CORREGIDO PARA SOFT DELETE:
@@ -130,7 +117,7 @@ export type CtCapituloIdParam = z.infer<typeof ctCapituloIdParamSchema>;
 - incluirInactivos=true muestra también registros eliminados
 
 📝 Uso de query parameters:
-- GET /api/ct_capitulo (solo activos)
-- GET /api/ct_capitulo?incluirInactivos=true (todos)
-- GET /api/ct_capitulo?activo=false (solo inactivos)
+- GET /api/ct_correspondencia_estado (solo activos)
+- GET /api/ct_correspondencia_estado?incluirInactivos=true (todos)
+- GET /api/ct_correspondencia_estado?activo=false (solo inactivos)
 */

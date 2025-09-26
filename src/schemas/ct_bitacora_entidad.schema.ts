@@ -1,26 +1,23 @@
 import { z } from "zod";
 
-//TODO ===== SCHEMAS PARA CT_CAPITULO =====
+//TODO ===== SCHEMAS PARA CT_BITACORA_ENTIDAD =====
 //? Esquemas para crear una nueva entidad
 
-export const crearCtCapituloSchema = z.object({
-  clave_capitulo: z
-    .number()
-    .min(1, "La clave del capitulo debe tener al menos 1 caracter"),
-  nombre_capitulo: z
+export const crearCtBitacoraEntidadSchema = z.object({
+  entidad: z.string().min(2, "La entidad debe tener al menos 2 caracteres"),
+  descripcion: z
     .string()
-    .min(2, "El nombre del capitulo debe tener al menos 2 caracteres"),
+    .min(2, "La descripción debe tener al menos 2 caracteres"),
   activo: z.boolean().default(true),
 });
 
 //? Esquemas para actualizar una acción
-export const actualizarCtCapituloSchema = z.object({
-  clave_capitulo: z
-    .number()
-    .min(1, "La clave del capitulo debe tener al menos 1 caracter"),
-  nombre_capitulo: z
+export const actualizarCtBitacoraEntidadSchema = z.object({
+  entidad: z.string().min(2, "La entidad debe tener al menos 2 caracteres"),
+  descripcion: z
     .string()
-    .min(2, "El nombre del capitulo debe tener al menos 2 caracteres"),
+    .min(2, "La descripción debe tener al menos 2 caracteres")
+    .optional(),
   activo: z.boolean().default(true),
 });
 
@@ -28,9 +25,9 @@ export { paginationSchema, idParamSchema } from "./commonSchemas";
 
 //? Schema para filtros y paginación de entidades
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctCapituloFiltrosSchema = z.object({
+export const ctBitacoraEntidadFiltrosSchema = z.object({
   //? Filtros específicos
-  id_capitulo: z
+  id_ct_bitacora_entidad: z
     .string()
     .optional()
     .transform((val) => {
@@ -42,19 +39,11 @@ export const ctCapituloFiltrosSchema = z.object({
       z
         .number()
         .int()
-        .positive("ID de la capitulo debe ser un número positivo")
+        .positive("ID de la entidad debe ser un número positivo")
         .optional()
     ),
-  clave_capitulo: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return undefined;
-      const num = parseInt(val, 10);
-      return isNaN(num) ? undefined : num;
-    })
-    .pipe(z.number().optional()),
-  nombre_capitulo: z.string().optional(),
+  entidad: z.string().optional(),
+  descripcion: z.string().optional(),
   activo: z
     .string()
     .optional()
@@ -95,30 +84,36 @@ export const ctCapituloFiltrosSchema = z.object({
     .pipe(z.number().int().min(1).max(100)),
 });
 
-export type CrearCtCapituloInput = z.infer<typeof crearCtCapituloSchema>;
-export type ActualizarCtCapituloInput = z.infer<
-  typeof actualizarCtCapituloSchema
+export type CrearCtBitacoraEntidadInput = z.infer<
+  typeof crearCtBitacoraEntidadSchema
+>;
+export type ActualizarCtBitacoraEntidadInput = z.infer<
+  typeof actualizarCtBitacoraEntidadSchema
 >;
 
-export type BuscarCtCapituloInput = z.infer<typeof ctCapituloFiltrosSchema>;
+export type BuscarCtBitacoraEntidadInput = z.infer<
+  typeof ctBitacoraEntidadFiltrosSchema
+>;
 
-export const ctCapituloIdParamSchema = z.object({
-  id_capitulo: z.union([z.string(), z.number()]).transform((val) => {
+export const ctBitacoraEntidadIdParamSchema = z.object({
+  id_ct_bitacora_entidad: z.union([z.string(), z.number()]).transform((val) => {
     const num = typeof val === "string" ? parseInt(val, 10) : val;
     if (isNaN(num) || num <= 0) {
-      throw new Error("ID de la capitulo debe ser un número positivo");
+      throw new Error("ID de la entidad debe ser un número positivo");
     }
     return num;
   }),
 });
 
-export type CtCapituloIdParam = z.infer<typeof ctCapituloIdParamSchema>;
+export type CtBitacoraEntidadIdParam = z.infer<
+  typeof ctBitacoraEntidadIdParamSchema
+>;
 
 /*
 🔧 SCHEMA CORREGIDO PARA SOFT DELETE:
 
 ✅ Cambios realizados:
-1. 🔢 id_capitulo - Ahora maneja correctamente valores undefined/vacíos
+1. 🔢 id_ct_bitacora_entidad - Ahora maneja correctamente valores undefined/vacíos
 2. ✅ activo - Corregido de number a boolean opcional
 3. 🆕 incluirInactivos - Nuevo parámetro para mostrar registros eliminados
 4. 📄 pagina/limite - Mejorado manejo de valores undefined con defaults
@@ -130,7 +125,7 @@ export type CtCapituloIdParam = z.infer<typeof ctCapituloIdParamSchema>;
 - incluirInactivos=true muestra también registros eliminados
 
 📝 Uso de query parameters:
-- GET /api/ct_capitulo (solo activos)
-- GET /api/ct_capitulo?incluirInactivos=true (todos)
-- GET /api/ct_capitulo?activo=false (solo inactivos)
+- GET /api/ct_bitacora_entidad (solo activos)
+- GET /api/ct_bitacora_entidad?incluirInactivos=true (todos)
+- GET /api/ct_bitacora_entidad?activo=false (solo inactivos)
 */

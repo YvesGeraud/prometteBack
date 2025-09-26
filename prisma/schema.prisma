@@ -12,6 +12,8 @@ model ct_bitacora_accion {
   accion                 String                   @db.VarChar(50)
   descripcion            String?                  @db.VarChar(255)
   activo                 Boolean?                 @default(true)
+  createdAt              DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt              DateTime?                  @db.DateTime(0)
   dt_bitacora_movimiento dt_bitacora_movimiento[]
 }
 
@@ -20,6 +22,8 @@ model ct_bitacora_entidad {
   entidad                String                   @db.VarChar(100)
   descripcion            String?                  @db.VarChar(255)
   activo                 Boolean?                 @default(true)
+  createdAt              DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt              DateTime?                  @db.DateTime(0)
   dt_bitacora_movimiento dt_bitacora_movimiento[]
 }
 
@@ -29,6 +33,8 @@ model ct_capitulo {
   nombre_capitulo      String                 @db.VarChar(100)
   activo               Boolean                @default(true)
   ct_partida           ct_partida[]
+  createdAt            DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt            DateTime?                  @db.DateTime(0)
   dt_techo_presupuesto dt_techo_presupuesto[]
 }
 
@@ -58,6 +64,8 @@ model ct_correspondencia_estado {
   id_estado                         Int                                 @id @default(autoincrement())
   nombre                            String                              @unique(map: "uk_corresp_estado_nombre") @db.VarChar(50)
   activo                            Boolean                             @default(true)
+  createdAt                         DateTime                            @default(now()) @db.DateTime(0)
+  updatedAt                         DateTime?                           @db.DateTime(0)
   rl_correspondencia_usuario_estado rl_correspondencia_usuario_estado[]
 }
 
