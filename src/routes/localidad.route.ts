@@ -6,7 +6,7 @@ import {
   actualizarCtLocalidadSchema,
   ctLocalidadIdParamSchema,
   localidadFiltrosSchema,
-} from "../schemas/ct_localidad.schema";
+} from "../schemas/localidadschema";
 
 //TODO ===== RUTAS PARA CT_LOCALIDAD CON BASE SERVICE =====
 

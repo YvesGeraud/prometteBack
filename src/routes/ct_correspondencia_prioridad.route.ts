@@ -24,7 +24,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_prioridad",
+  "/:id_ct_correspondencia_prioridad",
   validarRequest({ params: ctCorrespondenciaPrioridadIdParamSchema }),
   ctCorrespondenciaPrioridadController.obtenerCorrespondenciaPrioridadPorId
 );
@@ -38,7 +38,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_prioridad",
+  "/:id_ct_correspondencia_prioridad",
   validarRequest({
     params: ctCorrespondenciaPrioridadIdParamSchema,
     body: actualizarCtCorrespondenciaPrioridadSchema,
@@ -48,10 +48,10 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_prioridad",
+  "/:id_ct_correspondencia_prioridad",
   validarRequest({
     params: ctCorrespondenciaPrioridadIdParamSchema,
-    //body: eliminarCtCorrespondenciaPrioridadSchema,
+    body: eliminarCtCorrespondenciaPrioridadSchema,
   }),
   ctCorrespondenciaPrioridadController.eliminarCorrespondenciaPrioridad
 );

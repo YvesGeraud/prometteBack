@@ -23,7 +23,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_dispositivo",
+  "/:id_ct_dispositivo",
   validarRequest({ params: ctDispositivoIdParamSchema }),
   ctDispositivoController.obtenerDispositivoPorId
 );
@@ -37,7 +37,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_dispositivo",
+  "/:id_ct_dispositivo",
   validarRequest({
     params: ctDispositivoIdParamSchema,
     body: actualizarCtDispositivoSchema,
@@ -47,7 +47,7 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_dispositivo",
+  "/:id_ct_dispositivo",
   validarRequest({
     params: ctDispositivoIdParamSchema,
     body: eliminarCtDispositivoSchema,

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { BaseController } from "./BaseController";
-    import { CtLocalidadBaseService } from "../services/localidad.service";
+import { CtLocalidadBaseService } from "../services/localidad.service";
 import {
   CrearCtLocalidadInput,
   ActualizarCtLocalidadInput,
   ctLocalidadIdParamSchema,
   CtLocalidadIdParam,
-} from "../schemas/ct_localidad.schema";
+} from "../schemas/localidadschema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
 //TODO ===== CONTROLADOR PARA CT_ENTIDAD CON BASE SERVICE =====
-    const ctLocalidadBaseService = new CtLocalidadBaseService();
+const ctLocalidadBaseService = new CtLocalidadBaseService();
 
 export class CtLocalidadBaseController extends BaseController {
   /**
@@ -25,7 +25,7 @@ export class CtLocalidadBaseController extends BaseController {
         const entidadData: CrearCtLocalidadInput = req.body;
         return await ctLocalidadBaseService.crear(entidadData);
       },
-        "Entidad creada exitosamente"
+      "Entidad creada exitosamente"
     );
   };
 
@@ -38,12 +38,13 @@ export class CtLocalidadBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_localidad } = this.validarDatosConEsquema<CtLocalidadIdParam>(
-          ctLocalidadIdParamSchema,
-          req.params
-        );
+        const { id_localidad } =
+          this.validarDatosConEsquema<CtLocalidadIdParam>(
+            ctLocalidadIdParamSchema,
+            req.params
+          );
 
-            return await ctLocalidadBaseService.obtenerPorId(id_localidad);
+        return await ctLocalidadBaseService.obtenerPorId(id_localidad);
       },
       "Localidad obtenida exitosamente"
     );
@@ -70,7 +71,7 @@ export class CtLocalidadBaseController extends BaseController {
         const { pagina, limite, ...filters } = req.query as any;
         const pagination: PaginationInput = { pagina, limite };
 
-                return await ctLocalidadBaseService.obtenerTodos(filters, pagination);
+        return await ctLocalidadBaseService.obtenerTodos(filters, pagination);
       },
       "Localidades obtenidas exitosamente"
     );
@@ -85,13 +86,17 @@ export class CtLocalidadBaseController extends BaseController {
       req,
       res,
       async () => {
-            const { id_localidad } = this.validarDatosConEsquema<CtLocalidadIdParam>(
-          ctLocalidadIdParamSchema,
-          req.params
-        );
+        const { id_localidad } =
+          this.validarDatosConEsquema<CtLocalidadIdParam>(
+            ctLocalidadIdParamSchema,
+            req.params
+          );
         const localidadData: ActualizarCtLocalidadInput = req.body;
 
-        return await ctLocalidadBaseService.actualizar(id_localidad, localidadData);
+        return await ctLocalidadBaseService.actualizar(
+          id_localidad,
+          localidadData
+        );
       },
       "Localidad actualizada exitosamente"
     );
@@ -106,10 +111,11 @@ export class CtLocalidadBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_localidad } = this.validarDatosConEsquema<CtLocalidadIdParam>(
+        const { id_localidad } =
+          this.validarDatosConEsquema<CtLocalidadIdParam>(
             ctLocalidadIdParamSchema,
-          req.params
-        );
+            req.params
+          );
 
         await ctLocalidadBaseService.eliminar(id_localidad);
       },

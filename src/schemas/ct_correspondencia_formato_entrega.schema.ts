@@ -35,7 +35,7 @@ export const crearCtCorrespondenciaFormatoEntregaSchema = z.object({
 export const actualizarCtCorrespondenciaFormatoEntregaSchema = z.object({
   nombre: esquemaTextoOpcional(50),
   estado: esquemaEstadoOpcional,
-  id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
+  id_ct_usuario_up: esquemaUsuarioCreacion,
   fecha_in: esquemaFechaOpcional,
 });
 

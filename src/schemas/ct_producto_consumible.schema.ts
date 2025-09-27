@@ -22,34 +22,43 @@ import {
   esquemaNumeroOpcional,
 } from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_MODULO =====
+//TODO ===== SCHEMAS PARA CT_PRODUCTO_CONSUMIBLE =====
 
-//? Esquema para crear una nueva modulo
-export const crearCtModuloSchema = z.object({
-  nombre_modulo: esquemaTextoRequerido(2, 100),
+//? Esquema para crear una nueva producto consumible
+export const crearCtProductoConsumibleSchema = z.object({
+  id_ct_partida: esquemaNumeroRequerido(1, 100000),
+  nombre_producto: esquemaTextoRequerido(2, 50),
+  precio: esquemaNumeroRequerido(1, 100000),
+  id_ct_unidad_medida: esquemaNumeroRequerido(1, 100000),
   estado: esquemaEstadoRequerido,
   id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquema para actualizar una modulo
-export const actualizarCtModuloSchema = z.object({
-  nombre_modulo: esquemaTextoOpcional(100),
+//? Esquema para actualizar una producto consumible
+export const actualizarCtProductoConsumibleSchema = z.object({
+  id_ct_partida: esquemaNumeroOpcional(1, 100000),
+  nombre_producto: esquemaTextoOpcional(50),
+  precio: esquemaNumeroOpcional(1, 100000),
+  id_ct_unidad_medida: esquemaNumeroOpcional(1, 100000),
   estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
   fecha_up: esquemaFechaOpcional,
 });
 
-//? Schema para filtros y paginación de modulos
+//? Schema para filtros y paginación de producto consumible
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctModuloFiltrosSchema = z.object({
+export const ctProductoConsumibleFiltrosSchema = z.object({
   //? Filtros específicos
-  id_ct_modulo: esquemaQueryId,
-  nombre_modulo: esquemaQueryTexto,
+  id_ct_producto_consumible: esquemaQueryId,
+  id_ct_partida: esquemaQueryNumeroOpcional,
+  nombre_producto: esquemaQueryTexto,
+  precio: esquemaQueryNumeroOpcional,
+  id_ct_unidad_medida: esquemaQueryNumeroOpcional,
   estado: esquemaQueryBoolean,
   id_ct_usuario_in: esquemaQueryId,
   fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos de modulos
+  //? Filtros para incluir inactivos de producto consumible
   incluirInactivos: esquemaQueryBoolean,
 
   //? Paginación
@@ -57,22 +66,32 @@ export const ctModuloFiltrosSchema = z.object({
   limite: esquemaLimiteQuery,
 });
 
-export type CrearCtModuloInput = z.infer<typeof crearCtModuloSchema>;
-export type ActualizarCtModuloInput = z.infer<typeof actualizarCtModuloSchema>;
+export type CrearCtProductoConsumibleInput = z.infer<
+  typeof crearCtProductoConsumibleSchema
+>;
+export type ActualizarCtProductoConsumibleInput = z.infer<
+  typeof actualizarCtProductoConsumibleSchema
+>;
 
-export type BuscarCtModuloInput = z.infer<typeof ctModuloFiltrosSchema>;
+export type BuscarCtProductoConsumibleInput = z.infer<
+  typeof ctProductoConsumibleFiltrosSchema
+>;
 
-//? Esquema para parámetros de URL (ID de modulo)
-export const ctModuloIdParamSchema = z.object({
-  id_ct_modulo: esquemaParamId,
+//? Esquema para parámetros de URL (ID de producto consumible)
+export const ctProductoConsumibleIdParamSchema = z.object({
+  id_ct_producto_consumible: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación
-export const eliminarCtModuloSchema = esquemaDeleteConUsuario;
+export const eliminarCtProductoConsumibleSchema = esquemaDeleteConUsuario;
 
-export type CtModuloIdParam = z.infer<typeof ctModuloIdParamSchema>;
+export type CtProductoConsumibleIdParam = z.infer<
+  typeof ctProductoConsumibleIdParamSchema
+>;
 
-export type EliminarCtModuloInput = z.infer<typeof eliminarCtModuloSchema>;
+export type EliminarCtProductoConsumibleInput = z.infer<
+  typeof eliminarCtProductoConsumibleSchema
+>;
 
 /*
 🎉 SCHEMA REFACTORIZADO CON ESQUEMAS BASE REUTILIZABLES

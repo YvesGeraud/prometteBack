@@ -13,9 +13,12 @@ import ctCorrespondenciaEstadoRoutes from "./ct_correspondencia_estado.route";
 import ctCorrespondenciaFormatoEntregaRoutes from "./ct_correspondencia_formato_entrega.route";
 import ctCorrespondenciaPrioridadRoutes from "./ct_correspondencia_prioridad.route";
 import ctDispositivoRoutes from "./ct_dispositivo.route";
-import ctDocumentosAnnecRoutes from "./ct_documentos_annec.route";
+import ctDocumentoAnnecRoutes from "./ct_documento_annec.route";
 import ctFinanciamientoRoutes from "./ct_financiamiento.route";
 import ctModuloRoutes from "./ct_modulo.route";
+import ctPartidaRoutes from "./ct_partida.route";
+import ctProductoConsumibleRoutes from "./ct_producto_consumible.route";
+import ctPuestoRoutes from "./ct_puesto.route";
 
 /*import entidadRoutes from "./entidad.route";
 import municipioRoutes from "./municipio.route";
@@ -40,9 +43,13 @@ router.use(
 );
 router.use("/ct_correspondencia_prioridad", ctCorrespondenciaPrioridadRoutes);
 router.use("/ct_dispositivo", ctDispositivoRoutes);
-router.use("/ct_documentos_annec", ctDocumentosAnnecRoutes);
+router.use("/ct_documento_annec", ctDocumentoAnnecRoutes);
 router.use("/ct_financiamiento", ctFinanciamientoRoutes);
 router.use("/ct_modulo", ctModuloRoutes);
+router.use("/ct_partida", ctPartidaRoutes);
+router.use("/ct_producto_consumible", ctProductoConsumibleRoutes);
+router.use("/ct_puesto", ctPuestoRoutes);
+
 /*router.use("/entidad", entidadRoutes);
 router.use("/municipio", municipioRoutes);
 router.use("/localidad", localidadRoutes);*/

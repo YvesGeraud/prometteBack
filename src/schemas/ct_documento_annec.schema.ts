@@ -22,37 +22,34 @@ import {
   esquemaNumeroOpcional,
 } from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_DISPOSITIVO =====
+//TODO ===== SCHEMAS PARA CT_DOCUMENTOS_ANNEC =====
 
-//? Esquema para crear una nueva dispositivo
-export const crearCtDispositivoSchema = z.object({
-  nombre_dispositivo: esquemaTextoRequerido(2, 100),
-  descripcion: esquemaTextoRequerido(2, 255),
+//? Esquema para crear una nueva tipo de documento
+export const crearCtDocumentoAnnecSchema = z.object({
+  nombre: esquemaTextoRequerido(2, 50),
   estado: esquemaEstadoRequerido,
   id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquema para actualizar una dispositivo
-export const actualizarCtDispositivoSchema = z.object({
-  nombre_dispositivo: esquemaTextoOpcional(100),
-  descripcion: esquemaTextoOpcional(255),
+//? Esquema para actualizar una tipo de documento
+export const actualizarCtDocumentoAnnecSchema = z.object({
+  nombre: esquemaTextoOpcional(50),
   estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion,
   fecha_up: esquemaFechaOpcional,
 });
 
-//? Schema para filtros y paginación de dispositivos
+//? Schema para filtros y paginación de tipo de documento
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctDispositivoFiltrosSchema = z.object({
+export const ctDocumentoAnnecFiltrosSchema = z.object({
   //? Filtros específicos
-  id_ct_dispositivo: esquemaQueryId,
-  nombre_dispositivo: esquemaQueryTexto,
-  descripcion: esquemaQueryTexto,
+  id_ct_documento_aneec: esquemaQueryId,
+  nombre: esquemaQueryTexto,
   estado: esquemaQueryBoolean,
   id_ct_usuario_in: esquemaQueryId,
   fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos de dispositivos
+  //? Filtros para incluir inactivos de tipo de documento
   incluirInactivos: esquemaQueryBoolean,
 
   //? Paginación
@@ -60,27 +57,31 @@ export const ctDispositivoFiltrosSchema = z.object({
   limite: esquemaLimiteQuery,
 });
 
-export type CrearCtDispositivoInput = z.infer<typeof crearCtDispositivoSchema>;
-export type ActualizarCtDispositivoInput = z.infer<
-  typeof actualizarCtDispositivoSchema
+export type CrearCtDocumentoAnnecInput = z.infer<
+  typeof crearCtDocumentoAnnecSchema
+>;
+export type ActualizarCtDocumentoAnnecInput = z.infer<
+  typeof actualizarCtDocumentoAnnecSchema
 >;
 
-export type BuscarCtDispositivoInput = z.infer<
-  typeof ctDispositivoFiltrosSchema
+export type BuscarCtDocumentoAnnecInput = z.infer<
+  typeof ctDocumentoAnnecFiltrosSchema
 >;
 
-//? Esquema para parámetros de URL (ID de dispositivo)
-export const ctDispositivoIdParamSchema = z.object({
-  id_ct_dispositivo: esquemaParamId,
+//? Esquema para parámetros de URL (ID de tipo de documento)
+export const ctDocumentoAnnecIdParamSchema = z.object({
+  id_ct_documento_aneec: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación
-export const eliminarCtDispositivoSchema = esquemaDeleteConUsuario;
+export const eliminarCtDocumentoAnnecSchema = esquemaDeleteConUsuario;
 
-export type CtDispositivoIdParam = z.infer<typeof ctDispositivoIdParamSchema>;
+export type CtDocumentoAnnecIdParam = z.infer<
+  typeof ctDocumentoAnnecIdParamSchema
+>;
 
-export type EliminarCtDispositivoInput = z.infer<
-  typeof eliminarCtDispositivoSchema
+export type EliminarCtDocumentoAnnecInput = z.infer<
+  typeof eliminarCtDocumentoAnnecSchema
 >;
 
 /*

@@ -1,49 +1,50 @@
 /**
- * @fileoverview Servicio de ct_financiamiento usando BaseService
+ * @fileoverview Servicio de ct_documentos_aneec usando BaseService
  * ¡Prueba de que solo necesitas ~15 líneas para un CRUD completo!
  */
 
 import { BaseService } from "./BaseService";
-import { ct_financiamiento } from "@prisma/client";
+import { ct_documento_aneec } from "@prisma/client";
 import {
-  CrearCtFinanciamientoInput,
-  ActualizarCtFinanciamientoInput,
-  BuscarCtFinanciamientoInput,
-} from "../schemas/ct_financiamiento.schema";
+  CrearCtDocumentoAnnecInput,
+  ActualizarCtDocumentoAnnecInput,
+  BuscarCtDocumentoAnnecInput,
+} from "../schemas/ct_documento_annec.schema";
 
 //TODO ===== SERVICIO PARA CT_BITACORA_ACCION CON BASE SERVICE =====
 
-export class CtFinanciamientoService extends BaseService<
-  ct_financiamiento,
-  CrearCtFinanciamientoInput,
-  ActualizarCtFinanciamientoInput,
-  BuscarCtFinanciamientoInput
+export class CtDocumentoAnnecService extends BaseService<
+  ct_documento_aneec,
+  CrearCtDocumentoAnnecInput,
+  ActualizarCtDocumentoAnnecInput,
+  BuscarCtDocumentoAnnecInput
 > {
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
-    tableName: "ct_financiamiento",
-    defaultOrderBy: { id_ct_financiamiento: "asc" as const },
+    tableName: "ct_documento_aneec",
+    defaultOrderBy: { id_ct_documento_aneec: "asc" as const },
     campoActivo: "estado",
+    valorActivo: 1, // Para campos TinyInt: 1=activo, 0=inactivo
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
-  protected configurarIncludes(filters?: BuscarCtFinanciamientoInput) {
+  protected configurarIncludes(filters?: BuscarCtDocumentoAnnecInput) {
     return {};
   }
 
   // 🔍 Filtros específicos para entidades
-  protected construirWhereClause(filters?: BuscarCtFinanciamientoInput) {
+  protected construirWhereClause(filters?: BuscarCtDocumentoAnnecInput) {
     const where: any = {};
 
-    // Filtro de id_financiamiento
-    if (filters?.id_ct_financiamiento) {
-      where.id_ct_financiamiento = filters.id_ct_financiamiento;
+    // Filtro de id_tipo_documento
+    if (filters?.id_ct_documento_aneec) {
+      where.id_ct_documento_aneec = filters.id_ct_documento_aneec;
     }
 
-    // Filtro de nombre_financiamiento
-    if (filters?.nombre_financiamiento) {
-      where.nombre_financiamiento = {
-        contains: filters.nombre_financiamiento,
+    // Filtro de nombre
+    if (filters?.nombre) {
+      where.nombre = {
+        contains: filters.nombre,
       };
     }
 
@@ -57,7 +58,7 @@ export class CtFinanciamientoService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_ct_financiamiento";
+    return "id_ct_documento_aneec";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

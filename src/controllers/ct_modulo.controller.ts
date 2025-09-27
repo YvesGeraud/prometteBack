@@ -40,12 +40,12 @@ export class CtModuloBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
+        const { id_ct_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
           ctModuloIdParamSchema,
           req.params
         );
 
-        return await ctModuloBaseService.obtenerPorId(id_modulo);
+        return await ctModuloBaseService.obtenerPorId(id_ct_modulo);
       },
       "Modulo obtenida exitosamente"
     );
@@ -93,13 +93,13 @@ export class CtModuloBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
+        const { id_ct_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
           ctModuloIdParamSchema,
           req.params
         );
         const moduloData: ActualizarCtModuloInput = req.body;
 
-        return await ctModuloBaseService.actualizar(id_modulo, moduloData);
+        return await ctModuloBaseService.actualizar(id_ct_modulo, moduloData);
       },
       "Modulo actualizada exitosamente"
     );
@@ -114,7 +114,7 @@ export class CtModuloBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
+        const { id_ct_modulo } = this.validarDatosConEsquema<CtModuloIdParam>(
           ctModuloIdParamSchema,
           req.params
         );
@@ -125,7 +125,7 @@ export class CtModuloBaseController extends BaseController {
             req.body
           );
 
-        await ctModuloBaseService.eliminar(id_modulo, id_ct_usuario_up);
+        await ctModuloBaseService.eliminar(id_ct_modulo, id_ct_usuario_up);
       },
       "Modulo eliminada exitosamente"
     );

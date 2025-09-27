@@ -38,7 +38,7 @@ export const actualizarCtCapituloSchema = z.object({
   nombre_capitulo: esquemaTextoOpcional(50),
   estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
-  fecha_in: esquemaFechaOpcional,
+  fecha_up: esquemaFechaOpcional,
 });
 
 //? Schema para filtros y paginación de capitulos

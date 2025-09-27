@@ -9,7 +9,7 @@ import {
   CrearCtLocalidadInput,
   ActualizarCtLocalidadInput,
   BuscarLocalidadInput,
-} from "../schemas/ct_localidad.schema";
+} from "../schemas/localidadschema";
 
 //TODO ===== SERVICIO PARA CT_LOCALIDAD CON BASE SERVICE =====
 

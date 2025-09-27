@@ -43,14 +43,14 @@ export class CtFinanciamientoBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_financiamiento } =
+        const { id_ct_financiamiento } =
           this.validarDatosConEsquema<CtFinanciamientoIdParam>(
             ctFinanciamientoIdParamSchema,
             req.params
           );
 
         return await ctFinanciamientoBaseService.obtenerPorId(
-          id_financiamiento
+          id_ct_financiamiento
         );
       },
       "Financiamiento obtenido exitosamente"
@@ -105,7 +105,7 @@ export class CtFinanciamientoBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_financiamiento } =
+        const { id_ct_financiamiento } =
           this.validarDatosConEsquema<CtFinanciamientoIdParam>(
             ctFinanciamientoIdParamSchema,
             req.params
@@ -113,7 +113,7 @@ export class CtFinanciamientoBaseController extends BaseController {
         const financiamientoData: ActualizarCtFinanciamientoInput = req.body;
 
         return await ctFinanciamientoBaseService.actualizar(
-          id_financiamiento,
+          id_ct_financiamiento,
           financiamientoData
         );
       },
@@ -133,7 +133,7 @@ export class CtFinanciamientoBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_financiamiento } =
+        const { id_ct_financiamiento } =
           this.validarDatosConEsquema<CtFinanciamientoIdParam>(
             ctFinanciamientoIdParamSchema,
             req.params
@@ -146,7 +146,7 @@ export class CtFinanciamientoBaseController extends BaseController {
           );
 
         await ctFinanciamientoBaseService.eliminar(
-          id_financiamiento,
+          id_ct_financiamiento,
           id_ct_usuario_up
         );
       },

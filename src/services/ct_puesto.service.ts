@@ -1,43 +1,43 @@
 /**
- * @fileoverview Servicio de ct_documentos_aneec usando BaseService
+ * @fileoverview Servicio de ct_puesto usando BaseService
  * ¡Prueba de que solo necesitas ~15 líneas para un CRUD completo!
  */
 
 import { BaseService } from "./BaseService";
-import { ct_documentos_aneec } from "@prisma/client";
+import { ct_puesto } from "@prisma/client";
 import {
-  CrearCtDocumentosAnnecInput,
-  ActualizarCtDocumentosAnnecInput,
-  BuscarCtDocumentosAnnecInput,
-} from "../schemas/ct_documentos_annec.schema";
+  CrearCtPuestoInput,
+  ActualizarCtPuestoInput,
+  BuscarCtPuestoInput,
+} from "../schemas/ct_puesto.schema";
 
 //TODO ===== SERVICIO PARA CT_BITACORA_ACCION CON BASE SERVICE =====
 
-export class CtDocumentosAnnecService extends BaseService<
-  ct_documentos_aneec,
-  CrearCtDocumentosAnnecInput,
-  ActualizarCtDocumentosAnnecInput,
-  BuscarCtDocumentosAnnecInput
+export class CtPuestoService extends BaseService<
+  ct_puesto,
+  CrearCtPuestoInput,
+  ActualizarCtPuestoInput,
+  BuscarCtPuestoInput
 > {
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
-    tableName: "ct_documentos_aneec",
-    defaultOrderBy: { id_tipo_documento: "asc" as const },
+    tableName: "ct_puesto",
+    defaultOrderBy: { id_ct_puesto: "asc" as const },
     campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
-  protected configurarIncludes(filters?: BuscarCtDocumentosAnnecInput) {
+  protected configurarIncludes(filters?: BuscarCtPuestoInput) {
     return {};
   }
 
   // 🔍 Filtros específicos para entidades
-  protected construirWhereClause(filters?: BuscarCtDocumentosAnnecInput) {
+  protected construirWhereClause(filters?: BuscarCtPuestoInput) {
     const where: any = {};
 
-    // Filtro de id_tipo_documento
-    if (filters?.id_tipo_documento) {
-      where.id_tipo_documento = filters.id_tipo_documento;
+    // Filtro de id_ct_puesto
+    if (filters?.id_ct_puesto) {
+      where.id_ct_puesto = filters.id_ct_puesto;
     }
 
     // Filtro de nombre
@@ -47,9 +47,16 @@ export class CtDocumentosAnnecService extends BaseService<
       };
     }
 
+    // Filtro de descripcion
+    if (filters?.descripcion) {
+      where.descripcion = {
+        contains: filters.descripcion,
+      };
+    }
+
     // Filtro de estado
-    if (filters?.vigencia) {
-      where.vigencia = filters.vigencia;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -57,7 +64,7 @@ export class CtDocumentosAnnecService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_tipo_documento";
+    return "id_ct_puesto";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

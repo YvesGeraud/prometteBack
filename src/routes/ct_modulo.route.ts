@@ -23,7 +23,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_modulo",
+  "/:id_ct_modulo",
   validarRequest({ params: ctModuloIdParamSchema }),
   ctModuloController.obtenerModuloPorId
 );
@@ -37,7 +37,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_modulo",
+  "/:id_ct_modulo",
   validarRequest({
     params: ctModuloIdParamSchema,
     body: actualizarCtModuloSchema,
@@ -47,10 +47,10 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_modulo",
+  "/:id_ct_modulo",
   validarRequest({
     params: ctModuloIdParamSchema,
-    //body: eliminarCtModuloSchema,
+    body: eliminarCtModuloSchema,
   }),
   ctModuloController.eliminarModulo
 );

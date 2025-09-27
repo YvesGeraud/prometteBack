@@ -28,26 +28,26 @@ import {
 export const crearCtFinanciamientoSchema = z.object({
   nombre_financiamiento: esquemaTextoRequerido(2, 50),
   estado: esquemaEstadoRequerido,
-  //id_ct_usuario_in: esquemaUsuarioCreacion,
+  id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
 //? Esquema para actualizar una financiamiento
 export const actualizarCtFinanciamientoSchema = z.object({
   nombre_financiamiento: esquemaTextoOpcional(50),
   estado: esquemaEstadoOpcional,
-  /*id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
-  fecha_in: esquemaFechaOpcional,*/
+  id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
+  fecha_up: esquemaFechaOpcional,
 });
 
 //? Schema para filtros y paginación de financiamientos
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
 export const ctFinanciamientoFiltrosSchema = z.object({
   //? Filtros específicos
-  id_financiamiento: esquemaQueryId,
+  id_ct_financiamiento: esquemaQueryId,
   nombre_financiamiento: esquemaQueryTexto,
   estado: esquemaQueryBoolean,
-  /*id_ct_usuario_in: esquemaQueryId,
-  fecha_in: esquemaFechaOpcional,*/
+  id_ct_usuario_in: esquemaQueryId,
+  fecha_in: esquemaFechaOpcional,
 
   //? Filtros para incluir inactivos de financiamientos
   incluirInactivos: esquemaQueryBoolean,
@@ -70,7 +70,7 @@ export type BuscarCtFinanciamientoInput = z.infer<
 
 //? Esquema para parámetros de URL (ID de financiamiento)
 export const ctFinanciamientoIdParamSchema = z.object({
-  id_financiamiento: esquemaParamId,
+  id_ct_financiamiento: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación

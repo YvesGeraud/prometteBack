@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 import { BaseController } from "./BaseController";
-import { CtDocumentosAnnecService } from "../services/ct_documentos_annec.service";
+import { CtDocumentoAnnecService } from "../services/ct_documento_annec.service";
 import {
-  CrearCtDocumentosAnnecInput,
-  ActualizarCtDocumentosAnnecInput,
-  ctDocumentosAnnecIdParamSchema,
-  CtDocumentosAnnecIdParam,
-  EliminarCtDocumentosAnnecInput,
-  eliminarCtDocumentosAnnecSchema,
-} from "../schemas/ct_documentos_annec.schema";
+  CrearCtDocumentoAnnecInput,
+  ActualizarCtDocumentoAnnecInput,
+  ctDocumentoAnnecIdParamSchema,
+  CtDocumentoAnnecIdParam,
+  EliminarCtDocumentoAnnecInput,
+  eliminarCtDocumentoAnnecSchema,
+} from "../schemas/ct_documento_annec.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
 //TODO ===== CONTROLADOR PARA CT_CAPITULO CON BASE SERVICE =====
-const ctDocumentosAnnecBaseService = new CtDocumentosAnnecService();
+const ctDocumentoAnnecBaseService = new CtDocumentoAnnecService();
 
-export class CtDocumentosAnnecBaseController extends BaseController {
+export class CtDocumentoAnnecBaseController extends BaseController {
   /**
    * 📦 Crear nueva documentos Annec
    * @route POST /api/inventario/documentos-annec
@@ -24,8 +24,8 @@ export class CtDocumentosAnnecBaseController extends BaseController {
       req,
       res,
       async () => {
-        const documentosAnnecData: CrearCtDocumentosAnnecInput = req.body;
-        return await ctDocumentosAnnecBaseService.crear(documentosAnnecData);
+        const documentosAnnecData: CrearCtDocumentoAnnecInput = req.body;
+        return await ctDocumentoAnnecBaseService.crear(documentosAnnecData);
       },
       "Documentos Annec creado exitosamente"
     );
@@ -43,14 +43,14 @@ export class CtDocumentosAnnecBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_tipo_documento } =
-          this.validarDatosConEsquema<CtDocumentosAnnecIdParam>(
-            ctDocumentosAnnecIdParamSchema,
+        const { id_ct_documento_aneec } =
+          this.validarDatosConEsquema<CtDocumentoAnnecIdParam>(
+            ctDocumentoAnnecIdParamSchema,
             req.params
           );
 
-        return await ctDocumentosAnnecBaseService.obtenerPorId(
-          id_tipo_documento
+        return await ctDocumentoAnnecBaseService.obtenerPorId(
+          id_ct_documento_aneec
         );
       },
       "Documentos Annec obtenida exitosamente"
@@ -62,10 +62,10 @@ export class CtDocumentosAnnecBaseController extends BaseController {
    * @route GET /api/inventario/documentos-annec
    *
    * Query parameters soportados:
-   * - id_tipo_documento: Filtrar por ID de documentos Annec (búsqueda parcial)
-   * - clave_capitulo: Filtrar por clave de documentos Annec (búsqueda parcial)
+   * - id_ct_documento_aneec: Filtrar por ID de documentos Annec (búsqueda parcial)
+   * - nombre_documento_aneec: Filtrar por nombre de documentos Annec (búsqueda parcial)
    * - nombre_capitulo: Filtrar por nombre de documentos Annec (búsqueda parcial)
-   * - activo: Filtrar por activo (true/false)
+   * - estado: Filtrar por estado (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
    * - pagina: Número de página (default: 1)
    * - limite: Elementos por página (default: 10)
@@ -84,7 +84,7 @@ export class CtDocumentosAnnecBaseController extends BaseController {
         const { pagina, limite, ...filters } = req.query as any;
         const pagination: PaginationInput = { pagina, limite };
 
-        return await ctDocumentosAnnecBaseService.obtenerTodos(
+        return await ctDocumentoAnnecBaseService.obtenerTodos(
           filters,
           pagination
         );
@@ -95,7 +95,7 @@ export class CtDocumentosAnnecBaseController extends BaseController {
 
   /**
    * 📦 Actualizar documentos Annec
-   * @route PUT /api/inventario/documentos-annec/:id_tipo_documento
+   * @route PUT /api/inventario/documentos-annec/:id_ct_documento_aneec
    */
   actualizarDocumentosAnnec = async (
     req: Request,
@@ -105,15 +105,15 @@ export class CtDocumentosAnnecBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_tipo_documento } =
-          this.validarDatosConEsquema<CtDocumentosAnnecIdParam>(
-            ctDocumentosAnnecIdParamSchema,
+        const { id_ct_documento_aneec } =
+          this.validarDatosConEsquema<CtDocumentoAnnecIdParam>(
+            ctDocumentoAnnecIdParamSchema,
             req.params
           );
-        const documentosAnnecData: ActualizarCtDocumentosAnnecInput = req.body;
+        const documentosAnnecData: ActualizarCtDocumentoAnnecInput = req.body;
 
-        return await ctDocumentosAnnecBaseService.actualizar(
-          id_tipo_documento,
+        return await ctDocumentoAnnecBaseService.actualizar(
+          id_ct_documento_aneec,
           documentosAnnecData
         );
       },
@@ -123,7 +123,7 @@ export class CtDocumentosAnnecBaseController extends BaseController {
 
   /**
    * 📦 Eliminar documentos Annec
-   * @route DELETE /api/inventario/documentos-annec/:id_tipo_documento
+   * @route DELETE /api/inventario/documentos-annec/:id_ct_documento_aneec
    */
   eliminarDocumentosAnnec = async (
     req: Request,
@@ -133,20 +133,20 @@ export class CtDocumentosAnnecBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_tipo_documento } =
-          this.validarDatosConEsquema<CtDocumentosAnnecIdParam>(
-            ctDocumentosAnnecIdParamSchema,
+        const { id_ct_documento_aneec } =
+          this.validarDatosConEsquema<CtDocumentoAnnecIdParam>(
+            ctDocumentoAnnecIdParamSchema,
             req.params
           );
 
         const { id_ct_usuario_up } =
-          this.validarDatosConEsquema<EliminarCtDocumentosAnnecInput>(
-            eliminarCtDocumentosAnnecSchema,
+          this.validarDatosConEsquema<EliminarCtDocumentoAnnecInput>(
+            eliminarCtDocumentoAnnecSchema,
             req.body
           );
 
-        await ctDocumentosAnnecBaseService.eliminar(
-          id_tipo_documento,
+        await ctDocumentoAnnecBaseService.eliminar(
+          id_ct_documento_aneec,
           id_ct_usuario_up
         );
       },

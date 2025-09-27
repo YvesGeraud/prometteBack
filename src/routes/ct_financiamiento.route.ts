@@ -23,7 +23,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_financiamiento",
+  "/:id_ct_financiamiento",
   validarRequest({ params: ctFinanciamientoIdParamSchema }),
   ctFinanciamientoController.obtenerFinanciamientoPorId
 );
@@ -37,7 +37,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_financiamiento",
+  "/:id_ct_financiamiento",
   validarRequest({
     params: ctFinanciamientoIdParamSchema,
     body: actualizarCtFinanciamientoSchema,
@@ -47,10 +47,10 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_financiamiento",
+  "/:id_ct_financiamiento",
   validarRequest({
     params: ctFinanciamientoIdParamSchema,
-    //body: eliminarCtFinanciamientoSchema,
+    body: eliminarCtFinanciamientoSchema,
   }),
   ctFinanciamientoController.eliminarFinanciamiento
 );

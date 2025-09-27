@@ -22,7 +22,7 @@ export class CtDispositivoService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_dispositivo",
-    defaultOrderBy: { id_dispositivo: "asc" as const },
+    defaultOrderBy: { id_ct_dispositivo: "asc" as const },
     campoActivo: "estado",
   };
 
@@ -36,8 +36,8 @@ export class CtDispositivoService extends BaseService<
     const where: any = {};
 
     // Filtro de id_dispositivo
-    if (filters?.id_dispositivo) {
-      where.id_dispositivo = filters.id_dispositivo;
+    if (filters?.id_ct_dispositivo) {
+      where.id_ct_dispositivo = filters.id_ct_dispositivo;
     }
 
     // Filtro de nombre_dispositivo
@@ -55,16 +55,16 @@ export class CtDispositivoService extends BaseService<
     }
 
     // Filtro de activo
-    /*if (filters?.activo) {
-      where.activo = filters.activo;
-    }*/
+    if (filters?.estado) {
+      where.estado = filters.estado;
+    }
 
     return where;
   }
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_dispositivo";
+    return "id_ct_dispositivo";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

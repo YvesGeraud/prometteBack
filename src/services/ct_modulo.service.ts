@@ -22,7 +22,7 @@ export class CtModuloService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_modulo",
-    defaultOrderBy: { id_modulo: "asc" as const },
+    defaultOrderBy: { id_ct_modulo: "asc" as const },
     campoActivo: "estado",
   };
 
@@ -36,8 +36,8 @@ export class CtModuloService extends BaseService<
     const where: any = {};
 
     // Filtro de id_modulo
-    if (filters?.id_modulo) {
-      where.id_modulo = filters.id_modulo;
+    if (filters?.id_ct_modulo) {
+      where.id_ct_modulo = filters.id_ct_modulo;
     }
 
     // Filtro de nombre_modulo
@@ -57,7 +57,7 @@ export class CtModuloService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_modulo";
+    return "id_ct_modulo";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

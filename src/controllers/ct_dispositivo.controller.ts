@@ -33,7 +33,7 @@ export class CtDispositivoBaseController extends BaseController {
 
   /**
    * 📦 Obtener dispositivo por ID
-   * @route GET /api/inventario/dispositivo/:id_dispositivo
+   * @route GET /api/inventario/dispositivo/:id_ct_dispositivo
    */
   obtenerDispositivoPorId = async (
     req: Request,
@@ -43,13 +43,13 @@ export class CtDispositivoBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_dispositivo } =
+        const { id_ct_dispositivo } =
           this.validarDatosConEsquema<CtDispositivoIdParam>(
             ctDispositivoIdParamSchema,
             req.params
           );
 
-        return await ctDispositivoBaseService.obtenerPorId(id_dispositivo);
+        return await ctDispositivoBaseService.obtenerPorId(id_ct_dispositivo);
       },
       "Dispositivo obtenida exitosamente"
     );
@@ -60,10 +60,10 @@ export class CtDispositivoBaseController extends BaseController {
    * @route GET /api/inventario/dispositivo
    *
    * Query parameters soportados:
-   * - id_dispositivo: Filtrar por ID de dispositivo (búsqueda parcial)
-   * - clave_dispositivo: Filtrar por clave de dispositivo (búsqueda parcial)
+   * - id_ct_dispositivo: Filtrar por ID de dispositivo (búsqueda parcial)
    * - nombre_dispositivo: Filtrar por nombre de dispositivo (búsqueda parcial)
-   * - activo: Filtrar por activo (true/false)
+   * - nombre_dispositivo: Filtrar por nombre de dispositivo (búsqueda parcial)
+   * - estado: Filtrar por estado (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
    * - pagina: Número de página (default: 1)
    * - limite: Elementos por página (default: 10)
@@ -90,7 +90,7 @@ export class CtDispositivoBaseController extends BaseController {
 
   /**
    * 📦 Actualizar dispositivo
-   * @route PUT /api/inventario/dispositivo/:id_dispositivo
+   * @route PUT /api/inventario/dispositivo/:id_ct_dispositivo
    */
   actualizarDispositivo = async (
     req: Request,
@@ -100,7 +100,7 @@ export class CtDispositivoBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_dispositivo } =
+        const { id_ct_dispositivo } =
           this.validarDatosConEsquema<CtDispositivoIdParam>(
             ctDispositivoIdParamSchema,
             req.params
@@ -108,7 +108,7 @@ export class CtDispositivoBaseController extends BaseController {
         const dispositivoData: ActualizarCtDispositivoInput = req.body;
 
         return await ctDispositivoBaseService.actualizar(
-          id_dispositivo,
+          id_ct_dispositivo,
           dispositivoData
         );
       },
@@ -118,14 +118,14 @@ export class CtDispositivoBaseController extends BaseController {
 
   /**
    * 📦 Eliminar dispositivo
-   * @route DELETE /api/inventario/dispositivo/:id_dispositivo
+   * @route DELETE /api/inventario/dispositivo/:id_ct_dispositivo
    */
   eliminarDispositivo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarEliminacion(
       req,
       res,
       async () => {
-        const { id_dispositivo } =
+        const { id_ct_dispositivo } =
           this.validarDatosConEsquema<CtDispositivoIdParam>(
             ctDispositivoIdParamSchema,
             req.params
@@ -138,7 +138,7 @@ export class CtDispositivoBaseController extends BaseController {
           );
 
         await ctDispositivoBaseService.eliminar(
-          id_dispositivo,
+          id_ct_dispositivo,
           id_ct_usuario_up
         );
       },

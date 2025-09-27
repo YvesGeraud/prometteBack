@@ -22,8 +22,8 @@ export class CtCorrespondenciaPrioridadService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_correspondencia_prioridad",
-    defaultOrderBy: { id_prioridad: "asc" as const },
-    campoActivo: "activo",
+    defaultOrderBy: { id_ct_correspondencia_prioridad: "asc" as const },
+    campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
@@ -40,8 +40,9 @@ export class CtCorrespondenciaPrioridadService extends BaseService<
     const where: any = {};
 
     // Filtro de id_ct_capitulo
-    if (filters?.id_prioridad) {
-      where.id_prioridad = filters.id_prioridad;
+    if (filters?.id_ct_correspondencia_prioridad) {
+      where.id_ct_correspondencia_prioridad =
+        filters.id_ct_correspondencia_prioridad;
     }
 
     // Filtro de nombre_capitulo
@@ -52,8 +53,8 @@ export class CtCorrespondenciaPrioridadService extends BaseService<
     }
 
     // Filtro de estado
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -61,7 +62,7 @@ export class CtCorrespondenciaPrioridadService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_prioridad";
+    return "id_ct_correspondencia_prioridad";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

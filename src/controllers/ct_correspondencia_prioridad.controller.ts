@@ -50,14 +50,14 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_prioridad } =
+        const { id_ct_correspondencia_prioridad } =
           this.validarDatosConEsquema<CtCorrespondenciaPrioridadIdParam>(
             ctCorrespondenciaPrioridadIdParamSchema,
             req.params
           );
 
         return await ctCorrespondenciaPrioridadBaseService.obtenerPorId(
-          id_prioridad
+          id_ct_correspondencia_prioridad
         );
       },
       "Correspondencia prioridad obtenida exitosamente"
@@ -70,9 +70,9 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
    *
    * Query parameters soportados:
    * - id_ct_correspondencia_prioridad: Filtrar por ID de correspondencia prioridad (búsqueda parcial)
-   * - clave_correspondencia_prioridad: Filtrar por clave de correspondencia prioridad (búsqueda parcial)
    * - nombre_correspondencia_prioridad: Filtrar por nombre de correspondencia prioridad (búsqueda parcial)
-   * - activo: Filtrar por activo (true/false)
+   * - nombre_correspondencia_prioridad: Filtrar por nombre de correspondencia prioridad (búsqueda parcial)
+   * - estado: Filtrar por estado (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
    * - pagina: Número de página (default: 1)
    * - limite: Elementos por página (default: 10)
@@ -112,7 +112,7 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_prioridad } =
+        const { id_ct_correspondencia_prioridad } =
           this.validarDatosConEsquema<CtCorrespondenciaPrioridadIdParam>(
             ctCorrespondenciaPrioridadIdParamSchema,
             req.params
@@ -121,7 +121,7 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
           req.body;
 
         return await ctCorrespondenciaPrioridadBaseService.actualizar(
-          id_prioridad,
+          id_ct_correspondencia_prioridad,
           correspondenciaPrioridadData
         );
       },
@@ -141,7 +141,7 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_prioridad } =
+        const { id_ct_correspondencia_prioridad } =
           this.validarDatosConEsquema<CtCorrespondenciaPrioridadIdParam>(
             ctCorrespondenciaPrioridadIdParamSchema,
             req.params
@@ -154,7 +154,7 @@ export class CtCorrespondenciaPrioridadBaseController extends BaseController {
           );
 
         await ctCorrespondenciaPrioridadBaseService.eliminar(
-          id_prioridad,
+          id_ct_correspondencia_prioridad,
           id_ct_usuario_up
         );
       },

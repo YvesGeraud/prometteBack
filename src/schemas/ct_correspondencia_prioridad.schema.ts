@@ -27,27 +27,26 @@ import {
 //? Esquema para crear una nueva capitulo
 export const crearCtCorrespondenciaPrioridadSchema = z.object({
   nombre: esquemaTextoRequerido(2, 50),
-  activo: esquemaEstadoRequerido,
-  //id_ct_usuario_in: esquemaUsuarioCreacion,
+  estado: esquemaEstadoRequerido,
+  id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
 //? Esquema para actualizar una capitulo
 export const actualizarCtCorrespondenciaPrioridadSchema = z.object({
   nombre: esquemaTextoOpcional(50),
-  activo: esquemaEstadoOpcional,
-  /*id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
-  fecha_in: esquemaFechaOpcional,*/
+  estado: esquemaEstadoOpcional,
+  id_ct_usuario_up: esquemaUsuarioCreacion,
 });
 
 //? Schema para filtros y paginación de capitulos
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
 export const ctCorrespondenciaPrioridadFiltrosSchema = z.object({
   //? Filtros específicos
-  id_prioridad: esquemaQueryId,
+  id_ct_correspondencia_prioridad: esquemaQueryId,
   nombre: esquemaQueryTexto,
-  activo: esquemaQueryBoolean,
-  /*id_ct_usuario_in: esquemaQueryId,
-  fecha_in: esquemaFechaOpcional,*/
+  estado: esquemaQueryBoolean,
+  id_ct_usuario_in: esquemaQueryId,
+  fecha_in: esquemaFechaOpcional,
 
   //? Filtros para incluir inactivos de capitulos
   incluirInactivos: esquemaQueryBoolean,
@@ -70,7 +69,7 @@ export type BuscarCtCorrespondenciaPrioridadInput = z.infer<
 
 //? Esquema para parámetros de URL (ID de capitulo)
 export const ctCorrespondenciaPrioridadIdParamSchema = z.object({
-  id_prioridad: esquemaParamId,
+  id_ct_correspondencia_prioridad: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación

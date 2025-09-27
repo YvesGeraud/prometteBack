@@ -22,37 +22,37 @@ import {
   esquemaNumeroOpcional,
 } from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_DOCUMENTOS_ANNEC =====
+//TODO ===== SCHEMAS PARA CT_PUESTO =====
 
-//? Esquema para crear una nueva tipo de documento
-export const crearCtDocumentosAnnecSchema = z.object({
+//? Esquema para crear una nueva puesto
+export const crearCtPuestoSchema = z.object({
   nombre: esquemaTextoRequerido(2, 50),
-  //vigencia: esquemaEstadoRequerido,
-  /*estado: esquemaEstadoRequerido,
-  id_ct_usuario_in: esquemaUsuarioCreacion,*/
+  descripcion: esquemaTextoOpcional(255),
+  estado: esquemaEstadoRequerido,
+  id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquema para actualizar una tipo de documento
-export const actualizarCtDocumentosAnnecSchema = z.object({
-  nombre: esquemaTextoOpcional(50),
-  //vigencia: esquemaEstadoOpcional,
-  /*estado: esquemaEstadoOpcional,
+//? Esquema para actualizar una puesto
+export const actualizarCtPuestoSchema = z.object({
+  nombre: esquemaNumeroOpcional(1, 100000),
+  descripcion: esquemaTextoOpcional(50),
+  estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
-  fecha_in: esquemaFechaOpcional,*/
+  fecha_up: esquemaFechaOpcional,
 });
 
-//? Schema para filtros y paginación de tipo de documento
+//? Schema para filtros y paginación de puestos
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctDocumentosAnnecFiltrosSchema = z.object({
+export const ctPuestoFiltrosSchema = z.object({
   //? Filtros específicos
-  id_tipo_documento: esquemaQueryId,
-  nombre: esquemaQueryTexto,
-  vigencia: esquemaQueryBoolean,
-  /*estado: esquemaQueryBoolean,
+  id_ct_puesto: esquemaQueryId,
+  nombre: esquemaQueryNumeroOpcional,
+  descripcion: esquemaQueryTexto,
+  estado: esquemaQueryBoolean,
   id_ct_usuario_in: esquemaQueryId,
-  fecha_in: esquemaFechaOpcional,*/
+  fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos de tipo de documento
+  //? Filtros para incluir inactivos de puestos
   incluirInactivos: esquemaQueryBoolean,
 
   //? Paginación
@@ -60,32 +60,22 @@ export const ctDocumentosAnnecFiltrosSchema = z.object({
   limite: esquemaLimiteQuery,
 });
 
-export type CrearCtDocumentosAnnecInput = z.infer<
-  typeof crearCtDocumentosAnnecSchema
->;
-export type ActualizarCtDocumentosAnnecInput = z.infer<
-  typeof actualizarCtDocumentosAnnecSchema
->;
+export type CrearCtPuestoInput = z.infer<typeof crearCtPuestoSchema>;
+export type ActualizarCtPuestoInput = z.infer<typeof actualizarCtPuestoSchema>;
 
-export type BuscarCtDocumentosAnnecInput = z.infer<
-  typeof ctDocumentosAnnecFiltrosSchema
->;
+export type BuscarCtPuestoInput = z.infer<typeof ctPuestoFiltrosSchema>;
 
-//? Esquema para parámetros de URL (ID de tipo de documento)
-export const ctDocumentosAnnecIdParamSchema = z.object({
-  id_tipo_documento: esquemaParamId,
+//? Esquema para parámetros de URL (ID de puesto)
+export const ctPuestoIdParamSchema = z.object({
+  id_ct_puesto: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación
-export const eliminarCtDocumentosAnnecSchema = esquemaDeleteConUsuario;
+export const eliminarCtPuestoSchema = esquemaDeleteConUsuario;
 
-export type CtDocumentosAnnecIdParam = z.infer<
-  typeof ctDocumentosAnnecIdParamSchema
->;
+export type CtPuestoIdParam = z.infer<typeof ctPuestoIdParamSchema>;
 
-export type EliminarCtDocumentosAnnecInput = z.infer<
-  typeof eliminarCtDocumentosAnnecSchema
->;
+export type EliminarCtPuestoInput = z.infer<typeof eliminarCtPuestoSchema>;
 
 /*
 🎉 SCHEMA REFACTORIZADO CON ESQUEMAS BASE REUTILIZABLES

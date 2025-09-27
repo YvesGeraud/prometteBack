@@ -5,7 +5,7 @@
 
 import { BaseReportService } from "../BaseReportService";
 import { ReportesService, ColumnaReporte } from "../reportes.service";
-import { BuscarLocalidadInput } from "../../schemas/ct_localidad.schema";
+import { BuscarLocalidadInput } from "../../schemas/localidadschema";
 
 //TODO ===== SERVICIO PARA REPORTES DE LOCALIDADES CON BASE REPORT SERVICE =====
 

@@ -62,7 +62,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
       const where = {
         ...baseWhere,
         // Solo agregar filtro de activo si no se especifica en los filtros
-        //...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }), //Se comenta para no filtrar por activo por defecto
+        ...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }),
       };
 
       const include = this.configurarIncludes(filters);
@@ -109,7 +109,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
         where: {
           [this.getPrimaryKeyField()]: id,
           // 🔍 FILTRO AUTOMÁTICO: Solo buscar registros activos por defecto
-          //...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }), //Se comenta para no filtrar por activo por defecto
+          ...(!(filters as any)?.incluirInactivos && { [campoActivo]: true }),
         },
         include,
       });
@@ -169,8 +169,8 @@ export abstract class BaseService<T, CreateInput, UpdateInput, FilterInput> {
         where: { [this.getPrimaryKeyField()]: id },
         data: {
           ...datos,
-          // 🕐 Actualizar automáticamente updatedAt en cada UPDATE se comenta para no actualizar el campo fecha_up
-          //fecha_up: new Date(),
+          // 🕐 Actualizar automáticamente updatedAt en cada UPDATE
+          fecha_up: new Date(),
         },
         include,
       });

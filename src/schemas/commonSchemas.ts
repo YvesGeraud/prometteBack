@@ -174,7 +174,7 @@ export const esquemaLimiteQuery = z
 
 //? Esquema para el body de DELETE con auditoría
 export const esquemaDeleteConUsuario = z.object({
-  //id_ct_usuario_up: esquemaUsuarioCreacion, se comenta para no actualizar el campo fecha_up
+  id_ct_usuario_up: esquemaUsuarioCreacion,
 });
 
 //TODO ===== TIPOS INFERIDOS =====

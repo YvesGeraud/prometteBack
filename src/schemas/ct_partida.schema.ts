@@ -22,37 +22,40 @@ import {
   esquemaNumeroOpcional,
 } from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_DISPOSITIVO =====
+//TODO ===== SCHEMAS PARA CT_PARTIDA =====
 
-//? Esquema para crear una nueva dispositivo
-export const crearCtDispositivoSchema = z.object({
-  nombre_dispositivo: esquemaTextoRequerido(2, 100),
-  descripcion: esquemaTextoRequerido(2, 255),
+//? Esquema para crear una nueva partida
+export const crearCtPartidaSchema = z.object({
+  id_ct_capitulo: esquemaNumeroRequerido(1, 100000),
+  clave_partida: esquemaTextoRequerido(2, 10),
+  nombre_partida: esquemaTextoRequerido(2, 255),
   estado: esquemaEstadoRequerido,
   id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquema para actualizar una dispositivo
-export const actualizarCtDispositivoSchema = z.object({
-  nombre_dispositivo: esquemaTextoOpcional(100),
-  descripcion: esquemaTextoOpcional(255),
+//? Esquema para actualizar una partida
+export const actualizarCtPartidaSchema = z.object({
+  id_ct_capitulo: esquemaNumeroOpcional(1, 100000),
+  clave_partida: esquemaTextoOpcional(10),
+  nombre_partida: esquemaTextoOpcional(255),
   estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion,
   fecha_up: esquemaFechaOpcional,
 });
 
-//? Schema para filtros y paginación de dispositivos
+//? Schema para filtros y paginación de partidas
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const ctDispositivoFiltrosSchema = z.object({
+export const ctPartidaFiltrosSchema = z.object({
   //? Filtros específicos
-  id_ct_dispositivo: esquemaQueryId,
-  nombre_dispositivo: esquemaQueryTexto,
-  descripcion: esquemaQueryTexto,
+  id_ct_partida: esquemaQueryId,
+  id_ct_capitulo: esquemaQueryNumeroOpcional,
+  clave_partida: esquemaQueryNumeroOpcional,
+  nombre_partida: esquemaQueryTexto,
   estado: esquemaQueryBoolean,
   id_ct_usuario_in: esquemaQueryId,
   fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos de dispositivos
+  //? Filtros para incluir inactivos de partidas
   incluirInactivos: esquemaQueryBoolean,
 
   //? Paginación
@@ -60,28 +63,24 @@ export const ctDispositivoFiltrosSchema = z.object({
   limite: esquemaLimiteQuery,
 });
 
-export type CrearCtDispositivoInput = z.infer<typeof crearCtDispositivoSchema>;
-export type ActualizarCtDispositivoInput = z.infer<
-  typeof actualizarCtDispositivoSchema
+export type CrearCtPartidaInput = z.infer<typeof crearCtPartidaSchema>;
+export type ActualizarCtPartidaInput = z.infer<
+  typeof actualizarCtPartidaSchema
 >;
 
-export type BuscarCtDispositivoInput = z.infer<
-  typeof ctDispositivoFiltrosSchema
->;
+export type BuscarCtPartidaInput = z.infer<typeof ctPartidaFiltrosSchema>;
 
-//? Esquema para parámetros de URL (ID de dispositivo)
-export const ctDispositivoIdParamSchema = z.object({
-  id_ct_dispositivo: esquemaParamId,
+//? Esquema para parámetros de URL (ID de capitulo)
+export const ctPartidaIdParamSchema = z.object({
+  id_ct_partida: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación
-export const eliminarCtDispositivoSchema = esquemaDeleteConUsuario;
+export const eliminarCtPartidaSchema = esquemaDeleteConUsuario;
 
-export type CtDispositivoIdParam = z.infer<typeof ctDispositivoIdParamSchema>;
+export type CtPartidaIdParam = z.infer<typeof ctPartidaIdParamSchema>;
 
-export type EliminarCtDispositivoInput = z.infer<
-  typeof eliminarCtDispositivoSchema
->;
+export type EliminarCtPartidaInput = z.infer<typeof eliminarCtPartidaSchema>;
 
 /*
 🎉 SCHEMA REFACTORIZADO CON ESQUEMAS BASE REUTILIZABLES
