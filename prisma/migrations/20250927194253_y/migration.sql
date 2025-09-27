@@ -279,7 +279,7 @@ CREATE TABLE `ct_usuario` (
 
 -- CreateTable
 CREATE TABLE `dt_aspirante_aneec` (
-    `id_aspirante` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_dt_aspirante_aneec` INTEGER NOT NULL AUTO_INCREMENT,
     `curp` VARCHAR(18) NOT NULL,
     `nombre` VARCHAR(50) NOT NULL,
     `apellido_paterno` VARCHAR(50) NOT NULL,
@@ -299,16 +299,16 @@ CREATE TABLE `dt_aspirante_aneec` (
     `ruta_comprobante_domicilio` VARCHAR(50) NOT NULL,
     `ruta_carta_compromiso` VARCHAR(50) NOT NULL,
     `ruta_aviso_privacidad_aspirante` VARCHAR(50) NOT NULL,
-    `ct_usuario_in` INTEGER NOT NULL,
-    `createdAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `ct_usuario_at` INTEGER NULL,
-    `updatedAt` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `status` VARCHAR(50) NOT NULL DEFAULT 'EN PROCESO',
+    `estado` BOOLEAN NOT NULL DEFAULT true,
+    `fecha_in` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `fecha_up` DATETIME(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `id_ct_usuario_in` INTEGER NOT NULL,
+    `id_ct_usuario_up` INTEGER NULL,
 
     INDEX `fk_ct_municipio_id`(`ct_municipio_id`),
-    INDEX `fk_dt_aspirante_aneec_actualizado_por`(`ct_usuario_at`),
-    INDEX `fk_dt_aspirante_aneec_creado_por`(`ct_usuario_in`),
-    PRIMARY KEY (`id_aspirante`)
+    INDEX `fk_dt_aspirante_aneec_actualizado_por`(`id_ct_usuario_up`),
+    INDEX `fk_dt_aspirante_aneec_creado_por`(`id_ct_usuario_in`),
+    PRIMARY KEY (`id_dt_aspirante_aneec`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -829,10 +829,10 @@ ALTER TABLE `ct_usuario` ADD CONSTRAINT `FK_ct_usuario_ct_usuario` FOREIGN KEY (
 ALTER TABLE `ct_usuario` ADD CONSTRAINT `FK_ct_usuario_ct_usuario_2` FOREIGN KEY (`id_ct_usuario_up`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `dt_aspirante_aneec` ADD CONSTRAINT `fk_dt_aspirante_aneec_actualizado_por` FOREIGN KEY (`ct_usuario_at`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_aspirante_aneec` ADD CONSTRAINT `FK_dt_aspirante_aneec_ct_usuario` FOREIGN KEY (`id_ct_usuario_in`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `dt_aspirante_aneec` ADD CONSTRAINT `fk_dt_aspirante_aneec_creado_por` FOREIGN KEY (`ct_usuario_in`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_aspirante_aneec` ADD CONSTRAINT `FK_dt_aspirante_aneec_ct_usuario_2` FOREIGN KEY (`id_ct_usuario_up`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE `dt_bitacora_movimiento` ADD CONSTRAINT `dt_bitacora_movimiento_ibfk_1` FOREIGN KEY (`id_ct_bitacora_accion`) REFERENCES `ct_bitacora_accion`(`id_ct_bitacora_accion`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -880,7 +880,7 @@ ALTER TABLE `dt_correspondencia` ADD CONSTRAINT `fk_corresp_usuario_crea` FOREIG
 ALTER TABLE `dt_correspondencia` ADD CONSTRAINT `fk_corresp_usuario_modifica` FOREIGN KEY (`id_ct_usuario_modifica`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
-ALTER TABLE `dt_diagnostico_aneec` ADD CONSTRAINT `fk_dt_aspirante_id` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_aspirante`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_diagnostico_aneec` ADD CONSTRAINT `fk_dt_aspirante_id` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_dt_aspirante_aneec`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `dt_diagnostico_aneec` ADD CONSTRAINT `fk_dt_diagnostico_aneec_actualizado_por` FOREIGN KEY (`ct_usuario_at`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -898,7 +898,7 @@ ALTER TABLE `dt_funcion` ADD CONSTRAINT `fk_dt_funcion_creado_por` FOREIGN KEY (
 ALTER TABLE `dt_funcion` ADD CONSTRAINT `fk_dt_funcion_ct_modulo` FOREIGN KEY (`ct_modulo_id`) REFERENCES `ct_modulo`(`id_ct_modulo`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
-ALTER TABLE `dt_informes_aneec` ADD CONSTRAINT `fk_dt_aspirante_id_informe` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_aspirante`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_informes_aneec` ADD CONSTRAINT `fk_dt_aspirante_id_informe` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_dt_aspirante_aneec`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `dt_informes_aneec` ADD CONSTRAINT `fk_dt_diagnostico_id_informe` FOREIGN KEY (`dt_diagnostico_id`) REFERENCES `dt_diagnostico_aneec`(`id_diagnostico`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -919,7 +919,7 @@ ALTER TABLE `dt_planeaciones_aneec` ADD CONSTRAINT `FK_dt_planeaciones_aneec_ct_
 ALTER TABLE `dt_planeaciones_aneec` ADD CONSTRAINT `FK_dt_planeaciones_aneec_ct_usuario_creado_por` FOREIGN KEY (`ct_usuario_in`) REFERENCES `ct_usuario`(`id_ct_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
-ALTER TABLE `dt_planeaciones_aneec` ADD CONSTRAINT `FK_dt_planeaciones_aneec_dt_aspirante_aneec` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_aspirante`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_planeaciones_aneec` ADD CONSTRAINT `FK_dt_planeaciones_aneec_dt_aspirante_aneec` FOREIGN KEY (`dt_aspirante_id`) REFERENCES `dt_aspirante_aneec`(`id_dt_aspirante_aneec`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `dt_planeaciones_aneec` ADD CONSTRAINT `FK_dt_planeaciones_aneec_dt_diagnostico_aneec` FOREIGN KEY (`dt_diagnostico_id`) REFERENCES `dt_diagnostico_aneec`(`id_diagnostico`) ON DELETE RESTRICT ON UPDATE RESTRICT;

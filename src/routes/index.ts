@@ -19,10 +19,15 @@ import ctModuloRoutes from "./ct_modulo.route";
 import ctPartidaRoutes from "./ct_partida.route";
 import ctProductoConsumibleRoutes from "./ct_producto_consumible.route";
 import ctPuestoRoutes from "./ct_puesto.route";
+import ctUnidadMedidaRoutes from "./ct_unidad_medida.route";
+import ctUsuarioRoutes from "./ct_usuario.routes";
 
 /*import entidadRoutes from "./entidad.route";
 import municipioRoutes from "./municipio.route";
 import localidadRoutes from "./localidad.route";*/
+
+//?Descripciones importados
+import dtAspiranteAneecRoutes from "./dt_aspirante_aneec.route";
 
 const router = Router();
 
@@ -49,10 +54,15 @@ router.use("/ct_modulo", ctModuloRoutes);
 router.use("/ct_partida", ctPartidaRoutes);
 router.use("/ct_producto_consumible", ctProductoConsumibleRoutes);
 router.use("/ct_puesto", ctPuestoRoutes);
+router.use("/ct_unidad_medida", ctUnidadMedidaRoutes);
+router.use("/ct_usuario", ctUsuarioRoutes);
 
 /*router.use("/entidad", entidadRoutes);
 router.use("/municipio", municipioRoutes);
 router.use("/localidad", localidadRoutes);*/
+
+//?Descripciones
+router.use("/dt_aspirante_aneec", dtAspiranteAneecRoutes);
 
 // Ruta de salud para las APIs
 router.get("/health", (req, res) => {

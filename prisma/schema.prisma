@@ -337,8 +337,8 @@ model ct_usuario {
   other_ct_usuario_ct_usuario_id_ct_usuario_inToct_usuario                                           ct_usuario[]                         @relation("ct_usuario_id_ct_usuario_inToct_usuario")
   ct_usuario_ct_usuario_id_ct_usuario_upToct_usuario                                                 ct_usuario?                          @relation("ct_usuario_id_ct_usuario_upToct_usuario", fields: [id_ct_usuario_up], references: [id_ct_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_usuario_ct_usuario_2")
   other_ct_usuario_ct_usuario_id_ct_usuario_upToct_usuario                                           ct_usuario[]                         @relation("ct_usuario_id_ct_usuario_upToct_usuario")
-  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_atToct_usuario                                    dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario")
-  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_inToct_usuario                                    dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_id_ct_usuario_inToct_usuario                                 dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_id_ct_usuario_inToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_id_ct_usuario_upToct_usuario                                 dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_id_ct_usuario_upToct_usuario")
   dt_bitacora_movimiento                                                                             dt_bitacora_movimiento[]
   dt_consumible_entrega                                                                              dt_consumible_entrega[]
   dt_correspondencia_dt_correspondencia_id_ct_usuario_creaToct_usuario                               dt_correspondencia[]                 @relation("dt_correspondencia_id_ct_usuario_creaToct_usuario")
@@ -375,40 +375,40 @@ model ct_usuario {
 }
 
 model dt_aspirante_aneec {
-  id_aspirante                                            Int                     @id @default(autoincrement())
-  curp                                                    String                  @db.VarChar(18)
-  nombre                                                  String                  @db.VarChar(50)
-  apellido_paterno                                        String                  @db.VarChar(50)
-  apellido_materno                                        String                  @db.VarChar(50)
-  telefono                                                String                  @db.VarChar(15)
-  correo                                                  String                  @db.VarChar(50)
-  fecha_nacimiento                                        DateTime                @db.Date
-  instituto                                               String                  @db.VarChar(100)
-  licenciatura                                            String                  @db.VarChar(50)
-  direccion                                               String                  @db.VarChar(50)
-  codigo_postal                                           String                  @db.VarChar(10)
-  ct_municipio_id                                         Int
-  localidad                                               String                  @db.VarChar(100)
-  ruta_ine                                                String                  @db.VarChar(50)
-  tipo_documento                                          String                  @db.VarChar(45)
-  ruta_comprobante_estudio                                String                  @db.VarChar(50)
-  ruta_comprobante_domicilio                              String                  @db.VarChar(50)
-  ruta_carta_compromiso                                   String                  @db.VarChar(50)
-  ruta_aviso_privacidad_aspirante                         String                  @db.VarChar(50)
-  ct_usuario_in                                           Int
-  createdAt                                               DateTime                @default(now()) @db.Timestamp(0)
-  ct_usuario_at                                           Int?
-  updatedAt                                               DateTime?               @default(now()) @db.Timestamp(0)
-  status                                                  String                  @default("EN PROCESO") @db.VarChar(50)
-  ct_usuario_dt_aspirante_aneec_ct_usuario_atToct_usuario ct_usuario?             @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_ct_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_aspirante_aneec_actualizado_por")
-  ct_usuario_dt_aspirante_aneec_ct_usuario_inToct_usuario ct_usuario              @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_ct_usuario], onUpdate: Restrict, map: "fk_dt_aspirante_aneec_creado_por")
-  dt_diagnostico_aneec                                    dt_diagnostico_aneec[]
-  dt_informes_aneec                                       dt_informes_aneec[]
-  dt_planeaciones_aneec                                   dt_planeaciones_aneec[]
+  id_dt_aspirante_aneec                                      Int                     @id @default(autoincrement())
+  curp                                                       String                  @db.VarChar(18)
+  nombre                                                     String                  @db.VarChar(50)
+  apellido_paterno                                           String                  @db.VarChar(50)
+  apellido_materno                                           String                  @db.VarChar(50)
+  telefono                                                   String                  @db.VarChar(15)
+  correo                                                     String                  @db.VarChar(50)
+  fecha_nacimiento                                           DateTime                @db.Date
+  instituto                                                  String                  @db.VarChar(100)
+  licenciatura                                               String                  @db.VarChar(50)
+  direccion                                                  String                  @db.VarChar(50)
+  codigo_postal                                              String                  @db.VarChar(10)
+  ct_municipio_id                                            Int
+  localidad                                                  String                  @db.VarChar(100)
+  ruta_ine                                                   String                  @db.VarChar(50)
+  tipo_documento                                             String                  @db.VarChar(45)
+  ruta_comprobante_estudio                                   String                  @db.VarChar(50)
+  ruta_comprobante_domicilio                                 String                  @db.VarChar(50)
+  ruta_carta_compromiso                                      String                  @db.VarChar(50)
+  ruta_aviso_privacidad_aspirante                            String                  @db.VarChar(50)
+  estado                                                     Boolean                 @default(true)
+  fecha_in                                                   DateTime                @default(now()) @db.DateTime(0)
+  fecha_up                                                   DateTime?               @default(now()) @db.DateTime(0)
+  id_ct_usuario_in                                           Int
+  id_ct_usuario_up                                           Int?
+  ct_usuario_dt_aspirante_aneec_id_ct_usuario_inToct_usuario ct_usuario              @relation("dt_aspirante_aneec_id_ct_usuario_inToct_usuario", fields: [id_ct_usuario_in], references: [id_ct_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_aspirante_aneec_ct_usuario")
+  ct_usuario_dt_aspirante_aneec_id_ct_usuario_upToct_usuario ct_usuario?             @relation("dt_aspirante_aneec_id_ct_usuario_upToct_usuario", fields: [id_ct_usuario_up], references: [id_ct_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_dt_aspirante_aneec_ct_usuario_2")
+  dt_diagnostico_aneec                                       dt_diagnostico_aneec[]
+  dt_informes_aneec                                          dt_informes_aneec[]
+  dt_planeaciones_aneec                                      dt_planeaciones_aneec[]
 
   @@index([ct_municipio_id], map: "fk_ct_municipio_id")
-  @@index([ct_usuario_at], map: "fk_dt_aspirante_aneec_actualizado_por")
-  @@index([ct_usuario_in], map: "fk_dt_aspirante_aneec_creado_por")
+  @@index([id_ct_usuario_up], map: "fk_dt_aspirante_aneec_actualizado_por")
+  @@index([id_ct_usuario_in], map: "fk_dt_aspirante_aneec_creado_por")
 }
 
 model dt_bitacora_movimiento {
@@ -525,7 +525,7 @@ model dt_diagnostico_aneec {
   ruta_comprobante_domicilio                                String                                     @db.VarChar(50)
   ruta_privacidad_usuario                                   String                                     @db.VarChar(50)
   ruta_carta_compromiso_usuario                             String                                     @db.VarChar(50)
-  dt_aspirante_aneec                                        dt_aspirante_aneec                         @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "fk_dt_aspirante_id")
+  dt_aspirante_aneec                                        dt_aspirante_aneec                         @relation(fields: [dt_aspirante_id], references: [id_dt_aspirante_aneec], onUpdate: Restrict, map: "fk_dt_aspirante_id")
   ct_usuario_dt_diagnostico_aneec_ct_usuario_atToct_usuario ct_usuario?                                @relation("dt_diagnostico_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_ct_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_diagnostico_aneec_actualizado_por")
   ct_usuario_dt_diagnostico_aneec_ct_usuario_inToct_usuario ct_usuario                                 @relation("dt_diagnostico_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_ct_usuario], onUpdate: Restrict, map: "fk_dt_diagnostico_aneec_creado_por")
   dt_informes_aneec                                         dt_informes_aneec[]
@@ -567,7 +567,7 @@ model dt_informes_aneec {
   createdAt                                              DateTime             @default(now()) @db.Timestamp(0)
   ct_usuario_at                                          Int?
   updatedAt                                              DateTime?            @default(now()) @db.Timestamp(0)
-  dt_aspirante_aneec                                     dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "fk_dt_aspirante_id_informe")
+  dt_aspirante_aneec                                     dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_dt_aspirante_aneec], onUpdate: Restrict, map: "fk_dt_aspirante_id_informe")
   dt_diagnostico_aneec                                   dt_diagnostico_aneec @relation(fields: [dt_diagnostico_id], references: [id_diagnostico], onUpdate: Restrict, map: "fk_dt_diagnostico_id_informe")
   ct_usuario_dt_informes_aneec_ct_usuario_atToct_usuario ct_usuario?          @relation("dt_informes_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_ct_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_dt_informes_annec_actualizado_por")
   ct_usuario_dt_informes_aneec_ct_usuario_inToct_usuario ct_usuario           @relation("dt_informes_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_ct_usuario], onUpdate: Restrict, map: "fk_dt_informes_annec_creado_por")
@@ -591,7 +591,7 @@ model dt_planeaciones_aneec {
   ct_usuario_dt_planeaciones_aneec_ct_usuario_atToct_usuario ct_usuario?          @relation("dt_planeaciones_aneec_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_ct_usuario], onDelete: Restrict, onUpdate: Restrict, map: "FK_dt_planeaciones_aneec__actualizado_por")
   ct_documento_aneec                                         ct_documento_aneec   @relation(fields: [id_ct_documento_aneec], references: [id_ct_documento_aneec], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_ct_documentos_aneec")
   ct_usuario_dt_planeaciones_aneec_ct_usuario_inToct_usuario ct_usuario           @relation("dt_planeaciones_aneec_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_ct_usuario], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_ct_usuario_creado_por")
-  dt_aspirante_aneec                                         dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_aspirante], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_dt_aspirante_aneec")
+  dt_aspirante_aneec                                         dt_aspirante_aneec   @relation(fields: [dt_aspirante_id], references: [id_dt_aspirante_aneec], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_dt_aspirante_aneec")
   dt_diagnostico_aneec                                       dt_diagnostico_aneec @relation(fields: [dt_diagnostico_id], references: [id_diagnostico], onUpdate: Restrict, map: "FK_dt_planeaciones_aneec_dt_diagnostico_aneec")
 
   @@index([ct_usuario_at], map: "FK_dt_planeaciones_aneec__actualizado_por")

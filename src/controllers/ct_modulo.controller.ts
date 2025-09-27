@@ -11,13 +11,13 @@ import {
 } from "../schemas/ct_modulo.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
-//TODO ===== CONTROLADOR PARA CT_CAPITULO CON BASE SERVICE =====
+//TODO ===== CONTROLADOR PARA CT_MODULO CON BASE SERVICE =====
 const ctModuloBaseService = new CtModuloService();
 
 export class CtModuloBaseController extends BaseController {
   /**
-   * 📦 Crear nueva capitulo
-   * @route POST /api/inventario/capitulo
+   * 📦 Crear nuevo modulo
+   * @route POST /api/inventario/modulo
    */
   crearModulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarCreacion(
@@ -53,7 +53,7 @@ export class CtModuloBaseController extends BaseController {
 
   /**
    * 📦 Obtener todas las modulos con filtros y paginación
-   * @route GET /api/inventario/capitulo
+   * @route GET /api/inventario/modulo
    *
    * Query parameters soportados:
    * - id_ct_modulo: Filtrar por ID de modulo (búsqueda parcial)
@@ -86,7 +86,7 @@ export class CtModuloBaseController extends BaseController {
 
   /**
    * 📦 Actualizar modulo
-   * @route PUT /api/inventario/capitulo/:id_ct_capitulo
+   * @route PUT /api/inventario/modulo/:id_ct_modulo
    */
   actualizarModulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarActualizacion(
@@ -107,7 +107,7 @@ export class CtModuloBaseController extends BaseController {
 
   /**
    * 📦 Eliminar modulo
-   * @route DELETE /api/inventario/capitulo/:id_ct_capitulo
+   * @route DELETE /api/inventario/modulo/:id_ct_modulo
    */
   eliminarModulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarEliminacion(
