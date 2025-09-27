@@ -97,12 +97,18 @@ CREATE TABLE `ct_correspondencia_estado` (
 
 -- CreateTable
 CREATE TABLE `ct_correspondencia_formato_entrega` (
-    `id_formato` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_ct_correspondencia_formato_entrega` INTEGER NOT NULL AUTO_INCREMENT,
     `nombre` VARCHAR(50) NOT NULL,
-    `activo` BOOLEAN NOT NULL DEFAULT true,
+    `estado` BOOLEAN NOT NULL DEFAULT true,
+    `fecha_in` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `fecha_up` DATETIME(0) NULL,
+    `id_ct_usuario_in` INTEGER NOT NULL,
+    `id_ct_usuario_up` INTEGER NULL,
 
     UNIQUE INDEX `uk_corresp_formato_nombre`(`nombre`),
-    PRIMARY KEY (`id_formato`)
+    INDEX `FK_ct_correspondencia_formato_entrega_ct_usuario`(`id_ct_usuario_in`),
+    INDEX `FK_ct_correspondencia_formato_entrega_ct_usuario_2`(`id_ct_usuario_up`),
+    PRIMARY KEY (`id_ct_correspondencia_formato_entrega`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -342,14 +348,14 @@ CREATE TABLE `dt_correspondencia` (
     `destinatario` VARCHAR(255) NOT NULL,
     `id_prioridad` INTEGER NOT NULL,
     `id_tipo` INTEGER NOT NULL,
-    `id_formato` INTEGER NOT NULL,
+    `id_ct_correspondencia_formato_entrega` INTEGER NOT NULL,
     `folio` VARCHAR(100) NULL,
     `fecha_documento` DATE NOT NULL,
     `fecha_registro` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `id_usuario_crea` INTEGER NOT NULL,
     `id_usuario_modifica` INTEGER NULL,
 
-    INDEX `fk_corresp_formato`(`id_formato`),
+    INDEX `fk_corresp_formato`(`id_ct_correspondencia_formato_entrega`),
     INDEX `fk_corresp_prioridad`(`id_prioridad`),
     INDEX `fk_corresp_tipo`(`id_tipo`),
     INDEX `fk_corresp_usuario_crea`(`id_usuario_crea`),
@@ -531,7 +537,7 @@ CREATE TABLE `rl_correspondencia_usuario_estado` (
 
 -- CreateTable
 CREATE TABLE `rl_entrega_formato` (
-    `id_formato` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_ct_correspondencia_formato_entrega` INTEGER NOT NULL AUTO_INCREMENT,
     `folio_formato` VARCHAR(20) NOT NULL,
     `mes_cantidad` VARCHAR(100) NULL,
     `persona_recibe` VARCHAR(255) NULL,
@@ -541,7 +547,7 @@ CREATE TABLE `rl_entrega_formato` (
 
     UNIQUE INDEX `folio_formato_UNIQUE`(`folio_formato`),
     INDEX `fk_rl_entrega_formato_ct_usuario_idx`(`ct_usuario_id`),
-    PRIMARY KEY (`id_formato`)
+    PRIMARY KEY (`id_ct_correspondencia_formato_entrega`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -712,6 +718,12 @@ ALTER TABLE `ct_correspondencia_estado` ADD CONSTRAINT `FK_ct_correspondencia_es
 ALTER TABLE `ct_correspondencia_estado` ADD CONSTRAINT `FK_ct_correspondencia_estado_ct_usuario_2` FOREIGN KEY (`id_ct_usuario_up`) REFERENCES `ct_usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
+ALTER TABLE `ct_correspondencia_formato_entrega` ADD CONSTRAINT `FK_ct_correspondencia_formato_entrega_ct_usuario` FOREIGN KEY (`id_ct_usuario_in`) REFERENCES `ct_usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `ct_correspondencia_formato_entrega` ADD CONSTRAINT `FK_ct_correspondencia_formato_entrega_ct_usuario_2` FOREIGN KEY (`id_ct_usuario_up`) REFERENCES `ct_usuario`(`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
 ALTER TABLE `ct_modulo` ADD CONSTRAINT `fk_ct_modulo_actualizado_por` FOREIGN KEY (`ct_usuario_at`) REFERENCES `ct_usuario`(`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
@@ -784,7 +796,7 @@ ALTER TABLE `dt_consumible_inventario` ADD CONSTRAINT `FK_dt_inventario_ct_parti
 ALTER TABLE `dt_consumible_inventario` ADD CONSTRAINT `FK_dt_inventario_ct_unidad_medida` FOREIGN KEY (`ct_unidad_id`) REFERENCES `ct_unidad_medida`(`id_unidad`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `dt_correspondencia` ADD CONSTRAINT `fk_corresp_formato` FOREIGN KEY (`id_formato`) REFERENCES `ct_correspondencia_formato_entrega`(`id_formato`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `dt_correspondencia` ADD CONSTRAINT `fk_corresp_formato` FOREIGN KEY (`id_ct_correspondencia_formato_entrega`) REFERENCES `ct_correspondencia_formato_entrega`(`id_ct_correspondencia_formato_entrega`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `dt_correspondencia` ADD CONSTRAINT `fk_corresp_prioridad` FOREIGN KEY (`id_prioridad`) REFERENCES `ct_correspondencia_prioridad`(`id_prioridad`) ON DELETE RESTRICT ON UPDATE RESTRICT;

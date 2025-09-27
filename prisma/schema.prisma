@@ -111,10 +111,19 @@ model ct_correspondencia_estado {
 }
 
 model ct_correspondencia_formato_entrega {
-  id_formato         Int                  @id @default(autoincrement())
-  nombre             String               @unique(map: "uk_corresp_formato_nombre") @db.VarChar(50)
-  activo             Boolean              @default(true)
-  dt_correspondencia dt_correspondencia[]
+  id_ct_correspondencia_formato_entrega                                      Int                  @id @default(autoincrement())
+  nombre                                                                     String               @unique(map: "uk_corresp_formato_nombre") @db.VarChar(50)
+  estado                                                                     Boolean              @default(true)
+  fecha_in                                                                   DateTime             @default(now()) @db.DateTime(0)
+  fecha_up                                                                   DateTime?            @db.DateTime(0)
+  id_ct_usuario_in                                                           Int
+  id_ct_usuario_up                                                           Int?
+  ct_usuario_ct_correspondencia_formato_entrega_id_ct_usuario_inToct_usuario ct_usuario           @relation("ct_correspondencia_formato_entrega_id_ct_usuario_inToct_usuario", fields: [id_ct_usuario_in], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_correspondencia_formato_entrega_ct_usuario")
+  ct_usuario_ct_correspondencia_formato_entrega_id_ct_usuario_upToct_usuario ct_usuario?          @relation("ct_correspondencia_formato_entrega_id_ct_usuario_upToct_usuario", fields: [id_ct_usuario_up], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_ct_correspondencia_formato_entrega_ct_usuario_2")
+  dt_correspondencia                                                         dt_correspondencia[]
+
+  @@index([id_ct_usuario_in], map: "FK_ct_correspondencia_formato_entrega_ct_usuario")
+  @@index([id_ct_usuario_up], map: "FK_ct_correspondencia_formato_entrega_ct_usuario_2")
 }
 
 model ct_correspondencia_prioridad {
@@ -230,69 +239,71 @@ model ct_unidad_medida {
 }
 
 model ct_usuario {
-  id_usuario                                                                       Int                                 @id @default(autoincrement())
-  nombre_usuario                                                                   String                              @unique(map: "nombre_usuario_UNIQUE") @db.VarChar(255)
-  contrasena                                                                       String                              @db.VarChar(255)
-  estado                                                                           Boolean                             @default(true)
-  id_dt_rupeet_informacion                                                         Int?
-  ct_usuario_in                                                                    Int?
-  ct_usuario_at                                                                    Int?
-  createdAt                                                                        DateTime                            @default(now()) @db.Timestamp(0)
-  updatedAt                                                                        DateTime                            @default(now()) @db.Timestamp(0)
-  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_inToct_usuario               ct_bitacora_accion[]                @relation("ct_bitacora_accion_id_ct_usuario_inToct_usuario")
-  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_upToct_usuario               ct_bitacora_accion[]                @relation("ct_bitacora_accion_id_ct_usuario_upToct_usuario")
-  ct_bitacora_entidad_ct_bitacora_entidad_id_ct_usuario_inToct_usuario             ct_bitacora_entidad[]               @relation("ct_bitacora_entidad_id_ct_usuario_inToct_usuario")
-  ct_bitacora_entidad_ct_bitacora_entidad_id_ct_usuario_upToct_usuario             ct_bitacora_entidad[]               @relation("ct_bitacora_entidad_id_ct_usuario_upToct_usuario")
-  ct_capitulo_ct_capitulo_id_ct_usuario_inToct_usuario                             ct_capitulo[]                       @relation("ct_capitulo_id_ct_usuario_inToct_usuario")
-  ct_capitulo_ct_capitulo_id_ct_usuario_upToct_usuario                             ct_capitulo[]                       @relation("ct_capitulo_id_ct_usuario_upToct_usuario")
-  ct_consumible_factura_ct_consumible_factura_id_ct_usuario_inToct_usuario         ct_consumible_factura[]             @relation("ct_consumible_factura_id_ct_usuario_inToct_usuario")
-  ct_consumible_factura_ct_consumible_factura_id_ct_usuario_upToct_usuario         ct_consumible_factura[]             @relation("ct_consumible_factura_id_ct_usuario_upToct_usuario")
-  ct_consumible_proveedor_ct_consumible_proveedor_id_ct_usuario_inToct_usuario     ct_consumible_proveedor[]           @relation("ct_consumible_proveedor_id_ct_usuario_inToct_usuario")
-  ct_consumible_proveedor_ct_consumible_proveedor_id_ct_usuario_upToct_usuario     ct_consumible_proveedor[]           @relation("ct_consumible_proveedor_id_ct_usuario_upToct_usuario")
-  ct_correspondencia_estado_ct_correspondencia_estado_id_ct_usuario_inToct_usuario ct_correspondencia_estado[]         @relation("ct_correspondencia_estado_id_ct_usuario_inToct_usuario")
-  ct_correspondencia_estado_ct_correspondencia_estado_id_ct_usuario_upToct_usuario ct_correspondencia_estado[]         @relation("ct_correspondencia_estado_id_ct_usuario_upToct_usuario")
-  ct_modulo_ct_modulo_ct_usuario_atToct_usuario                                    ct_modulo[]                         @relation("ct_modulo_ct_usuario_atToct_usuario")
-  ct_modulo_ct_modulo_ct_usuario_inToct_usuario                                    ct_modulo[]                         @relation("ct_modulo_ct_usuario_inToct_usuario")
-  ct_producto_consumible_ct_producto_consumible_ct_usuario_atToct_usuario          ct_producto_consumible[]            @relation("ct_producto_consumible_ct_usuario_atToct_usuario")
-  ct_producto_consumible_ct_producto_consumible_ct_usuario_inToct_usuario          ct_producto_consumible[]            @relation("ct_producto_consumible_ct_usuario_inToct_usuario")
-  ct_puesto_ct_puesto_id_usuario_creaToct_usuario                                  ct_puesto[]                         @relation("ct_puesto_id_usuario_creaToct_usuario")
-  ct_puesto_ct_puesto_id_usuario_modificaToct_usuario                              ct_puesto[]                         @relation("ct_puesto_id_usuario_modificaToct_usuario")
-  ct_usuario_ct_usuario_ct_usuario_atToct_usuario                                  ct_usuario?                         @relation("ct_usuario_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_usuario_actualizado_por")
-  other_ct_usuario_ct_usuario_ct_usuario_atToct_usuario                            ct_usuario[]                        @relation("ct_usuario_ct_usuario_atToct_usuario")
-  ct_usuario_ct_usuario_ct_usuario_inToct_usuario                                  ct_usuario?                         @relation("ct_usuario_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_usuario_creado_por")
-  other_ct_usuario_ct_usuario_ct_usuario_inToct_usuario                            ct_usuario[]                        @relation("ct_usuario_ct_usuario_inToct_usuario")
-  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_atToct_usuario                  dt_aspirante_aneec[]                @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario")
-  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_inToct_usuario                  dt_aspirante_aneec[]                @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario")
-  dt_bitacora_movimiento                                                           dt_bitacora_movimiento[]
-  dt_consumible_entrega                                                            dt_consumible_entrega[]
-  dt_correspondencia_dt_correspondencia_id_usuario_creaToct_usuario                dt_correspondencia[]                @relation("dt_correspondencia_id_usuario_creaToct_usuario")
-  dt_correspondencia_dt_correspondencia_id_usuario_modificaToct_usuario            dt_correspondencia[]                @relation("dt_correspondencia_id_usuario_modificaToct_usuario")
-  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_atToct_usuario              dt_diagnostico_aneec[]              @relation("dt_diagnostico_aneec_ct_usuario_atToct_usuario")
-  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_inToct_usuario              dt_diagnostico_aneec[]              @relation("dt_diagnostico_aneec_ct_usuario_inToct_usuario")
-  dt_funcion_dt_funcion_ct_usuario_atToct_usuario                                  dt_funcion[]                        @relation("dt_funcion_ct_usuario_atToct_usuario")
-  dt_funcion_dt_funcion_ct_usuario_inToct_usuario                                  dt_funcion[]                        @relation("dt_funcion_ct_usuario_inToct_usuario")
-  dt_informes_aneec_dt_informes_aneec_ct_usuario_atToct_usuario                    dt_informes_aneec[]                 @relation("dt_informes_aneec_ct_usuario_atToct_usuario")
-  dt_informes_aneec_dt_informes_aneec_ct_usuario_inToct_usuario                    dt_informes_aneec[]                 @relation("dt_informes_aneec_ct_usuario_inToct_usuario")
-  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_atToct_usuario            dt_planeaciones_aneec[]             @relation("dt_planeaciones_aneec_ct_usuario_atToct_usuario")
-  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_inToct_usuario            dt_planeaciones_aneec[]             @relation("dt_planeaciones_aneec_ct_usuario_inToct_usuario")
-  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_atToct_usuario              dt_techo_presupuesto[]              @relation("dt_techo_presupuesto_ct_usuario_atToct_usuario")
-  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_inToct_usuario              dt_techo_presupuesto[]              @relation("dt_techo_presupuesto_ct_usuario_inToct_usuario")
-  rl_analista_unidad_rl_analista_unidad_ct_usuario_inToct_usuario                  rl_analista_unidad[]                @relation("rl_analista_unidad_ct_usuario_inToct_usuario")
-  rl_analista_unidad_rl_analista_unidad_ct_usuario_idToct_usuario                  rl_analista_unidad[]                @relation("rl_analista_unidad_ct_usuario_idToct_usuario")
-  rl_area_financiero_rl_area_financiero_ct_usuario_atToct_usuario                  rl_area_financiero[]                @relation("rl_area_financiero_ct_usuario_atToct_usuario")
-  rl_area_financiero_rl_area_financiero_ct_usuario_inToct_usuario                  rl_area_financiero[]                @relation("rl_area_financiero_ct_usuario_inToct_usuario")
-  rl_correspondencia_usuario_estado                                                rl_correspondencia_usuario_estado[]
-  rl_entrega_formato                                                               rl_entrega_formato[]
-  rl_justificacion                                                                 rl_justificacion[]
-  rl_producto_requisicion                                                          rl_producto_requisicion[]
-  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_atToct_usuario                    rl_puesto_funcion[]                 @relation("rl_puesto_funcion_ct_usuario_atToct_usuario")
-  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_inToct_usuario                    rl_puesto_funcion[]                 @relation("rl_puesto_funcion_ct_usuario_inToct_usuario")
-  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_atToct_usuario                  rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_atToct_usuario")
-  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_inToct_usuario                  rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_inToct_usuario")
-  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_idToct_usuario                  rl_usuario_funcion[]                @relation("rl_usuario_funcion_ct_usuario_idToct_usuario")
-  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_atToct_usuario                    rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_atToct_usuario")
-  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_inToct_usuario                    rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_inToct_usuario")
-  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_idToct_usuario                    rl_usuario_puesto[]                 @relation("rl_usuario_puesto_ct_usuario_idToct_usuario")
+  id_usuario                                                                                         Int                                  @id @default(autoincrement())
+  nombre_usuario                                                                                     String                               @unique(map: "nombre_usuario_UNIQUE") @db.VarChar(255)
+  contrasena                                                                                         String                               @db.VarChar(255)
+  estado                                                                                             Boolean                              @default(true)
+  id_dt_rupeet_informacion                                                                           Int?
+  ct_usuario_in                                                                                      Int?
+  ct_usuario_at                                                                                      Int?
+  createdAt                                                                                          DateTime                             @default(now()) @db.Timestamp(0)
+  updatedAt                                                                                          DateTime                             @default(now()) @db.Timestamp(0)
+  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_inToct_usuario                                 ct_bitacora_accion[]                 @relation("ct_bitacora_accion_id_ct_usuario_inToct_usuario")
+  ct_bitacora_accion_ct_bitacora_accion_id_ct_usuario_upToct_usuario                                 ct_bitacora_accion[]                 @relation("ct_bitacora_accion_id_ct_usuario_upToct_usuario")
+  ct_bitacora_entidad_ct_bitacora_entidad_id_ct_usuario_inToct_usuario                               ct_bitacora_entidad[]                @relation("ct_bitacora_entidad_id_ct_usuario_inToct_usuario")
+  ct_bitacora_entidad_ct_bitacora_entidad_id_ct_usuario_upToct_usuario                               ct_bitacora_entidad[]                @relation("ct_bitacora_entidad_id_ct_usuario_upToct_usuario")
+  ct_capitulo_ct_capitulo_id_ct_usuario_inToct_usuario                                               ct_capitulo[]                        @relation("ct_capitulo_id_ct_usuario_inToct_usuario")
+  ct_capitulo_ct_capitulo_id_ct_usuario_upToct_usuario                                               ct_capitulo[]                        @relation("ct_capitulo_id_ct_usuario_upToct_usuario")
+  ct_consumible_factura_ct_consumible_factura_id_ct_usuario_inToct_usuario                           ct_consumible_factura[]              @relation("ct_consumible_factura_id_ct_usuario_inToct_usuario")
+  ct_consumible_factura_ct_consumible_factura_id_ct_usuario_upToct_usuario                           ct_consumible_factura[]              @relation("ct_consumible_factura_id_ct_usuario_upToct_usuario")
+  ct_consumible_proveedor_ct_consumible_proveedor_id_ct_usuario_inToct_usuario                       ct_consumible_proveedor[]            @relation("ct_consumible_proveedor_id_ct_usuario_inToct_usuario")
+  ct_consumible_proveedor_ct_consumible_proveedor_id_ct_usuario_upToct_usuario                       ct_consumible_proveedor[]            @relation("ct_consumible_proveedor_id_ct_usuario_upToct_usuario")
+  ct_correspondencia_estado_ct_correspondencia_estado_id_ct_usuario_inToct_usuario                   ct_correspondencia_estado[]          @relation("ct_correspondencia_estado_id_ct_usuario_inToct_usuario")
+  ct_correspondencia_estado_ct_correspondencia_estado_id_ct_usuario_upToct_usuario                   ct_correspondencia_estado[]          @relation("ct_correspondencia_estado_id_ct_usuario_upToct_usuario")
+  ct_correspondencia_formato_entrega_ct_correspondencia_formato_entrega_id_ct_usuario_inToct_usuario ct_correspondencia_formato_entrega[] @relation("ct_correspondencia_formato_entrega_id_ct_usuario_inToct_usuario")
+  ct_correspondencia_formato_entrega_ct_correspondencia_formato_entrega_id_ct_usuario_upToct_usuario ct_correspondencia_formato_entrega[] @relation("ct_correspondencia_formato_entrega_id_ct_usuario_upToct_usuario")
+  ct_modulo_ct_modulo_ct_usuario_atToct_usuario                                                      ct_modulo[]                          @relation("ct_modulo_ct_usuario_atToct_usuario")
+  ct_modulo_ct_modulo_ct_usuario_inToct_usuario                                                      ct_modulo[]                          @relation("ct_modulo_ct_usuario_inToct_usuario")
+  ct_producto_consumible_ct_producto_consumible_ct_usuario_atToct_usuario                            ct_producto_consumible[]             @relation("ct_producto_consumible_ct_usuario_atToct_usuario")
+  ct_producto_consumible_ct_producto_consumible_ct_usuario_inToct_usuario                            ct_producto_consumible[]             @relation("ct_producto_consumible_ct_usuario_inToct_usuario")
+  ct_puesto_ct_puesto_id_usuario_creaToct_usuario                                                    ct_puesto[]                          @relation("ct_puesto_id_usuario_creaToct_usuario")
+  ct_puesto_ct_puesto_id_usuario_modificaToct_usuario                                                ct_puesto[]                          @relation("ct_puesto_id_usuario_modificaToct_usuario")
+  ct_usuario_ct_usuario_ct_usuario_atToct_usuario                                                    ct_usuario?                          @relation("ct_usuario_ct_usuario_atToct_usuario", fields: [ct_usuario_at], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_usuario_actualizado_por")
+  other_ct_usuario_ct_usuario_ct_usuario_atToct_usuario                                              ct_usuario[]                         @relation("ct_usuario_ct_usuario_atToct_usuario")
+  ct_usuario_ct_usuario_ct_usuario_inToct_usuario                                                    ct_usuario?                          @relation("ct_usuario_ct_usuario_inToct_usuario", fields: [ct_usuario_in], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_ct_usuario_creado_por")
+  other_ct_usuario_ct_usuario_ct_usuario_inToct_usuario                                              ct_usuario[]                         @relation("ct_usuario_ct_usuario_inToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_atToct_usuario                                    dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_ct_usuario_atToct_usuario")
+  dt_aspirante_aneec_dt_aspirante_aneec_ct_usuario_inToct_usuario                                    dt_aspirante_aneec[]                 @relation("dt_aspirante_aneec_ct_usuario_inToct_usuario")
+  dt_bitacora_movimiento                                                                             dt_bitacora_movimiento[]
+  dt_consumible_entrega                                                                              dt_consumible_entrega[]
+  dt_correspondencia_dt_correspondencia_id_usuario_creaToct_usuario                                  dt_correspondencia[]                 @relation("dt_correspondencia_id_usuario_creaToct_usuario")
+  dt_correspondencia_dt_correspondencia_id_usuario_modificaToct_usuario                              dt_correspondencia[]                 @relation("dt_correspondencia_id_usuario_modificaToct_usuario")
+  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_atToct_usuario                                dt_diagnostico_aneec[]               @relation("dt_diagnostico_aneec_ct_usuario_atToct_usuario")
+  dt_diagnostico_aneec_dt_diagnostico_aneec_ct_usuario_inToct_usuario                                dt_diagnostico_aneec[]               @relation("dt_diagnostico_aneec_ct_usuario_inToct_usuario")
+  dt_funcion_dt_funcion_ct_usuario_atToct_usuario                                                    dt_funcion[]                         @relation("dt_funcion_ct_usuario_atToct_usuario")
+  dt_funcion_dt_funcion_ct_usuario_inToct_usuario                                                    dt_funcion[]                         @relation("dt_funcion_ct_usuario_inToct_usuario")
+  dt_informes_aneec_dt_informes_aneec_ct_usuario_atToct_usuario                                      dt_informes_aneec[]                  @relation("dt_informes_aneec_ct_usuario_atToct_usuario")
+  dt_informes_aneec_dt_informes_aneec_ct_usuario_inToct_usuario                                      dt_informes_aneec[]                  @relation("dt_informes_aneec_ct_usuario_inToct_usuario")
+  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_atToct_usuario                              dt_planeaciones_aneec[]              @relation("dt_planeaciones_aneec_ct_usuario_atToct_usuario")
+  dt_planeaciones_aneec_dt_planeaciones_aneec_ct_usuario_inToct_usuario                              dt_planeaciones_aneec[]              @relation("dt_planeaciones_aneec_ct_usuario_inToct_usuario")
+  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_atToct_usuario                                dt_techo_presupuesto[]               @relation("dt_techo_presupuesto_ct_usuario_atToct_usuario")
+  dt_techo_presupuesto_dt_techo_presupuesto_ct_usuario_inToct_usuario                                dt_techo_presupuesto[]               @relation("dt_techo_presupuesto_ct_usuario_inToct_usuario")
+  rl_analista_unidad_rl_analista_unidad_ct_usuario_inToct_usuario                                    rl_analista_unidad[]                 @relation("rl_analista_unidad_ct_usuario_inToct_usuario")
+  rl_analista_unidad_rl_analista_unidad_ct_usuario_idToct_usuario                                    rl_analista_unidad[]                 @relation("rl_analista_unidad_ct_usuario_idToct_usuario")
+  rl_area_financiero_rl_area_financiero_ct_usuario_atToct_usuario                                    rl_area_financiero[]                 @relation("rl_area_financiero_ct_usuario_atToct_usuario")
+  rl_area_financiero_rl_area_financiero_ct_usuario_inToct_usuario                                    rl_area_financiero[]                 @relation("rl_area_financiero_ct_usuario_inToct_usuario")
+  rl_correspondencia_usuario_estado                                                                  rl_correspondencia_usuario_estado[]
+  rl_entrega_formato                                                                                 rl_entrega_formato[]
+  rl_justificacion                                                                                   rl_justificacion[]
+  rl_producto_requisicion                                                                            rl_producto_requisicion[]
+  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_atToct_usuario                                      rl_puesto_funcion[]                  @relation("rl_puesto_funcion_ct_usuario_atToct_usuario")
+  rl_puesto_funcion_rl_puesto_funcion_ct_usuario_inToct_usuario                                      rl_puesto_funcion[]                  @relation("rl_puesto_funcion_ct_usuario_inToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_atToct_usuario                                    rl_usuario_funcion[]                 @relation("rl_usuario_funcion_ct_usuario_atToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_inToct_usuario                                    rl_usuario_funcion[]                 @relation("rl_usuario_funcion_ct_usuario_inToct_usuario")
+  rl_usuario_funcion_rl_usuario_funcion_ct_usuario_idToct_usuario                                    rl_usuario_funcion[]                 @relation("rl_usuario_funcion_ct_usuario_idToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_atToct_usuario                                      rl_usuario_puesto[]                  @relation("rl_usuario_puesto_ct_usuario_atToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_inToct_usuario                                      rl_usuario_puesto[]                  @relation("rl_usuario_puesto_ct_usuario_inToct_usuario")
+  rl_usuario_puesto_rl_usuario_puesto_ct_usuario_idToct_usuario                                      rl_usuario_puesto[]                  @relation("rl_usuario_puesto_ct_usuario_idToct_usuario")
 
   @@index([ct_usuario_at], map: "fk_ct_usuario_actualizado_por")
   @@index([ct_usuario_in], map: "fk_ct_usuario_creado_por")
@@ -412,19 +423,19 @@ model dt_correspondencia {
   destinatario                                                  String                              @db.VarChar(255)
   id_prioridad                                                  Int
   id_tipo                                                       Int
-  id_formato                                                    Int
+  id_ct_correspondencia_formato_entrega                         Int
   folio                                                         String?                             @db.VarChar(100)
   fecha_documento                                               DateTime                            @db.Date
   fecha_registro                                                DateTime                            @default(now()) @db.Timestamp(0)
   id_usuario_crea                                               Int
   id_usuario_modifica                                           Int?
-  ct_correspondencia_formato_entrega                            ct_correspondencia_formato_entrega  @relation(fields: [id_formato], references: [id_formato], onUpdate: Restrict, map: "fk_corresp_formato")
+  ct_correspondencia_formato_entrega                            ct_correspondencia_formato_entrega  @relation(fields: [id_ct_correspondencia_formato_entrega], references: [id_ct_correspondencia_formato_entrega], onUpdate: Restrict, map: "fk_corresp_formato")
   ct_correspondencia_prioridad                                  ct_correspondencia_prioridad        @relation(fields: [id_prioridad], references: [id_prioridad], onUpdate: Restrict, map: "fk_corresp_prioridad")
   ct_usuario_dt_correspondencia_id_usuario_creaToct_usuario     ct_usuario                          @relation("dt_correspondencia_id_usuario_creaToct_usuario", fields: [id_usuario_crea], references: [id_usuario], onUpdate: Restrict, map: "fk_corresp_usuario_crea")
   ct_usuario_dt_correspondencia_id_usuario_modificaToct_usuario ct_usuario?                         @relation("dt_correspondencia_id_usuario_modificaToct_usuario", fields: [id_usuario_modifica], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_corresp_usuario_modifica")
   rl_correspondencia_usuario_estado                             rl_correspondencia_usuario_estado[]
 
-  @@index([id_formato], map: "fk_corresp_formato")
+  @@index([id_ct_correspondencia_formato_entrega], map: "fk_corresp_formato")
   @@index([id_prioridad], map: "fk_corresp_prioridad")
   @@index([id_tipo], map: "fk_corresp_tipo")
   @@index([id_usuario_crea], map: "fk_corresp_usuario_crea")
@@ -629,15 +640,15 @@ model rl_correspondencia_usuario_estado {
 }
 
 model rl_entrega_formato {
-  id_formato            Int                     @id @default(autoincrement())
-  folio_formato         String                  @unique(map: "folio_formato_UNIQUE") @db.VarChar(20)
-  mes_cantidad          String?                 @db.VarChar(100)
-  persona_recibe        String?                 @db.VarChar(255)
-  ct_usuario_id         Int
-  createdAt             DateTime                @default(now()) @db.DateTime(0)
-  updatedAt             DateTime                @default(now()) @db.DateTime(0)
-  dt_consumible_entrega dt_consumible_entrega[]
-  ct_usuario            ct_usuario              @relation(fields: [ct_usuario_id], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_rl_entrega_formato_ct_usuario")
+  id_ct_correspondencia_formato_entrega Int                     @id @default(autoincrement())
+  folio_formato                         String                  @unique(map: "folio_formato_UNIQUE") @db.VarChar(20)
+  mes_cantidad                          String?                 @db.VarChar(100)
+  persona_recibe                        String?                 @db.VarChar(255)
+  ct_usuario_id                         Int
+  createdAt                             DateTime                @default(now()) @db.DateTime(0)
+  updatedAt                             DateTime                @default(now()) @db.DateTime(0)
+  dt_consumible_entrega                 dt_consumible_entrega[]
+  ct_usuario                            ct_usuario              @relation(fields: [ct_usuario_id], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_rl_entrega_formato_ct_usuario")
 
   @@index([ct_usuario_id], map: "fk_rl_entrega_formato_ct_usuario_idx")
 }

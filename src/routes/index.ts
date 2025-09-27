@@ -3,13 +3,19 @@ import { Router } from "express";
 import authRoutes from "./authRoutes";
 import reportesRoutes from "./reportes.routes";
 
-//catalogos
+//?catalogos importados
 import ctBitacoraAccionRoutes from "./ct_bitacora_accion.route";
-import ctBitacoraEntidadRoutes from "./ct_bitacora_entidad.routes";
-import ctCapituloRoutes from "./ct_capitulo.routes";
+import ctBitacoraEntidadRoutes from "./ct_bitacora_entidad.route";
+import ctCapituloRoutes from "./ct_capitulo.route";
 import ctConsumibleProveedorRoutes from "./ct_consumible_proveedor.route";
-import ctConsumibleFacturaRoutes from "./ct_consumible_factura.routes";
-import ctCorrespondenciaEstadoRoutes from "./ct_correspondencia_estado.routes";
+import ctConsumibleFacturaRoutes from "./ct_consumible_factura.route";
+import ctCorrespondenciaEstadoRoutes from "./ct_correspondencia_estado.route";
+import ctCorrespondenciaFormatoEntregaRoutes from "./ct_correspondencia_formato_entrega.route";
+import ctCorrespondenciaPrioridadRoutes from "./ct_correspondencia_prioridad.route";
+import ctDispositivoRoutes from "./ct_dispositivo.route";
+import ctDocumentosAnnecRoutes from "./ct_documentos_annec.route";
+import ctFinanciamientoRoutes from "./ct_financiamiento.route";
+import ctModuloRoutes from "./ct_modulo.route";
 
 /*import entidadRoutes from "./entidad.route";
 import municipioRoutes from "./municipio.route";
@@ -21,14 +27,22 @@ const router = Router();
 //router.use("/auth", authRoutes);
 //router.use("/reportes", reportesRoutes);
 
-//catalogos
+//?catalogos
 router.use("/ct_bitacora_accion", ctBitacoraAccionRoutes);
 router.use("/ct_bitacora_entidad", ctBitacoraEntidadRoutes);
 router.use("/ct_capitulo", ctCapituloRoutes);
 router.use("/ct_consumible_proveedor", ctConsumibleProveedorRoutes);
 router.use("/ct_consumible_factura", ctConsumibleFacturaRoutes);
 router.use("/ct_correspondencia_estado", ctCorrespondenciaEstadoRoutes);
-
+router.use(
+  "/ct_correspondencia_formato_entrega",
+  ctCorrespondenciaFormatoEntregaRoutes
+);
+router.use("/ct_correspondencia_prioridad", ctCorrespondenciaPrioridadRoutes);
+router.use("/ct_dispositivo", ctDispositivoRoutes);
+router.use("/ct_documentos_annec", ctDocumentosAnnecRoutes);
+router.use("/ct_financiamiento", ctFinanciamientoRoutes);
+router.use("/ct_modulo", ctModuloRoutes);
 /*router.use("/entidad", entidadRoutes);
 router.use("/municipio", municipioRoutes);
 router.use("/localidad", localidadRoutes);*/
