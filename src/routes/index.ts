@@ -7,7 +7,7 @@ import reportesRoutes from "./reportes.routes";
 import ctBitacoraAccionRoutes from "./ct_bitacora_accion.route";
 import ctBitacoraEntidadRoutes from "./ct_bitacora_entidad.routes";
 import ctCapituloRoutes from "./ct_capitulo.routes";
-import ctConsumiblesProveedorRoutes from "./ct_consumibles_proveedor.route";
+import ctConsumibleProveedorRoutes from "./ct_consumible_proveedor.route";
 import ctConsumibleFacturaRoutes from "./ct_consumible_factura.routes";
 import ctCorrespondenciaEstadoRoutes from "./ct_correspondencia_estado.routes";
 
@@ -25,7 +25,7 @@ const router = Router();
 router.use("/ct_bitacora_accion", ctBitacoraAccionRoutes);
 router.use("/ct_bitacora_entidad", ctBitacoraEntidadRoutes);
 router.use("/ct_capitulo", ctCapituloRoutes);
-router.use("/ct_consumibles_proveedor", ctConsumiblesProveedorRoutes);
+router.use("/ct_consumible_proveedor", ctConsumibleProveedorRoutes);
 router.use("/ct_consumible_factura", ctConsumibleFacturaRoutes);
 router.use("/ct_correspondencia_estado", ctCorrespondenciaEstadoRoutes);
 

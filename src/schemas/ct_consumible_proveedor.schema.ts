@@ -14,41 +14,42 @@ import {
   esquemaLimiteQuery,
   esquemaParamId,
   esquemaDeleteConUsuario,
+  esquemaNumeroRequerido,
+  esquemaQueryNumeroRequerido,
   paginationSchema,
   idParamSchema,
+  esquemaQueryNumeroOpcional,
+  esquemaNumeroOpcional,
 } from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_BITACORA_ENTIDAD =====
+//TODO ===== SCHEMAS PARA CT_CONSUMIBLE_PROVEEDOR =====
 
-//? Esquema para crear una nueva entidad
-export const crearCtBitacoraEntidadSchema = z.object({
-  entidad: esquemaTextoRequerido(2, 50),
-  descripcion: esquemaTextoOpcional(255),
-  estado: esquemaEstadoRequerido,
+//? Esquema para crear una nueva consumible proveedor
+export const crearCtConsumibleProveedorSchema = z.object({
+  razon_social: esquemaTextoRequerido(2),
+  estado: esquemaEstadoOpcional,
   id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquema para actualizar una entidad
-export const actualizarCtBitacoraEntidadSchema = z.object({
-  entidad: esquemaTextoRequerido(2, 50),
-  descripcion: esquemaTextoOpcional(255),
+//? Esquema para actualizar una consumible proveedor
+export const actualizarCtConsumibleProveedorSchema = z.object({
+  razon_social: esquemaTextoOpcional(255),
   estado: esquemaEstadoOpcional,
   id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
   fecha_in: esquemaFechaOpcional,
 });
 
-//? Schema para filtros y paginación de entidades
+//? Schema para filtros y paginación de consumible proveedor
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
-export const bitacoraEntidadFiltrosSchema = z.object({
+export const ctConsumibleProveedorFiltrosSchema = z.object({
   //? Filtros específicos
-  id_ct_bitacora_entidad: esquemaQueryId,
-  entidad: esquemaQueryTexto,
-  descripcion: esquemaQueryTexto,
+  id_ct_consumible_proveedor: esquemaQueryId,
+  razon_social: esquemaQueryTexto,
   estado: esquemaQueryBoolean,
   id_ct_usuario_in: esquemaQueryId,
   fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos
+  //? Filtros para incluir inactivos de consumible proveedor
   incluirInactivos: esquemaQueryBoolean,
 
   //? Paginación
@@ -56,31 +57,31 @@ export const bitacoraEntidadFiltrosSchema = z.object({
   limite: esquemaLimiteQuery,
 });
 
-export type CrearCtBitacoraEntidadInput = z.infer<
-  typeof crearCtBitacoraEntidadSchema
+export type CrearCtConsumibleProveedorInput = z.infer<
+  typeof crearCtConsumibleProveedorSchema
 >;
-export type ActualizarCtBitacoraEntidadInput = z.infer<
-  typeof actualizarCtBitacoraEntidadSchema
->;
-
-export type BuscarBitacoraEntidadInput = z.infer<
-  typeof bitacoraEntidadFiltrosSchema
+export type ActualizarCtConsumibleProveedorInput = z.infer<
+  typeof actualizarCtConsumibleProveedorSchema
 >;
 
-//? Esquema para parámetros de URL (ID de bitácora entidad)
-export const ctBitacoraEntidadIdParamSchema = z.object({
-  id_ct_bitacora_entidad: esquemaParamId,
+export type BuscarCtConsumibleProveedorInput = z.infer<
+  typeof ctConsumibleProveedorFiltrosSchema
+>;
+
+//? Esquema para parámetros de URL (ID de consumible proveedor)
+export const ctConsumibleProveedorIdParamSchema = z.object({
+  id_ct_consumible_proveedor: esquemaParamId,
 });
 
 //? Esquema para validar el body del DELETE - quién ejecuta la eliminación
-export const eliminarCtBitacoraEntidadSchema = esquemaDeleteConUsuario;
+export const eliminarCtConsumibleProveedorSchema = esquemaDeleteConUsuario;
 
-export type CtBitacoraEntidadIdParam = z.infer<
-  typeof ctBitacoraEntidadIdParamSchema
+export type CtConsumibleProveedorIdParam = z.infer<
+  typeof ctConsumibleProveedorIdParamSchema
 >;
 
-export type EliminarCtBitacoraEntidadInput = z.infer<
-  typeof eliminarCtBitacoraEntidadSchema
+export type EliminarCtConsumibleProveedorInput = z.infer<
+  typeof eliminarCtConsumibleProveedorSchema
 >;
 
 /*

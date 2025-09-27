@@ -6,16 +6,18 @@ import {
   ActualizarCtConsumibleFacturaInput,
   ctConsumibleFacturaIdParamSchema,
   CtConsumibleFacturaIdParam,
+  EliminarCtConsumibleFacturaInput,
+  eliminarCtConsumibleFacturaSchema,
 } from "../schemas/ct_consumible_factura.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
-//TODO ===== CONTROLADOR PARA CT_BITACORA_ACCION CON BASE SERVICE =====
+//TODO ===== CONTROLADOR PARA CT_CONSUMIBLE_FACTURA CON BASE SERVICE =====
 const ctConsumibleFacturaBaseService = new CtConsumibleFacturaService();
 
 export class CtConsumibleFacturaBaseController extends BaseController {
   /**
-   * 📦 Crear nueva bitacora acción
-   * @route POST /api/inventario/bitacora_accion
+   * 📦 Crear nueva consumible factura
+   * @route POST /api/inventario/consumible_factura
    */
   crearConsumibleFactura = async (
     req: Request,
@@ -36,7 +38,7 @@ export class CtConsumibleFacturaBaseController extends BaseController {
 
   /**
    * 📦 Obtener consumible factura por ID
-   * @route GET /api/inventario/bitacora_accion/:id_bitacora_accion
+   * @route GET /api/inventario/consumible_factura/:id_ct_consumible_factura
    */
   obtenerConsumibleFacturaPorId = async (
     req: Request,
@@ -46,13 +48,15 @@ export class CtConsumibleFacturaBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_factura } =
+        const { id_ct_consumible_factura } =
           this.validarDatosConEsquema<CtConsumibleFacturaIdParam>(
             ctConsumibleFacturaIdParamSchema,
             req.params
           );
 
-        return await ctConsumibleFacturaBaseService.obtenerPorId(id_factura);
+        return await ctConsumibleFacturaBaseService.obtenerPorId(
+          id_ct_consumible_factura
+        );
       },
       "Consumible factura obtenida exitosamente"
     );
@@ -63,9 +67,9 @@ export class CtConsumibleFacturaBaseController extends BaseController {
    * @route GET /api/inventario/consumible_factura
    *
    * Query parameters soportados:
-   * - id_factura: Filtrar por ID de factura (búsqueda parcial)
-   * - clave_factura: Filtrar por clave de factura (búsqueda parcial)
-   * - nombre_factura: Filtrar por nombre de factura (búsqueda parcial)
+   * - id_ct_consumible_factura: Filtrar por ID de factura (búsqueda parcial)
+   * - factura: Filtrar por factura (búsqueda parcial)
+   * - id_ct_consumible_proveedor: Filtrar por ID de proveedor (búsqueda parcial)
    * - activo: Filtrar por activo (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
    * - pagina: Número de página (default: 1)
@@ -96,7 +100,7 @@ export class CtConsumibleFacturaBaseController extends BaseController {
 
   /**
    * 📦 Actualizar consumible factura
-   * @route PUT /api/inventario/capitulo/:id_capitulo
+   * @route PUT /api/inventario/consumible_factura/:id_ct_consumible_factura
    */
   actualizarConsumibleFactura = async (
     req: Request,
@@ -106,7 +110,7 @@ export class CtConsumibleFacturaBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_factura } =
+        const { id_ct_consumible_factura } =
           this.validarDatosConEsquema<CtConsumibleFacturaIdParam>(
             ctConsumibleFacturaIdParamSchema,
             req.params
@@ -115,7 +119,7 @@ export class CtConsumibleFacturaBaseController extends BaseController {
           req.body;
 
         return await ctConsumibleFacturaBaseService.actualizar(
-          id_factura,
+          id_ct_consumible_factura,
           consumibleFacturaData
         );
       },
@@ -124,8 +128,8 @@ export class CtConsumibleFacturaBaseController extends BaseController {
   };
 
   /**
-   * 📦 Eliminar capitulo
-   * @route DELETE /api/inventario/capitulo/:id_capitulo
+   * 📦 Eliminar consumible factura
+   * @route DELETE /api/inventario/consumible_factura/:id_ct_consumible_factura
    */
   eliminarConsumibleFactura = async (
     req: Request,
@@ -135,13 +139,22 @@ export class CtConsumibleFacturaBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_factura } =
+        const { id_ct_consumible_factura } =
           this.validarDatosConEsquema<CtConsumibleFacturaIdParam>(
             ctConsumibleFacturaIdParamSchema,
             req.params
           );
 
-        await ctConsumibleFacturaBaseService.eliminar(id_factura);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtConsumibleFacturaInput>(
+            eliminarCtConsumibleFacturaSchema,
+            req.body
+          );
+
+        await ctConsumibleFacturaBaseService.eliminar(
+          id_ct_consumible_factura,
+          id_ct_usuario_up
+        );
       },
       "Consumible factura eliminada exitosamente"
     );

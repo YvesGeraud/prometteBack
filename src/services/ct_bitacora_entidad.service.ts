@@ -8,7 +8,7 @@ import { ct_bitacora_entidad } from "@prisma/client";
 import {
   CrearCtBitacoraEntidadInput,
   ActualizarCtBitacoraEntidadInput,
-  BuscarCtBitacoraEntidadInput,
+  BuscarBitacoraEntidadInput,
 } from "../schemas/ct_bitacora_entidad.schema";
 
 //TODO ===== SERVICIO PARA CT_BITACORA_ENTIDAD CON BASE SERVICE =====
@@ -17,21 +17,22 @@ export class CtBitacoraEntidadService extends BaseService<
   ct_bitacora_entidad,
   CrearCtBitacoraEntidadInput,
   ActualizarCtBitacoraEntidadInput,
-  BuscarCtBitacoraEntidadInput
+  BuscarBitacoraEntidadInput
 > {
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_bitacora_entidad",
     defaultOrderBy: { id_ct_bitacora_entidad: "asc" as const },
+    campoActivo: "estado", // Este modelo usa 'estado' en lugar de 'activo'
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
-  protected configurarIncludes(filters?: BuscarCtBitacoraEntidadInput) {
+  protected configurarIncludes(filters?: BuscarBitacoraEntidadInput) {
     return {};
   }
 
   // 🔍 Filtros específicos para entidades
-  protected construirWhereClause(filters?: BuscarCtBitacoraEntidadInput) {
+  protected construirWhereClause(filters?: BuscarBitacoraEntidadInput) {
     const where: any = {};
 
     //? Filtro de id_ct_bitacora_entidad
@@ -54,8 +55,8 @@ export class CtBitacoraEntidadService extends BaseService<
     }
 
     //? Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;

@@ -6,6 +6,8 @@ import {
   ActualizarCtBitacoraEntidadInput,
   ctBitacoraEntidadIdParamSchema,
   CtBitacoraEntidadIdParam,
+  EliminarCtBitacoraEntidadInput,
+  eliminarCtBitacoraEntidadSchema,
 } from "../schemas/ct_bitacora_entidad.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
@@ -137,7 +139,16 @@ export class CtBitacoraEntidadBaseController extends BaseController {
             req.params
           );
 
-        await ctBitacoraEntidadBaseService.eliminar(id_ct_bitacora_entidad);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtBitacoraEntidadInput>(
+            eliminarCtBitacoraEntidadSchema,
+            req.body
+          );
+
+        await ctBitacoraEntidadBaseService.eliminar(
+          id_ct_bitacora_entidad,
+          id_ct_usuario_up
+        );
       },
       "Bitacora entidad eliminada exitosamente"
     );

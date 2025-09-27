@@ -4,43 +4,44 @@
  */
 
 import { BaseService } from "./BaseService";
-import { ct_consumibles_proveedor } from "@prisma/client";
+import { ct_consumible_proveedor } from "@prisma/client";
 import {
-  CrearCtConsumiblesProveedorInput,
-  ActualizarCtConsumiblesProveedorInput,
-  BuscarCtConsumiblesProveedorInput,
-} from "../schemas/ct_consumibles_proveedor.schema";
+  CrearCtConsumibleProveedorInput,
+  ActualizarCtConsumibleProveedorInput,
+  BuscarCtConsumibleProveedorInput,
+} from "../schemas/ct_consumible_proveedor.schema";
 
 //TODO ===== SERVICIO PARA CT_BITACORA_ACCION CON BASE SERVICE =====
 
-export class CtConsumiblesProveedorService extends BaseService<
-  ct_consumibles_proveedor,
-  CrearCtConsumiblesProveedorInput,
-  ActualizarCtConsumiblesProveedorInput,
-  BuscarCtConsumiblesProveedorInput
+export class CtConsumibleProveedorService extends BaseService<
+  ct_consumible_proveedor,
+  CrearCtConsumibleProveedorInput,
+  ActualizarCtConsumibleProveedorInput,
+  BuscarCtConsumibleProveedorInput
 > {
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
-    tableName: "ct_consumibles_proveedor",
-    defaultOrderBy: { id_proveedor: "asc" as const },
+    tableName: "ct_consumible_proveedor",
+    defaultOrderBy: { id_ct_consumible_proveedor: "asc" as const },
+    campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
-  protected configurarIncludes(filters?: BuscarCtConsumiblesProveedorInput) {
+  protected configurarIncludes(filters?: BuscarCtConsumibleProveedorInput) {
     return {};
   }
 
   // 🔍 Filtros específicos para entidades
-  protected construirWhereClause(filters?: BuscarCtConsumiblesProveedorInput) {
+  protected construirWhereClause(filters?: BuscarCtConsumibleProveedorInput) {
     const where: any = {};
     const conditions: any[] = [];
 
-    // Filtro de entidad
-    if (filters?.id_proveedor) {
-      where.id_proveedor = filters.id_proveedor;
+    // Filtro de id_ct_consumible_proveedor
+    if (filters?.id_ct_consumible_proveedor) {
+      where.id_ct_consumible_proveedor = filters.id_ct_consumible_proveedor;
     }
 
-    // Filtro de clave_capitulo (campo numérico)
+    // Filtro de razon_social
     if (filters?.razon_social) {
       where.razon_social = {
         contains: filters.razon_social,
@@ -48,8 +49,8 @@ export class CtConsumiblesProveedorService extends BaseService<
     }
 
     // Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -57,7 +58,7 @@ export class CtConsumiblesProveedorService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_proveedor";
+    return "id_ct_consumible_proveedor";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

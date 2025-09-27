@@ -1,79 +1,60 @@
 import { z } from "zod";
+import {
+  esquemaTextoRequerido,
+  esquemaTextoOpcional,
+  esquemaEstadoRequerido,
+  esquemaEstadoOpcional,
+  esquemaUsuarioCreacion,
+  esquemaUsuarioActualizacion,
+  esquemaFechaOpcional,
+  esquemaQueryId,
+  esquemaQueryTexto,
+  esquemaQueryBoolean,
+  esquemaPaginaQuery,
+  esquemaLimiteQuery,
+  esquemaParamId,
+  esquemaDeleteConUsuario,
+  esquemaNumeroRequerido,
+  esquemaQueryNumeroRequerido,
+  paginationSchema,
+  idParamSchema,
+  esquemaQueryNumeroOpcional,
+  esquemaNumeroOpcional,
+} from "./commonSchemas";
 
-//TODO ===== SCHEMAS PARA CT_CAPITULO =====
-//? Esquemas para crear una nueva entidad
+//TODO ===== SCHEMAS PARA CT_CORRESPONDENCIA_ESTADO =====
 
+//? Esquema para crear una nueva correspondencia estado
 export const crearCtCorrespondenciaEstadoSchema = z.object({
-  nombre: z.string().min(1, "El nombre debe tener al menos 1 caracter"),
-  activo: z.boolean().default(true),
+  nombre: esquemaTextoRequerido(2, 50),
+  estado: esquemaEstadoRequerido,
+  id_ct_usuario_in: esquemaUsuarioCreacion,
 });
 
-//? Esquemas para actualizar una acción
+//? Esquema para actualizar una correspondencia estado
 export const actualizarCtCorrespondenciaEstadoSchema = z.object({
-  nombre: z.string().min(1, "El nombre debe tener al menos 1 caracter"),
-  activo: z.boolean().default(true),
+  nombre: esquemaTextoOpcional(50),
+  estado: esquemaEstadoOpcional,
+  id_ct_usuario_up: esquemaUsuarioCreacion, // Requerido para actualización
+  fecha_in: esquemaFechaOpcional,
 });
 
-export { paginationSchema, idParamSchema } from "./commonSchemas";
-
-//? Schema para filtros y paginación de entidades
+//? Schema para filtros y paginación de correspondencia estados
 //! NOTA: Implementa soft delete - por defecto solo muestra registros activos
 export const ctCorrespondenciaEstadoFiltrosSchema = z.object({
   //? Filtros específicos
-  id_estado: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return undefined;
-      const num = parseInt(val, 10);
-      return isNaN(num) ? undefined : num;
-    })
-    .pipe(
-      z
-        .number()
-        .int()
-        .positive("ID de la estado debe ser un número positivo")
-        .optional()
-    ),
-  nombre: z.string().optional(),
-  activo: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return undefined;
-      return val === "true" || val === "1";
-    })
-    .pipe(z.boolean().optional()),
+  id_ct_correspondencia_estado: esquemaQueryId,
+  nombre: esquemaQueryTexto,
+  estado: esquemaQueryBoolean,
+  id_ct_usuario_in: esquemaQueryId,
+  fecha_in: esquemaFechaOpcional,
 
-  //? Filtros para incluir inactivos
-  incluirInactivos: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return false;
-      return val === "true" || val === "1";
-    })
-    .pipe(z.boolean()),
+  //? Filtros para incluir inactivos de correspondencia estados
+  incluirInactivos: esquemaQueryBoolean,
+
   //? Paginación
-  pagina: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return 1;
-      const num = parseInt(val, 10);
-      return isNaN(num) || num < 1 ? 1 : num;
-    })
-    .pipe(z.number().int().min(1)),
-  //? Filtros para limite
-  limite: z
-    .string()
-    .optional()
-    .transform((val) => {
-      if (val === undefined || val === null || val === "") return 10;
-      const num = parseInt(val, 10);
-      return isNaN(num) || num < 1 ? 10 : Math.min(num, 100);
-    })
-    .pipe(z.number().int().min(1).max(100)),
+  pagina: esquemaPaginaQuery,
+  limite: esquemaLimiteQuery,
 });
 
 export type CrearCtCorrespondenciaEstadoInput = z.infer<
@@ -87,37 +68,38 @@ export type BuscarCtCorrespondenciaEstadoInput = z.infer<
   typeof ctCorrespondenciaEstadoFiltrosSchema
 >;
 
+//? Esquema para parámetros de URL (ID de correspondencia estado)
 export const ctCorrespondenciaEstadoIdParamSchema = z.object({
-  id_estado: z.union([z.string(), z.number()]).transform((val) => {
-    const num = typeof val === "string" ? parseInt(val, 10) : val;
-    if (isNaN(num) || num <= 0) {
-      throw new Error("ID de la estado debe ser un número positivo");
-    }
-    return num;
-  }),
+  id_ct_correspondencia_estado: esquemaParamId,
 });
+
+//? Esquema para validar el body del DELETE - quién ejecuta la eliminación
+export const eliminarCtCorrespondenciaEstadoSchema = esquemaDeleteConUsuario;
 
 export type CtCorrespondenciaEstadoIdParam = z.infer<
   typeof ctCorrespondenciaEstadoIdParamSchema
 >;
 
+export type EliminarCtCorrespondenciaEstadoInput = z.infer<
+  typeof eliminarCtCorrespondenciaEstadoSchema
+>;
+
 /*
-🔧 SCHEMA CORREGIDO PARA SOFT DELETE:
+🎉 SCHEMA REFACTORIZADO CON ESQUEMAS BASE REUTILIZABLES
 
-✅ Cambios realizados:
-1. 🔢 id_capitulo - Ahora maneja correctamente valores undefined/vacíos
-2. ✅ activo - Corregido de number a boolean opcional
-3. 🆕 incluirInactivos - Nuevo parámetro para mostrar registros eliminados
-4. 📄 pagina/limite - Mejorado manejo de valores undefined con defaults
+✅ Beneficios:
+- ✨ Código más limpio y mantenible
+- 🔄 Reutilización de validaciones comunes
+- 📝 Consistencia en mensajes de error
+- 🚀 Fácil actualización de validaciones globales
+- 🛡️ Menos duplicación de código
 
-🎯 Comportamiento:
-- Por defecto solo muestra registros activos (activo = true)
-- Todos los campos de filtro son opcionales
-- Paginación tiene valores por defecto (pagina=1, limite=10)
-- incluirInactivos=true muestra también registros eliminados
-
-📝 Uso de query parameters:
-- GET /api/ct_correspondencia_estado (solo activos)
-- GET /api/ct_correspondencia_estado?incluirInactivos=true (todos)
-- GET /api/ct_correspondencia_estado?activo=false (solo inactivos)
+🔧 Esquemas utilizados:
+- esquemaTextoRequerido/Opcional - Para campos de texto
+- esquemaEstadoRequerido/Opcional - Para campos booleanos de estado
+- esquemaUsuarioCreacion/Actualización - Para auditoría de usuarios
+- esquemaQueryId/Texto/Boolean - Para filtros en query parameters
+- esquemaPaginaQuery/LimiteQuery - Para paginación
+- esquemaParamId - Para parámetros de URL
+- esquemaDeleteConUsuario - Para eliminación con auditoría
 */

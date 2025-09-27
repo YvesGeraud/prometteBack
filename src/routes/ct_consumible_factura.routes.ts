@@ -6,6 +6,8 @@ import {
   actualizarCtConsumibleFacturaSchema,
   ctConsumibleFacturaIdParamSchema,
   ctConsumibleFacturaFiltrosSchema,
+  eliminarCtConsumibleFacturaSchema,
+  EliminarCtConsumibleFacturaInput,
 } from "../schemas/ct_consumible_factura.schema";
 
 //TODO ===== RUTAS PARA CT_BITACORA_ACCION CON BASE SERVICE =====
@@ -22,7 +24,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_factura",
+  "/:id_ct_consumible_factura",
   validarRequest({ params: ctConsumibleFacturaIdParamSchema }),
   ctConsumibleFacturaController.obtenerConsumibleFacturaPorId
 );
@@ -36,7 +38,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_factura",
+  "/:id_ct_consumible_factura",
   validarRequest({
     params: ctConsumibleFacturaIdParamSchema,
     body: actualizarCtConsumibleFacturaSchema,
@@ -46,8 +48,11 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_factura",
-  validarRequest({ params: ctConsumibleFacturaIdParamSchema }),
+  "/:id_ct_consumible_factura",
+  validarRequest({
+    params: ctConsumibleFacturaIdParamSchema,
+    body: eliminarCtConsumibleFacturaSchema,
+  }),
   ctConsumibleFacturaController.eliminarConsumibleFactura
 );
 

@@ -6,6 +6,8 @@ import {
   ActualizarCtCorrespondenciaEstadoInput,
   ctCorrespondenciaEstadoIdParamSchema,
   CtCorrespondenciaEstadoIdParam,
+  EliminarCtCorrespondenciaEstadoInput,
+  eliminarCtCorrespondenciaEstadoSchema,
 } from "../schemas/ct_correspondencia_estado.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
@@ -25,16 +27,19 @@ export class CtCorrespondenciaEstadoController extends BaseController {
       req,
       res,
       async () => {
-        const capituloData: CrearCtCorrespondenciaEstadoInput = req.body;
-        return await ctCorrespondenciaEstadoBaseService.crear(capituloData);
+        const correspondenciaEstadoData: CrearCtCorrespondenciaEstadoInput =
+          req.body;
+        return await ctCorrespondenciaEstadoBaseService.crear(
+          correspondenciaEstadoData
+        );
       },
       "Correspondencia estado creado exitosamente"
     );
   };
 
   /**
-   * 📦 Obtener capitulo por ID
-   * @route GET /api/inventario/correspondencia_estado/:id_estado
+   * 📦 Obtener correspondencia estado por ID
+   * @route GET /api/inventario/correspondencia_estado/:id_ct_correspondencia_estado
    */
   obtenerCorrespondenciaEstadoPorId = async (
     req: Request,
@@ -44,13 +49,15 @@ export class CtCorrespondenciaEstadoController extends BaseController {
       req,
       res,
       async () => {
-        const { id_estado } =
+        const { id_ct_correspondencia_estado } =
           this.validarDatosConEsquema<CtCorrespondenciaEstadoIdParam>(
             ctCorrespondenciaEstadoIdParamSchema,
             req.params
           );
 
-        return await ctCorrespondenciaEstadoBaseService.obtenerPorId(id_estado);
+        return await ctCorrespondenciaEstadoBaseService.obtenerPorId(
+          id_ct_correspondencia_estado
+        );
       },
       "Correspondencia estado obtenida exitosamente"
     );
@@ -61,10 +68,9 @@ export class CtCorrespondenciaEstadoController extends BaseController {
    * @route GET /api/inventario/correspondencia_estado
    *
    * Query parameters soportados:
-   * - id_estado: Filtrar por ID de correspondencia estado (búsqueda parcial)
+   * - id_ct_correspondencia_estado: Filtrar por ID de correspondencia estado (búsqueda parcial)
    * - nombre: Filtrar por nombre de correspondencia estado (búsqueda parcial)
-   * - nombre_capitulo: Filtrar por nombre de capitulo (búsqueda parcial)
-   * - activo: Filtrar por activo (true/false)
+   * - estado: Filtrar por estado (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
    * - pagina: Número de página (default: 1)
    * - limite: Elementos por página (default: 10)
@@ -88,13 +94,13 @@ export class CtCorrespondenciaEstadoController extends BaseController {
           pagination
         );
       },
-      "Capitulos obtenidas exitosamente"
+      "Correspondencia estados obtenidas exitosamente"
     );
   };
 
   /**
    * 📦 Actualizar correspondencia estado
-   * @route PUT /api/inventario/correspondencia_estado/:id_correspondencia_estado
+   * @route PUT /api/inventario/correspondencia_estado/:id_ct_correspondencia_estado
    */
   actualizarCorrespondenciaEstado = async (
     req: Request,
@@ -104,16 +110,17 @@ export class CtCorrespondenciaEstadoController extends BaseController {
       req,
       res,
       async () => {
-        const { id_estado } =
+        const { id_ct_correspondencia_estado } =
           this.validarDatosConEsquema<CtCorrespondenciaEstadoIdParam>(
             ctCorrespondenciaEstadoIdParamSchema,
             req.params
           );
-        const capituloData: ActualizarCtCorrespondenciaEstadoInput = req.body;
+        const correspondenciaEstadoData: ActualizarCtCorrespondenciaEstadoInput =
+          req.body;
 
         return await ctCorrespondenciaEstadoBaseService.actualizar(
-          id_estado,
-          capituloData
+          id_ct_correspondencia_estado,
+          correspondenciaEstadoData
         );
       },
       "Correspondencia estado actualizada exitosamente"
@@ -122,7 +129,7 @@ export class CtCorrespondenciaEstadoController extends BaseController {
 
   /**
    * 📦 Eliminar correspondencia estado
-   * @route DELETE /api/inventario/correspondencia_estado/:id_correspondencia_estado
+   * @route DELETE /api/inventario/correspondencia_estado/:id_ct_correspondencia_estado
    */
   eliminarCorrespondenciaEstado = async (
     req: Request,
@@ -132,13 +139,22 @@ export class CtCorrespondenciaEstadoController extends BaseController {
       req,
       res,
       async () => {
-        const { id_estado } =
+        const { id_ct_correspondencia_estado } =
           this.validarDatosConEsquema<CtCorrespondenciaEstadoIdParam>(
             ctCorrespondenciaEstadoIdParamSchema,
             req.params
           );
 
-        await ctCorrespondenciaEstadoBaseService.eliminar(id_estado);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtCorrespondenciaEstadoInput>(
+            eliminarCtCorrespondenciaEstadoSchema,
+            req.body
+          );
+
+        await ctCorrespondenciaEstadoBaseService.eliminar(
+          id_ct_correspondencia_estado,
+          id_ct_usuario_up
+        );
       },
       "Correspondencia estado eliminada exitosamente"
     );

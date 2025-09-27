@@ -6,16 +6,18 @@ import {
   ActualizarCtCapituloInput,
   ctCapituloIdParamSchema,
   CtCapituloIdParam,
+  EliminarCtCapituloInput,
+  eliminarCtCapituloSchema,
 } from "../schemas/ct_capitulo.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
-//TODO ===== CONTROLADOR PARA CT_BITACORA_ACCION CON BASE SERVICE =====
+//TODO ===== CONTROLADOR PARA CT_CAPITULO CON BASE SERVICE =====
 const ctCapituloBaseService = new CtCapituloService();
 
 export class CtCapituloBaseController extends BaseController {
   /**
-   * 📦 Crear nueva bitacora acción
-   * @route POST /api/inventario/bitacora_accion
+   * 📦 Crear nueva capitulo
+   * @route POST /api/inventario/capitulo
    */
   crearCapitulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarCreacion(
@@ -31,19 +33,20 @@ export class CtCapituloBaseController extends BaseController {
 
   /**
    * 📦 Obtener capitulo por ID
-   * @route GET /api/inventario/bitacora_accion/:id_bitacora_accion
+   * @route GET /api/inventario/capitulo/:id_ct_capitulo
    */
   obtenerCapituloPorId = async (req: Request, res: Response): Promise<void> => {
     await this.manejarOperacion(
       req,
       res,
       async () => {
-        const { id_capitulo } = this.validarDatosConEsquema<CtCapituloIdParam>(
-          ctCapituloIdParamSchema,
-          req.params
-        );
+        const { id_ct_capitulo } =
+          this.validarDatosConEsquema<CtCapituloIdParam>(
+            ctCapituloIdParamSchema,
+            req.params
+          );
 
-        return await ctCapituloBaseService.obtenerPorId(id_capitulo);
+        return await ctCapituloBaseService.obtenerPorId(id_ct_capitulo);
       },
       "Capitulo obtenida exitosamente"
     );
@@ -54,7 +57,7 @@ export class CtCapituloBaseController extends BaseController {
    * @route GET /api/inventario/capitulo
    *
    * Query parameters soportados:
-   * - id_capitulo: Filtrar por ID de capitulo (búsqueda parcial)
+   * - id_ct_capitulo: Filtrar por ID de capitulo (búsqueda parcial)
    * - clave_capitulo: Filtrar por clave de capitulo (búsqueda parcial)
    * - nombre_capitulo: Filtrar por nombre de capitulo (búsqueda parcial)
    * - activo: Filtrar por activo (true/false)
@@ -84,21 +87,22 @@ export class CtCapituloBaseController extends BaseController {
 
   /**
    * 📦 Actualizar capitulo
-   * @route PUT /api/inventario/capitulo/:id_capitulo
+   * @route PUT /api/inventario/capitulo/:id_ct_capitulo
    */
   actualizarCapitulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarActualizacion(
       req,
       res,
       async () => {
-        const { id_capitulo } = this.validarDatosConEsquema<CtCapituloIdParam>(
-          ctCapituloIdParamSchema,
-          req.params
-        );
+        const { id_ct_capitulo } =
+          this.validarDatosConEsquema<CtCapituloIdParam>(
+            ctCapituloIdParamSchema,
+            req.params
+          );
         const capituloData: ActualizarCtCapituloInput = req.body;
 
         return await ctCapituloBaseService.actualizar(
-          id_capitulo,
+          id_ct_capitulo,
           capituloData
         );
       },
@@ -108,19 +112,26 @@ export class CtCapituloBaseController extends BaseController {
 
   /**
    * 📦 Eliminar capitulo
-   * @route DELETE /api/inventario/capitulo/:id_capitulo
+   * @route DELETE /api/inventario/capitulo/:id_ct_capitulo
    */
   eliminarCapitulo = async (req: Request, res: Response): Promise<void> => {
     await this.manejarEliminacion(
       req,
       res,
       async () => {
-        const { id_capitulo } = this.validarDatosConEsquema<CtCapituloIdParam>(
-          ctCapituloIdParamSchema,
-          req.params
-        );
+        const { id_ct_capitulo } =
+          this.validarDatosConEsquema<CtCapituloIdParam>(
+            ctCapituloIdParamSchema,
+            req.params
+          );
 
-        await ctCapituloBaseService.eliminar(id_capitulo);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtCapituloInput>(
+            eliminarCtCapituloSchema,
+            req.body
+          );
+
+        await ctCapituloBaseService.eliminar(id_ct_capitulo, id_ct_usuario_up);
       },
       "Capitulo eliminada exitosamente"
     );

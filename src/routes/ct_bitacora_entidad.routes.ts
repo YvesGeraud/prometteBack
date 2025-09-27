@@ -5,7 +5,8 @@ import {
   crearCtBitacoraEntidadSchema,
   actualizarCtBitacoraEntidadSchema,
   ctBitacoraEntidadIdParamSchema,
-  ctBitacoraEntidadFiltrosSchema,
+  bitacoraEntidadFiltrosSchema,
+  eliminarCtBitacoraEntidadSchema,
 } from "../schemas/ct_bitacora_entidad.schema";
 
 //TODO ===== RUTAS PARA CT_BITACORA_ACCION CON BASE SERVICE =====
@@ -16,7 +17,7 @@ const ctBitacoraEntidadController = new CtBitacoraEntidadBaseController();
 // 📦 Obtener todas las entidades con filtros y paginación
 router.get(
   "/",
-  validarRequest({ query: ctBitacoraEntidadFiltrosSchema }),
+  validarRequest({ query: bitacoraEntidadFiltrosSchema }),
   ctBitacoraEntidadController.obtenerTodasLasBitacorasEntidades
 );
 
@@ -47,7 +48,10 @@ router.put(
 // 📦 Eliminar entidad
 router.delete(
   "/:id_ct_bitacora_entidad",
-  validarRequest({ params: ctBitacoraEntidadIdParamSchema }),
+  validarRequest({
+    params: ctBitacoraEntidadIdParamSchema,
+    body: eliminarCtBitacoraEntidadSchema,
+  }),
   ctBitacoraEntidadController.eliminarBitacoraEntidad
 );
 

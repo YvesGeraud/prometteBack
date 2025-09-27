@@ -74,6 +74,10 @@ export const vigenciaSchema = z.object({
 //TODO ===== ESQUEMAS BASE REUTILIZABLES =====
 
 //? Esquemas para campos de ID (números enteros positivos)
+export const esquemaNumeroRequerido = (min: number = 1, max: number = 100000) =>
+  z.number().int().min(min).max(max);
+export const esquemaNumeroOpcional = (min: number = 1, max: number = 100000) =>
+  z.number().int().min(min).max(max).optional();
 export const esquemaIdRequerido = z.number().int().positive();
 export const esquemaIdOpcional = z.number().int().positive().optional();
 
@@ -139,6 +143,13 @@ export const esquemaQueryBoolean = z
   .pipe(z.boolean().optional());
 
 export const esquemaQueryTexto = z.string().optional();
+
+export const esquemaQueryNumeroRequerido = z.number().int().positive();
+export const esquemaQueryNumeroOpcional = z
+  .number()
+  .int()
+  .positive()
+  .optional();
 
 //? Esquemas para paginación mejorados
 export const esquemaPaginaQuery = z

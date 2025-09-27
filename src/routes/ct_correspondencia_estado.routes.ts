@@ -6,6 +6,8 @@ import {
   actualizarCtCorrespondenciaEstadoSchema,
   ctCorrespondenciaEstadoIdParamSchema,
   ctCorrespondenciaEstadoFiltrosSchema,
+  eliminarCtCorrespondenciaEstadoSchema,
+  EliminarCtCorrespondenciaEstadoInput,
 } from "../schemas/ct_correspondencia_estado.schema";
 
 //TODO ===== RUTAS PARA CT_BITACORA_ACCION CON BASE SERVICE =====
@@ -23,7 +25,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_estado",
+  "/:id_ct_correspondencia_estado",
   validarRequest({ params: ctCorrespondenciaEstadoIdParamSchema }),
   ctCorrespondenciaEstadoController.obtenerCorrespondenciaEstadoPorId
 );
@@ -37,7 +39,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_estado",
+  "/:id_ct_correspondencia_estado",
   validarRequest({
     params: ctCorrespondenciaEstadoIdParamSchema,
     body: actualizarCtCorrespondenciaEstadoSchema,
@@ -47,8 +49,11 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_estado",
-  validarRequest({ params: ctCorrespondenciaEstadoIdParamSchema }),
+  "/:id_ct_correspondencia_estado",
+  validarRequest({
+    params: ctCorrespondenciaEstadoIdParamSchema,
+    body: eliminarCtCorrespondenciaEstadoSchema,
+  }),
   ctCorrespondenciaEstadoController.eliminarCorrespondenciaEstado
 );
 

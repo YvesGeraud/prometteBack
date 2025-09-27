@@ -22,7 +22,8 @@ export class CtCorrespondenciaEstadoService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_correspondencia_estado",
-    defaultOrderBy: { id_estado: "asc" as const },
+    defaultOrderBy: { id_ct_correspondencia_estado: "asc" as const },
+    campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
@@ -35,8 +36,8 @@ export class CtCorrespondenciaEstadoService extends BaseService<
     const where: any = {};
 
     // Filtro de entidad
-    if (filters?.id_estado) {
-      where.id_estado = filters.id_estado;
+    if (filters?.id_ct_correspondencia_estado) {
+      where.id_ct_correspondencia_estado = filters.id_ct_correspondencia_estado;
     }
 
     // Filtro de nombre
@@ -47,8 +48,8 @@ export class CtCorrespondenciaEstadoService extends BaseService<
     }
 
     // Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -56,7 +57,7 @@ export class CtCorrespondenciaEstadoService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_estado";
+    return "id_ct_correspondencia_estado";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

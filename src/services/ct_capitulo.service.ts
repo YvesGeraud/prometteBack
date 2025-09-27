@@ -22,7 +22,8 @@ export class CtCapituloService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_capitulo",
-    defaultOrderBy: { id_capitulo: "asc" as const },
+    defaultOrderBy: { id_ct_capitulo: "asc" as const },
+    campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
@@ -34,26 +35,26 @@ export class CtCapituloService extends BaseService<
   protected construirWhereClause(filters?: BuscarCtCapituloInput) {
     const where: any = {};
 
-    // Filtro de entidad
-    if (filters?.id_capitulo) {
-      where.id_capitulo = filters.id_capitulo;
+    // Filtro de id_ct_capitulo
+    if (filters?.id_ct_capitulo) {
+      where.id_ct_capitulo = filters.id_ct_capitulo;
     }
 
-    // Filtro de clave_capitulo (campo numérico)
+    // Filtro de clave_capitulo
     if (filters?.clave_capitulo) {
       where.clave_capitulo = filters.clave_capitulo;
     }
 
-    // Filtro de abreviatura
+    // Filtro de nombre_capitulo
     if (filters?.nombre_capitulo) {
       where.nombre_capitulo = {
         contains: filters.nombre_capitulo,
       };
     }
 
-    // Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    // Filtro de estado
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -61,7 +62,7 @@ export class CtCapituloService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_capitulo";
+    return "id_ct_capitulo";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

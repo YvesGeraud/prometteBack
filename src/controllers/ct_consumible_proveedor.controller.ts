@@ -1,21 +1,23 @@
 import { Request, Response } from "express";
 import { BaseController } from "./BaseController";
-import { CtConsumiblesProveedorService } from "../services/ct_consumible_proveedor.service";
+import { CtConsumibleProveedorService } from "../services/ct_consumible_proveedor.service";
 import {
-  CrearCtConsumiblesProveedorInput,
-  ActualizarCtConsumiblesProveedorInput,
-  ctConsumiblesProveedorIdParamSchema,
-  CtConsumiblesProveedorIdParam,
-} from "../schemas/ct_consumibles_proveedor.schema";
+  CrearCtConsumibleProveedorInput,
+  ActualizarCtConsumibleProveedorInput,
+  ctConsumibleProveedorIdParamSchema,
+  CtConsumibleProveedorIdParam,
+  EliminarCtConsumibleProveedorInput,
+  eliminarCtConsumibleProveedorSchema,
+} from "../schemas/ct_consumible_proveedor.schema";
 import { PaginationInput } from "../schemas/commonSchemas";
 
 //TODO ===== CONTROLADOR PARA CT_BITACORA_ACCION CON BASE SERVICE =====
-const ctConsumiblesProveedorBaseService = new CtConsumiblesProveedorService();
+const ctConsumibleProveedorBaseService = new CtConsumibleProveedorService();
 
-export class CtConsumiblesProveedorBaseController extends BaseController {
+export class CtConsumibleProveedorBaseController extends BaseController {
   /**
    * 📦 Crear nueva bitacora acción
-   * @route POST /api/inventario/bitacora_accion
+   * @route POST /api/inventario/consumible_proveedor
    */
   crearConsumiblesProveedor = async (
     req: Request,
@@ -25,9 +27,9 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
       req,
       res,
       async () => {
-        const consumiblesProveedorData: CrearCtConsumiblesProveedorInput =
+        const consumiblesProveedorData: CrearCtConsumibleProveedorInput =
           req.body;
-        return await ctConsumiblesProveedorBaseService.crear(
+        return await ctConsumibleProveedorBaseService.crear(
           consumiblesProveedorData
         );
       },
@@ -37,7 +39,7 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
 
   /**
    * 📦 Obtener consumibles proveedor por ID
-   * @route GET /api/inventario/consumibles_proveedor/:id_proveedor
+   * @route GET /api/inventario/consumibles_proveedor/:id_ct_consumible_proveedor
    */
   obtenerConsumiblesProveedorPorId = async (
     req: Request,
@@ -47,14 +49,14 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_proveedor } =
-          this.validarDatosConEsquema<CtConsumiblesProveedorIdParam>(
-            ctConsumiblesProveedorIdParamSchema,
+        const { id_ct_consumible_proveedor } =
+          this.validarDatosConEsquema<CtConsumibleProveedorIdParam>(
+            ctConsumibleProveedorIdParamSchema,
             req.params
           );
 
-        return await ctConsumiblesProveedorBaseService.obtenerPorId(
-          id_proveedor
+        return await ctConsumibleProveedorBaseService.obtenerPorId(
+          id_ct_consumible_proveedor
         );
       },
       "Consumibles proveedor obtenida exitosamente"
@@ -66,7 +68,7 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
    * @route GET /api/inventario/consumibles_proveedor
    *
    * Query parameters soportados:
-   * - id_proveedor: Filtrar por ID de consumibles proveedor (búsqueda parcial)
+   * - id_ct_consumible_proveedor: Filtrar por ID de consumibles proveedor (búsqueda parcial)
    * - razon_social: Filtrar por razon social de consumibles proveedor (búsqueda parcial)
    * - activo: Filtrar por activo (true/false)
    * - incluirInactivos: Incluir registros eliminados/inactivos (true/false, default: false)
@@ -87,7 +89,7 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
         const { pagina, limite, ...filters } = req.query as any;
         const pagination: PaginationInput = { pagina, limite };
 
-        return await ctConsumiblesProveedorBaseService.obtenerTodos(
+        return await ctConsumibleProveedorBaseService.obtenerTodos(
           filters,
           pagination
         );
@@ -98,7 +100,7 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
 
   /**
    * 📦 Actualizar consumibles proveedor
-   * @route PUT /api/inventario/consumibles_proveedor/:id_proveedor
+   * @route PUT /api/inventario/consumibles_proveedor/:id_ct_consumible_proveedor
    */
   actualizarConsumiblesProveedor = async (
     req: Request,
@@ -108,17 +110,17 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_proveedor } =
-          this.validarDatosConEsquema<CtConsumiblesProveedorIdParam>(
-            ctConsumiblesProveedorIdParamSchema,
+        const { id_ct_consumible_proveedor } =
+          this.validarDatosConEsquema<CtConsumibleProveedorIdParam>(
+            ctConsumibleProveedorIdParamSchema,
             req.params
           );
-        const consumiblesProveedorData: ActualizarCtConsumiblesProveedorInput =
+        const consumibleProveedorData: ActualizarCtConsumibleProveedorInput =
           req.body;
 
-        return await ctConsumiblesProveedorBaseService.actualizar(
-          id_proveedor,
-          consumiblesProveedorData
+        return await ctConsumibleProveedorBaseService.actualizar(
+          id_ct_consumible_proveedor,
+          consumibleProveedorData
         );
       },
       "Consumibles proveedor actualizada exitosamente"
@@ -127,7 +129,7 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
 
   /**
    * 📦 Eliminar consumibles proveedor
-   * @route DELETE /api/inventario/consumibles_proveedor/:id_proveedor
+   * @route DELETE /api/inventario/consumibles_proveedor/:id_ct_consumible_proveedor
    */
   eliminarConsumiblesProveedor = async (
     req: Request,
@@ -137,13 +139,22 @@ export class CtConsumiblesProveedorBaseController extends BaseController {
       req,
       res,
       async () => {
-        const { id_proveedor } =
-          this.validarDatosConEsquema<CtConsumiblesProveedorIdParam>(
-            ctConsumiblesProveedorIdParamSchema,
+        const { id_ct_consumible_proveedor } =
+          this.validarDatosConEsquema<CtConsumibleProveedorIdParam>(
+            ctConsumibleProveedorIdParamSchema,
             req.params
           );
 
-        await ctConsumiblesProveedorBaseService.eliminar(id_proveedor);
+        const { id_ct_usuario_up } =
+          this.validarDatosConEsquema<EliminarCtConsumibleProveedorInput>(
+            eliminarCtConsumibleProveedorSchema,
+            req.body
+          );
+
+        await ctConsumibleProveedorBaseService.eliminar(
+          id_ct_consumible_proveedor,
+          id_ct_usuario_up
+        );
       },
       "Consumibles proveedor eliminada exitosamente"
     );

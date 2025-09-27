@@ -22,7 +22,8 @@ export class CtConsumibleFacturaService extends BaseService<
   // 🔧 Configuración específica del modelo (4 líneas)
   protected config = {
     tableName: "ct_consumible_factura",
-    defaultOrderBy: { id_factura: "asc" as const },
+    defaultOrderBy: { id_ct_consumible_factura: "asc" as const },
+    campoActivo: "estado",
   };
 
   // 🔗 Sin includes - tabla simple (3 líneas)
@@ -30,8 +31,8 @@ export class CtConsumibleFacturaService extends BaseService<
     const includes: any = {};
 
     // Solo incluir entidad si se solicita explícitamente
-    if (filters?.incluir_ct_provedor) {
-      includes.ct_consumibles_proveedor = true;
+    if (filters?.incluir_ct_consumible_proveedor) {
+      includes.ct_consumible_proveedor = true;
     }
 
     return Object.keys(includes).length > 0 ? includes : undefined;
@@ -42,8 +43,8 @@ export class CtConsumibleFacturaService extends BaseService<
     const where: any = {};
 
     // Filtro de entidad
-    if (filters?.id_factura) {
-      where.id_factura = filters.id_factura;
+    if (filters?.id_ct_consumible_factura) {
+      where.id_ct_consumible_factura = filters.id_ct_consumible_factura;
     }
 
     // Filtro de factura (campo numérico)
@@ -54,13 +55,13 @@ export class CtConsumibleFacturaService extends BaseService<
     }
 
     // Filtro de ct_provedor_id
-    if (filters?.ct_provedor_id) {
-      where.ct_provedor_id = filters.ct_provedor_id;
+    if (filters?.id_ct_consumible_proveedor) {
+      where.id_ct_consumible_proveedor = filters.id_ct_consumible_proveedor;
     }
 
     // Filtro de activo
-    if (filters?.activo) {
-      where.activo = filters.activo;
+    if (filters?.estado) {
+      where.estado = filters.estado;
     }
 
     return where;
@@ -68,7 +69,7 @@ export class CtConsumibleFacturaService extends BaseService<
 
   // 🔧 Sobrescribir campo PK (3 líneas)
   protected getPrimaryKeyField(): string {
-    return "id_factura";
+    return "id_ct_consumible_factura";
   }
 
   // ✨ ¡YA TIENES CRUD COMPLETO AUTOMÁTICAMENTE!

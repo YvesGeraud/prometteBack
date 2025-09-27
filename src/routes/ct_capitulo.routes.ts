@@ -6,6 +6,7 @@ import {
   actualizarCtCapituloSchema,
   ctCapituloIdParamSchema,
   ctCapituloFiltrosSchema,
+  eliminarCtCapituloSchema,
 } from "../schemas/ct_capitulo.schema";
 
 //TODO ===== RUTAS PARA CT_BITACORA_ACCION CON BASE SERVICE =====
@@ -22,7 +23,7 @@ router.get(
 
 // 📦 Obtener bitacora acción específica por ID
 router.get(
-  "/:id_capitulo",
+  "/:id_ct_capitulo",
   validarRequest({ params: ctCapituloIdParamSchema }),
   ctCapituloController.obtenerCapituloPorId
 );
@@ -36,7 +37,7 @@ router.post(
 
 // 📦 Actualizar entidad existente
 router.put(
-  "/:id_capitulo",
+  "/:id_ct_capitulo",
   validarRequest({
     params: ctCapituloIdParamSchema,
     body: actualizarCtCapituloSchema,
@@ -46,8 +47,11 @@ router.put(
 
 // 📦 Eliminar entidad
 router.delete(
-  "/:id_capitulo",
-  validarRequest({ params: ctCapituloIdParamSchema }),
+  "/:id_ct_capitulo",
+  validarRequest({
+    params: ctCapituloIdParamSchema,
+    body: eliminarCtCapituloSchema,
+  }),
   ctCapituloController.eliminarCapitulo
 );
 
