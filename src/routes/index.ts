@@ -39,6 +39,19 @@ import dtPlaneacionesAneecRoutes from "./dt_planeaciones_aneec.route";
 import dtProyectoAnualRoutes from "./dt_proyecto_anual.route";
 import dtTechoPresupuestoRoutes from "./dt_techo_presupuesto.route";
 
+//?Relaciones importados
+import rlAnalistaUnidadRoutes from "./rl_analista_unidad.route";
+import rlAreaFinancieroRoutes from "./rl_area_financiero.route";
+import rlCorrespondenciaUsuarioEstadoRoutes from "./rl_correspondencia_usuario_estado.route";
+import rlEntregaFormatoRoutes from "./rl_entrega_formato.route";
+import rlJustificacionRoutes from "./rl_justificacion.route";
+import rlPartidaAreaRoutes from "./rl_partida_area.route";
+import rlProductoAreaRoutes from "./rl_producto_area.route";
+import rlProductoRequisicionRoutes from "./rl_producto_requisicion.route";
+import rlPuestoFuncionRoutes from "./rl_puesto_funcion.route";
+import rlUsuarioFuncionRoutes from "./rl_usuario_funcion.route";
+import rlUsuarioPuestoRoutes from "./rl_usuario_puesto.route";
+
 const router = Router();
 
 // Montar las rutas con sus prefijos
@@ -84,6 +97,22 @@ router.use("/dt_informes_aneec", dtInformesAneecRoutes);
 router.use("/dt_planeaciones_aneec", dtPlaneacionesAneecRoutes);
 router.use("/dt_proyecto_anual", dtProyectoAnualRoutes);
 router.use("/dt_techo_presupuesto", dtTechoPresupuestoRoutes);
+
+//?Relaciones
+router.use("/rl_analista_unidad", rlAnalistaUnidadRoutes);
+router.use("/rl_area_financiero", rlAreaFinancieroRoutes);
+router.use(
+  "/rl_correspondencia_usuario_estado",
+  rlCorrespondenciaUsuarioEstadoRoutes
+);
+router.use("/rl_entrega_formato", rlEntregaFormatoRoutes);
+router.use("/rl_justificacion", rlJustificacionRoutes);
+router.use("/rl_partida_area", rlPartidaAreaRoutes);
+router.use("/rl_producto_area", rlProductoAreaRoutes);
+router.use("/rl_producto_requisicion", rlProductoRequisicionRoutes);
+router.use("/rl_puesto_funcion", rlPuestoFuncionRoutes);
+router.use("/rl_usuario_funcion", rlUsuarioFuncionRoutes);
+router.use("/rl_usuario_puesto", rlUsuarioPuestoRoutes);
 
 // Ruta de salud para las APIs
 router.get("/health", (req, res) => {
