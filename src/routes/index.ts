@@ -28,6 +28,12 @@ import localidadRoutes from "./localidad.route";*/
 
 //?Descripciones importados
 import dtAspiranteAneecRoutes from "./dt_aspirante_aneec.route";
+import dtBitacoraMovimientoRoutes from "./dt_bitacora_movimiento.route";
+import dtConsumibleEntregaRoutes from "./dt_consumible_entrega.route";
+import dtConsumibleInventarioRoutes from "./dt_consumible_inventario.route";
+import dtCorrespondenciaRoutes from "./dt_correspondencia.route";
+import dtDiagnosticoAneecRoutes from "./dt_diagnostico_aneec.route";
+import dtFuncionRoutes from "./dt_funcion.routes";
 
 const router = Router();
 
@@ -56,6 +62,8 @@ router.use("/ct_producto_consumible", ctProductoConsumibleRoutes);
 router.use("/ct_puesto", ctPuestoRoutes);
 router.use("/ct_unidad_medida", ctUnidadMedidaRoutes);
 router.use("/ct_usuario", ctUsuarioRoutes);
+router.use("/dt_consumible_entrega", dtConsumibleEntregaRoutes);
+router.use("/dt_funcion", dtFuncionRoutes);
 
 /*router.use("/entidad", entidadRoutes);
 router.use("/municipio", municipioRoutes);
@@ -63,6 +71,11 @@ router.use("/localidad", localidadRoutes);*/
 
 //?Descripciones
 router.use("/dt_aspirante_aneec", dtAspiranteAneecRoutes);
+router.use("/dt_bitacora_movimiento", dtBitacoraMovimientoRoutes);
+router.use("/dt_consumible_entrega", dtConsumibleEntregaRoutes);
+router.use("/dt_consumible_inventario", dtConsumibleInventarioRoutes);
+router.use("/dt_correspondencia", dtCorrespondenciaRoutes);
+router.use("/dt_diagnostico_aneec", dtDiagnosticoAneecRoutes);
 
 // Ruta de salud para las APIs
 router.get("/health", (req, res) => {

@@ -65,7 +65,7 @@ async function crearUsuariosPrueba() {
 
       // Verificar si el usuario ya existe
       const usuarioExistente = await prisma.ct_usuario.findFirst({
-        where: { usuario: userData.usuario },
+        where: { nombre_usuario: userData.usuario },
       });
 
       if (usuarioExistente) {
@@ -89,26 +89,25 @@ async function crearUsuariosPrueba() {
       // Crear usuario
       const nuevoUsuario = await prisma.ct_usuario.create({
         data: {
-          usuario: userData.usuario,
+          nombre_usuario: userData.usuario,
           contrasena: contrasenaHasheada,
           uuid_usuario: uuidUsuario,
           email: userData.email,
-          estatus: userData.estatus,
-          fecha_registro: new Date(),
-          fecha_modificacion: new Date(),
-          intentos_fallidos: 0,
+          estado: userData.estatus === 1, // Convertir número a boolean
+          intento_fallidos: 0, // Cambiado de intentos_fallidos a intento_fallidos
           bloqueado_hasta: null,
           ultimo_login: null,
+          // fecha_in se establece automáticamente por el default
+          // fecha_up se deja como null
+          // id_ct_usuario_in e id_ct_usuario_up se dejan como null por defecto
         },
       });
 
       console.log(
-        `   ✅ Usuario creado exitosamente (ID: ${nuevoUsuario.id_usuario})`
+        `   ✅ Usuario creado exitosamente (ID: ${nuevoUsuario.id_ct_usuario})`
       );
       console.log(`   📧 Email: ${userData.email}`);
-      console.log(
-        `   📊 Estatus: ${userData.estatus === 1 ? "Activo" : "Inactivo"}`
-      );
+      console.log(`   📊 Estado: ${userData.estatus ? "Activo" : "Inactivo"}`);
     }
 
     console.log(
@@ -173,7 +172,7 @@ async function limpiarUsuariosPrueba() {
 
     const resultado = await prisma.ct_usuario.deleteMany({
       where: {
-        usuario: {
+        nombre_usuario: {
           in: usuariosAEliminar,
         },
       },
