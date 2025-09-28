@@ -80,6 +80,14 @@ export const esquemaNumeroOpcional = (min: number = 1, max: number = 100000) =>
   z.number().int().min(min).max(max).optional();
 export const esquemaIdRequerido = z.number().int().positive();
 export const esquemaIdOpcional = z.number().int().positive().optional();
+export const esquemaDecimalOpcional = (
+  min: number = 0,
+  max: number = 999999.999
+) => z.number().min(min).max(max).optional();
+export const esquemaDecimalRequerido = (
+  min: number = 0,
+  max: number = 999999.999
+) => z.number().min(min).max(max);
 
 //? Esquemas para campos de texto
 export const esquemaTextoRequerido = (
