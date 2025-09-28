@@ -34,6 +34,10 @@ import dtConsumibleInventarioRoutes from "./dt_consumible_inventario.route";
 import dtCorrespondenciaRoutes from "./dt_correspondencia.route";
 import dtDiagnosticoAneecRoutes from "./dt_diagnostico_aneec.route";
 import dtFuncionRoutes from "./dt_funcion.routes";
+import dtInformesAneecRoutes from "./dt_informes_aneec.route";
+import dtPlaneacionesAneecRoutes from "./dt_planeaciones_aneec.route";
+import dtProyectoAnualRoutes from "./dt_proyecto_anual.route";
+import dtTechoPresupuestoRoutes from "./dt_techo_presupuesto.route";
 
 const router = Router();
 
@@ -76,6 +80,10 @@ router.use("/dt_consumible_entrega", dtConsumibleEntregaRoutes);
 router.use("/dt_consumible_inventario", dtConsumibleInventarioRoutes);
 router.use("/dt_correspondencia", dtCorrespondenciaRoutes);
 router.use("/dt_diagnostico_aneec", dtDiagnosticoAneecRoutes);
+router.use("/dt_informes_aneec", dtInformesAneecRoutes);
+router.use("/dt_planeaciones_aneec", dtPlaneacionesAneecRoutes);
+router.use("/dt_proyecto_anual", dtProyectoAnualRoutes);
+router.use("/dt_techo_presupuesto", dtTechoPresupuestoRoutes);
 
 // Ruta de salud para las APIs
 router.get("/health", (req, res) => {
